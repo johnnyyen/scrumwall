@@ -33,6 +33,26 @@
 		<start url="${tomcat.manager}" username="${tomcat.username}" password="${tomcat.password}"
 		  path="/${projectname}" />
 	</target>
+
+	<target name="deploy-hudson"
+          depends="clean, compile, prepareDistDirs, copy-dist-files, copyWeb"
+          description="Task which builds and copies files to deployment dir without making jar">
+
+		<copy todir="${tomcat.hudson.dir}/WEB-INF/classes">
+		  <fileset dir="${classes.dir}">
+		    <include name="**/*.class" />
+		  </fileset>
+		</copy>	
+		<copy todir="${tomcat.hudson.dir}/WEB-INF/classes">
+		  <fileset dir="${classes.dir}">
+		    <include name="log4j.xml"/>
+		  </fileset>
+		</copy>
+
+		<copy todir="${tomcat.hudson.dir}" overwrite="false">
+	      <fileset dir="${build.dist.dir}" />
+	    </copy>
+  	</target>
 	
 	<target name="deploy-dev"
           depends="clean, compile, prepareDistDirs, copyDev, copyWeb"
@@ -49,15 +69,6 @@
         <include name="log4j.xml"/>
       </fileset>
     </copy>
-	<copy todir="${tomcat.deploy.dir}/WEB-INF/jsp">
-		<fileset dir="${build.dist.jsp.dir}" />
-	</copy>
-	<copy todir="${tomcat.deploy.dir}/js">
-		<fileset dir="${build.dist.dir}/js" />
-	</copy>
-	<copy todir="${tomcat.deploy.dir}/css">
-		<fileset dir="${build.dist.dir}/css" />
-	</copy>
   </target>
 	
 	<target name="compile" depends="_prepare" description="Compiles the .java files">
@@ -95,9 +106,11 @@
     </copy>
 
     <copy toDir="${build.dist.web-inf.dir}">
-      <fileset dir="${etc.dir}" includes="*.xml" />
+      <fileset dir="${etc.dir}" includes="*.xml" excludes="log4j.xml"/>
     </copy>
-    
+	<copy toDir="${classes.dir}">
+      <fileset dir="${etc.dir}" includes="log4j.xml"/>
+    </copy>
     <copy todir="${build.dist.lib.dir}">
       <fileset dir="${lib.dir}">
         <include name="*.jar" />
