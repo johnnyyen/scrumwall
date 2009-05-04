@@ -1,0 +1,51 @@
+.areaContainer{
+	width: 100%;
+	height:100%;
+}
+
+#newItemArea{
+	position: absolute;
+	float:left;	
+	height:10%;
+	width: 15%;
+	text-align: center;
+	border: 1px solid black;
+}
+#left{
+	float:left;
+	width:25%;
+	height:100%;
+	background-color: grey;
+}
+#right{
+	float:right;
+	width:25%;
+	height:100%;
+	background-color: green;
+}
+.centerContainer{
+	width:50%;
+	float:left;
+}
+.centerleft{
+	float:left;
+	width:50%;
+	height:100%;
+	background-color: brown;
+}
+.centerright{
+	float:right;
+	width:50%;
+	height:100%;
+	background-color: yellow;
+	
+}
+.item{
+	position:absolute;
+	float:right;
+	height: 100px;
+	width: 100px;
+	background-color: white;
+	text-align: center;
+	border:1px solid black;
+}

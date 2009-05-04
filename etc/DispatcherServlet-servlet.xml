@@ -8,9 +8,10 @@
 
   <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
-       <value>
-            /Welcome.form=welcomeController
-       </value>
+       <props>
+            <prop key="/Welcome.form">welcomeController</prop>
+            <prop key="/Layout.form">layoutController</prop>
+       </props>
      </property>
   </bean>
   
@@ -25,5 +26,5 @@
       <ref bean="itemDao"/>
     </property>
   </bean>
-
+	<bean id="layoutController" class="com.scrumwall.controller.LayoutController"/>
 </beans>

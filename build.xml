@@ -50,25 +50,25 @@
 		</copy>
 
 		<copy todir="${tomcat.hudson.dir}" overwrite="false">
-	      <fileset dir="${build.dist.dir}" />
+	      <fileset dir="${build.dist.dir}" includes="**/*" />
 	    </copy>
   	</target>
 	
 	<target name="deploy-dev"
-          depends="clean, compile, prepareDistDirs, copyDev, copyWeb"
+          depends="clean, compile, prepareDistDirs, copyWeb, copyDev"
           description="Task which builds and copies files to deployment dir without making jar">
 
-    <copy todir="${tomcat.deploy.dir}/WEB-INF/classes">
-      <fileset dir="${classes.dir}">
-        <include name="**/*.class" />
-      </fileset>
-    </copy>
+	    <copy todir="${tomcat.deploy.dir}/WEB-INF/classes">
+	      <fileset dir="${classes.dir}">
+	        <include name="**/*.class" />
+	      </fileset>
+	    </copy>
     
-    <copy todir="${tomcat.deploy.dir}/WEB-INF/classes">
-      <fileset dir="${build.dist.web-inf.dir}">
-        <include name="log4j.xml"/>
-      </fileset>
-    </copy>
+	    <copy todir="${tomcat.deploy.dir}/WEB-INF/classes">
+	      <fileset dir="${build.dist.web-inf.dir}">
+	        <include name="log4j.xml"/>
+	      </fileset>
+	    </copy>
   </target>
 	
 	<target name="compile" depends="_prepare" description="Compiles the .java files">
@@ -133,7 +133,7 @@
 
   <target name="copyDev" depends="copy-dist-files">
     <copy todir="${tomcat.deploy.dir}" overwrite="false">
-      <fileset dir="${build.dist.dir}" />
+      <fileset dir="${build.dist.dir}" includes="**/*"/>
     </copy>
   </target> 
 	
