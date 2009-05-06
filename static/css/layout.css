@@ -1,15 +1,17 @@
 .areaContainer{
-	width: 100%;
+	margin-left: 14%;
+	width: 86%;
 	height:100%;
 }
 
-#newItemArea{
+#menu{
 	position: absolute;
 	float:left;	
-	height:10%;
-	width: 15%;
+	height:50%;
+	width: 14%;
 	text-align: center;
 	border: 1px solid black;
+	background-color: #e0ffff;
 }
 #left{
 	float:left;
@@ -48,4 +50,18 @@
 	background-color: white;
 	text-align: center;
 	border:1px solid black;
+}
+
+.burndown{
+	height:100px;
+	width:150px;
+	background-color:grey;
+	margin-left:15px;
+}
+
+.ui-tabs .ui-tabs-hide {
+     display: none;
+}
+#tabbar{
+	margin-left:15%;
 }
