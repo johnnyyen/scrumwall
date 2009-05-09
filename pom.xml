@@ -125,7 +125,34 @@
 			<version>${version.spring}</version>
 		</dependency>
 	</dependencies>
-	
+	<repositories>
+        <repository>
+            <id>local-m2</id>
+            <url>file://home/zsz/.m2/repository</url>
+        </repository>
+        <repository>
+            <id>springsource-milestone</id>
+            <url>http://repository.springsource.com/maven/bundles/milestone</url>
+        </repository>
+        <repository>
+            <id>springsource-release</id>
+            <url>http://repository.springsource.com/maven/bundles/release</url>
+        </repository>
+        <repository>
+            <id>springsource-external</id>
+            <url>http://repository.springsource.com/maven/bundles/external</url>
+        </repository>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala Tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository> 
+        <repository>
+            <id>jboss.com</id>
+            <name>Jboss repo</name>
+            <url>http://repository.jboss.com/maven2</url>
+        </repository> 
+    </repositories>
 	<profiles>
 		<profile>
 			<id>dev</id>
