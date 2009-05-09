@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="mappings">
+       <props>
+            <prop key="/Welcome.form">welcomeController</prop>
+            <prop key="/Layout.form">layoutController</prop>
+       </props>
+     </property>
+  </bean>
+  
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/jsp/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>
+
+  <bean id="welcomeController" class="com.scrumwall.controller.WelcomeController">
+    <property name="itemDao">
+      <ref bean="itemDao"/>
+    </property>
+  </bean>
+	<bean id="layoutController" class="com.scrumwall.controller.LayoutController"/>
+</beans>
