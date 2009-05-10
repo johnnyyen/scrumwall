@@ -14,7 +14,11 @@
 		<version.asm>3.1</version.asm>
 		
 	</properties>
-	
+	<scm>
+		<connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
+		<developerConnection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</developerConnection>
+		<url>http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</url>
+	</scm>
 	<build>
 		<plugins>
 			<plugin>
