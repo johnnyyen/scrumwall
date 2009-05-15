@@ -1,8 +1,8 @@
 package com.scrumwall.dao.item
 
 import com.scrumwall.domain.item.Item
-import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport
+import com.scrumwall.dao.BaseDao
 
-trait ItemDao extends SimpleJdbcDaoSupport {
+trait ItemDao extends BaseDao {
 	def getItem(itemId: Int) : Item
 }

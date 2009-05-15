@@ -6,23 +6,18 @@ import java.lang.Class
 
 trait LogsToLog4J {
 	
-	private val toLog = Logger.getLogger(this.getClass)  
-  
-	private val debugMethod = { toLog debug(_: Any) } 
-	private val debugException = { toLog debug(_: Any, _: Exception) } 
-  
-	private val errorMethod = { toLog error(_: Any)}
- 
+	private val toLog = Logger.getLogger(this.getClass)
+   
 	def debug(message: Any) = {
-	  this.log( this.debugMethod, message ) 
+	  this.log( toLog.debug(_: Any), message ) 
 	}
  
 	def debug(message: Any, exception: Exception) = {
-	  this.log( this.debugException, message, exception )
+	  this.log( toLog debug(_: Any, _: Exception), message, exception )
 	}
  
 	def error(message: Any) = {
-	  this.log( this.errorMethod, message);
+	  this.log( toLog error(_: Any), message);
 	}
  
 	private def log(logMethod: Any => Unit, message: => Any) = {

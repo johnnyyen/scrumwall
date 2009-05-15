@@ -7,14 +7,10 @@ import java.sql.ResultSet
 import scala.runtime.RichInt
 import com.scrumwall.util.debug.LogsToLog4J
 
-class ItemDaoImpl extends ItemDao with LogsToLog4J{
-  
-  val SQL_GET_ITEM = "SELECT id, content, estimation FROM item WHERE id = :id";
+class ItemDaoImpl extends ItemDao{
   
   override def getItem(itemId: Int) : Item = {
-    debug( "Using SQL for getting item: " + this.SQL_GET_ITEM );
-    
-    error( "Something went wrong......help" );
+    debug( "Getting item with id: " + itemId );
     
     val mapper: ParameterizedRowMapper[Item] = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
@@ -23,7 +19,11 @@ class ItemDaoImpl extends ItemDao with LogsToLog4J{
       }
     };
     
-    getSimpleJdbcTemplate.queryForObject(SQL_GET_ITEM, mapper, new RichInt(itemId)).asInstanceOf[Item]
+    getSimpleJdbcTemplate.queryForObject(ItemDaoImpl.SQL_GET_ITEM, mapper, new RichInt(itemId)).asInstanceOf[Item]
   }
   
+}
+
+object ItemDaoImpl {
+  val SQL_GET_ITEM = "SELECT id, content, estimation FROM item WHERE id = :id";
 }
