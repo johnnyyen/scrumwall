@@ -11,7 +11,10 @@
     </layout> 
   </appender> 
   <root> 
-    <priority value="debug" />
+    <priority value="error" />
     <appender-ref ref="R" /> 
   </root>
+  <logger name="com.scrumwall">
+    <level value="debug"/> 
+  </logger>
 </log4j:configuration>
