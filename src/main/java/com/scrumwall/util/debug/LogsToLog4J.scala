@@ -8,15 +8,15 @@ trait LogsToLog4J {
 	
 	private val toLog = Logger.getLogger(this.getClass)
     
-	def debug(message: Any) = {
+	def debug(message: => Any) = {
 	  this.log(toLog isDebugEnabled,  toLog.debug(_: Any), message ) 
 	}
  
-	def debug(message: Any, exception: Exception) = {
+	def debug(exception: Exception)(message: => Any) = {
 	  this.log(toLog isDebugEnabled, toLog debug(_: Any, _: Exception), message, exception )
 	}
  
-	def error(message: Any) = {
+	def error(message: => Any) = {
 	  this.log(true, toLog error(_: Any), message);
 	}
  

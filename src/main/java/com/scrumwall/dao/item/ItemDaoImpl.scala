@@ -12,6 +12,10 @@ class ItemDaoImpl extends ItemDao{
   override def getItem(itemId: Int) : Item = {
     debug( "Getting item with id: " + itemId );
     
+    debug(new Exception()) {
+      "Something happened when trying to get choice with id: " + itemId
+    }
+    
     val mapper: ParameterizedRowMapper[Item] = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
 			  val item: Item = new ItemImpl(rs.getInt("id"), rs.getString("content"), rs.getInt("estimation"))
