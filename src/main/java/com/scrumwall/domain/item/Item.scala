@@ -3,7 +3,7 @@ package com.scrumwall.domain.item
 import scala.runtime.RichInt
 import scala.runtime.RichString
 
-trait Item {
+abstract class Item {
   
 	def getId() : RichInt  
    

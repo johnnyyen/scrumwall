@@ -7,11 +7,11 @@
     <!-- Keep one backup file -->
     <param name="MaxBackupIndex" value="1"/>
     <layout class="org.apache.log4j.PatternLayout"> 
-      <param name="ConversionPattern" value="%p %t %c - %m%n"/> 
+      <param name="ConversionPattern" value="%p %d %c - %m%n"/> 
     </layout> 
   </appender> 
   <root> 
-    <priority value ="debug" />
+    <priority value="debug" />
     <appender-ref ref="R" /> 
   </root>
 </log4j:configuration>

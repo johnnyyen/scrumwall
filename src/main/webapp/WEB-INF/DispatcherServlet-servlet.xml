@@ -20,9 +20,8 @@
   </bean>
 
   <bean id="welcomeController" class="com.scrumwall.controller.WelcomeController">
-    <property name="itemDao">
-      <ref bean="itemDao"/>
-    </property>
+    <constructor-arg ref="itemDao" />
   </bean>
+  
 	<bean id="layoutController" class="com.scrumwall.controller.LayoutController"/>
 </beans>

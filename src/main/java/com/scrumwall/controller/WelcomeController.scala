@@ -8,9 +8,7 @@ import com.scrumwall.dao.item.ItemDao
 import scala.collection.jcl.HashMap
 import com.scrumwall.domain.item.Item
 
-class WelcomeController extends AbstractController {
-  
-	var itemDao: ItemDao = null
+class WelcomeController(val itemDao: ItemDao) extends AbstractController {
   
 	override def handleRequestInternal(request: HttpServletRequest, response: HttpServletResponse) : ModelAndView = {
 		val item = itemDao.getItem(1);
@@ -19,9 +17,5 @@ class WelcomeController extends AbstractController {
 		val mv = new ModelAndView("Welcome", data.underlying);
 		mv
 	}
-
- 	def setItemDao(itemDaoIn: ItemDao) = {
- 	  this.itemDao = itemDaoIn
- 	}
  
 }

@@ -12,7 +12,7 @@
 		<version.spring>3.0.0.M2</version.spring>
 		<version.scala>2.7.4</version.scala>
 		<version.asm>3.1</version.asm>
-		
+		<version.log4j>1.2.9</version.log4j>
 	</properties>
 	<scm>
 		<connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
@@ -50,6 +50,11 @@
 			<artifactId>asm</artifactId>
 			<version>${version.asm}</version>
 		</dependency>
+		<dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${version.log4j}</version>
+    </dependency> 
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm-commons</artifactId>
@@ -126,6 +131,10 @@
         <repository>
             <id>springsource-milestone</id>
             <url>http://repository.springsource.com/maven/bundles/milestone</url>
+        </repository>
+        <repository>
+            <id>log4j</id>
+            <url>http://repo1.maven.org/maven2/log4j/log4j/1.2.9/</url>
         </repository>
         <repository>
             <id>springsource-release</id>
