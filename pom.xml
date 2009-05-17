@@ -72,7 +72,7 @@
 			<version>${version.scala}</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.scala-lang.testing</groupId>
+		  <groupId>org.scala-tools.testing</groupId>
 		  <artifactId>scalatest</artifactId>
 		  <version>${version.scalatest}</version>
 		</dependency>
