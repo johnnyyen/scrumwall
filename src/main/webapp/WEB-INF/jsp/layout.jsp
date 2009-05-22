@@ -18,44 +18,46 @@
 		<input type="button" value="Impediments"/><br/>
 		<input type="button" value="Options"/><br/><br/>
 		<div class="burndown">burndown chart goes here</div><br/>
-		<div class="item">Item 1</div>
+		<div id="itemCreator">Click me to create items</div>
 		
 	</div>
 	<div id="tabbar">
 		<ul>
 			<li>
-				<a href="#areaContainer">Sprint 1</a>
+				<a href="#columnContainer">Sprint 1</a>
 			</li>
 			<li>
-				<a href="#areaContainer">Sprint 2</a>
+				<a href="#columnContainer">Sprint 2</a>
 			</li>
 			<li>
-				<a href="#areaContainer">Sprint 3</a>
+				<a href="#columnContainer">Sprint 3</a>
 			</li>
 			<li>
-				<a href="#areaContainer">Sprint 4</a>
+				<a href="#columnContainer">Sprint 4</a>
 			</li>
 			<li>
-				<a href="#areaContainer">New sprint</a>
+				<a href="#columnContainer">New sprint</a>
 			</li>
 		</ul>
 	</div>
-	<div class="areaContainer">
-		<div id="left">left</div>
-		<div class="centerContainer">
-			<div class="centerleft">centerleft</div>
-			<div class="centerright">centerright</div>
-		</div>
-		<div id="right">right</div>
-	</div>
+	<div id="columnContainer"></div>
 	<script type="text/javascript" src="js/jquery-1.3.2/jquery-1.3.2.js"></script>
-	<script type="text/javascript" src="js/jquery-1.3.2/ui.core.js"></script>
-	<script type="text/javascript" src="js/jquery-1.3.2/ui.draggable.js"></script>
-	<script type="text/javascript" src="js/jquery-1.3.2/ui.tabs.js"></script>
+	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.core.js"></script>
+	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.draggable.js"></script>
+	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.droppable.js"></script>
+	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.tabs.js"></script>
+	<script type="text/javascript" src="js/jquery-1.3.2/jquery.create.js"></script>
+	<script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
+	<script type="text/javascript" src="js/common/global.js"></script>
+	<script type="text/javascript" src="js/column.js"></script>
+	<script type="text/javascript" src="js/item.js"></script>
 	<script type="text/javascript" src="js/layout.js"></script>
 	<script type="text/javascript">
+		var config = {
+			columns:7
+		};
 		$(document).ready(function(){
-			init();
+			new scrumwall.layout(config);
 		});
 	</script>
 </body>

@@ -1,50 +1,32 @@
-.areaContainer{
+#columnContainer{
 	margin-left: 14%;
 	width: 86%;
+	height:90%;
+	min-width:800px;
+}
+.column{	
+	float:left;
 	height:100%;
 }
 
 #menu{
 	position: absolute;
 	float:left;	
-	height:50%;
 	width: 14%;
 	text-align: center;
 	border: 1px solid black;
 	background-color: #e0ffff;
 }
-#left{
-	float:left;
-	width:25%;
-	height:100%;
-	background-color: grey;
-}
-#right{
-	float:right;
-	width:25%;
-	height:100%;
-	background-color: green;
-}
-.centerContainer{
-	width:50%;
-	float:left;
-}
-.centerleft{
-	float:left;
-	width:50%;
-	height:100%;
-	background-color: brown;
-}
-.centerright{
-	float:right;
-	width:50%;
-	height:100%;
-	background-color: yellow;
-	
+
+#itemCreator{
+	border: 1px solid black;
+	height:50px;
+	width:75px;
+	background-color:white;
+	margin-left:25%;
 }
 .item{
 	position:absolute;
-	float:right;
 	height: 100px;
 	width: 100px;
 	background-color: white;
@@ -64,4 +46,16 @@
 }
 #tabbar{
 	margin-left:15%;
+	height:47px;
+}
+
+.colHeader{
+	background-color:grey;
+	border-right:1px dotted black;
+	float:right;
+	width:100%;
+}
+.colBody{
+	height:100%;
+	border-right:1px dotted grey;
 }
