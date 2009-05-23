@@ -51,11 +51,8 @@
 							<name>log4j.configuration</name>  
 							<value>test-log4j.xml</value>  
 						</property>
-	          <property>
-	            <name>maven.test.useFile</name>
-	            <value>false</value>
-	          </property>
-					</systemProperties>  
+					</systemProperties>
+					<useFile>false</useFile>  
 				</configuration>  
 			</plugin>
 		</plugins>
