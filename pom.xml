@@ -14,6 +14,7 @@
 		<version.asm>3.1</version.asm>
 		<version.log4j>1.2.9</version.log4j>
 		<version.scalatest>0.9.5</version.scalatest>
+		<maven.test.compile.verbose>true</maven.test.compile.verbose>
 	</properties>
 	<scm>
 		<connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
@@ -49,7 +50,11 @@
 						<property> 
 							<name>log4j.configuration</name>  
 							<value>test-log4j.xml</value>  
-						</property>  
+						</property>
+	          <property>
+	            <name>maven.test.useFile</name>
+	            <value>false</value>
+	          </property>
 					</systemProperties>  
 				</configuration>  
 			</plugin>
