@@ -1,24 +1,22 @@
 package com.scrumwall.item
 
+import com.scrumwall.helper.BaseTestCase
 import org.scalatest.FunSuite
+import org.scalatest.tools.Runner
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.ModelAndViewAssert
+import org.springframework.beans.factory.annotation.Autowired
 import com.scrumwall.controller.WelcomeController
 import com.scrumwall.dao.item.ItemDao
 import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.scalatest.tools.Runner
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.AbstractSpringContextTests
-import org.springframework.beans.factory.annotation.Autowired
 
-@RunWith(classOf[org.springframework.test.context.junit4.SpringJUnit4ClassRunner])
-@ContextConfiguration{val locations = Array("classpath:applicationContext.xml", "classpath:test-ds.xml"), val inheritLocations = false}
-class GetItemTest extends TestCase with FunSuite{
+class GetItemTest extends BaseTestCase {
 
-  var itemDao: ItemDao = null
+  var itemDao: ItemDao = _
   
   @Autowired def setItemDao(itemDao: ItemDao) = { this.itemDao = itemDao }
   
@@ -29,10 +27,7 @@ class GetItemTest extends TestCase with FunSuite{
 	val controller = new WelcomeController(itemDao) 
 	val mv = controller.handleRequestInternal(request, response)
  
-	assert(mv != null)
-  }
-  
-  test("You should not be able to send in strings") {
+	assert( mv != null )
   }
   
 }
