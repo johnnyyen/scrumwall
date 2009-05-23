@@ -33,7 +33,6 @@
 			<plugin>
 				<groupId>org.scala-tools</groupId>
 				<artifactId>maven-scala-plugin</artifactId>
-				<version>2.10</version>
 				<executions>
 					<execution>
 						<goals>
@@ -42,6 +41,17 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>  
+				<artifactId>maven-surefire-plugin</artifactId>  
+				<configuration>  
+					<systemProperties>  
+						<property> 
+							<name>log4j.configuration</name>  
+							<value>test-log4j.xml</value>  
+						</property>  
+					</systemProperties>  
+				</configuration>  
 			</plugin>
 		</plugins>
 	</build>
@@ -251,7 +261,6 @@
 						</configuration>
 						<executions>
 							<execution>
-								<id>undeploy</id>
 								<phase>install</phase>
 								<goals>
 									<goal>undeploy</goal>
