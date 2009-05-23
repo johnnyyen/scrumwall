@@ -15,6 +15,8 @@
 		<version.log4j>1.2.9</version.log4j>
 		<version.scalatest>0.9.5</version.scalatest>
 		<maven.test.compile.verbose>true</maven.test.compile.verbose>
+		<db.schema>scrumwall</db.schema>
+		<db.test.schema>scrumjunit</db.test.schema>
 	</properties>
 	<scm>
 		<connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
@@ -55,7 +57,18 @@
 					<useFile>false</useFile>  
 				</configuration>  
 			</plugin>
+			
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 	<dependencies>
 		<dependency>
@@ -218,6 +231,9 @@
 		</profile>
 		<profile>
 			<id>prod</id>
+			<properties>
+				<db.schema>scrumtest</db.schema>
+			</properties>
 			<build>
         		<finalName>scrumtest</finalName>
         		<plugins>
