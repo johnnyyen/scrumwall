@@ -214,6 +214,7 @@
 						<artifactId>tomcat-maven-plugin</artifactId>
 						<configuration>
 							<server>tomcat</server>
+							<path>/scrumtest</path>
 						</configuration>
 						<executions>
 							<execution>
