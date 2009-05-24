@@ -1,6 +1,6 @@
 #columnContainer{
-	margin-left: 14%;
-	width: 86%;
+	margin-left: 11%;
+	width: 89%;
 	height:90%;
 	min-width:800px;
 }
@@ -12,7 +12,7 @@
 #menu{
 	position: absolute;
 	float:left;	
-	width: 14%;
+	width: 10%;
 	text-align: center;
 	border: 1px solid black;
 	background-color: #e0ffff;
@@ -28,15 +28,16 @@
 .item{
 	position:absolute;
 	height: 100px;
-	width: 100px;
+	width: 120px;
 	background-color: white;
 	text-align: center;
 	border:1px solid black;
+	overflow:hidden;
 }
 
 .burndown{
 	height:100px;
-	width:150px;
+	width:75px;
 	background-color:grey;
 	margin-left:15px;
 }
@@ -58,4 +59,42 @@
 .colBody{
 	height:100%;
 	border-right:1px dotted grey;
+}
+.hidden{
+	display:none;
+}
+.itemContent{
+	width:100%;
+}
+.estimate{
+	width:35px;
+	
+}
+.estWrapper{
+	position:absolute;
+	bottom:0;
+	right:0;
+}
+.collapseButton{
+	
+	
+}
+.owner{
+	color:grey;
+	width:50px;
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+
+.ownerInput{
+	width:100%;
+}
+.itemContent{
+	height:90%;
+}
+.itemText{
+	height:75%;
+	overflow: hidden;
+	font-size:0.75em;
 }

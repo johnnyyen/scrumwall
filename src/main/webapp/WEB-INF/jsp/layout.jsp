@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div id="menu">
-		<input type="text" value="Your name"/><br/>
+		<input type="text" value="Your name" class="ownerInput" id="ownerInput"/><br/>
 		<div class="sprintdate">
 			05.05.2009 - 27.05.2009
 		</div>
@@ -51,6 +51,7 @@
 	<script type="text/javascript" src="js/common/global.js"></script>
 	<script type="text/javascript" src="js/column.js"></script>
 	<script type="text/javascript" src="js/item.js"></script>
+	<script type="text/javascript" src="js/menu.js"></script>
 	<script type="text/javascript" src="js/layout.js"></script>
 	<script type="text/javascript">
 		var config = {

@@ -3,8 +3,9 @@ scrumwall.create("layout", {
 	init: function(config){
 		$("#newItem").click(function(ev){alert("button clicked");});
 		$("#tabbar").tabs();
+		var menu = new scrumwall.menu();
 		
-		$("#itemCreator").click(this.createItem);
+		$("#itemCreator").bind("click",{owner:$(menu.owner)},this.createItem);
 		var creator = $("#itemCreator");
 		creator.itemCount = 0;
 		
@@ -32,8 +33,12 @@ scrumwall.create("layout", {
 		}
 	},
 	createItem:function(event){
-		
-		var item = new scrumwall.item(event.target, itemCount++);
+		var owner = event.data.owner;
+		var defaultOwner = $(owner).attr("value");
+		if(defaultOwner == "Your name"){
+			defaultOwner =  "";
+		}
+		var item = new scrumwall.item(event.target, itemCount++, defaultOwner);
 		
 	}
 });
