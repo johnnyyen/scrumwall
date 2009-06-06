@@ -14,11 +14,8 @@
     <constructor-arg index="0" ref="itemDao" />
     <dwr:remote javascript="ItemService">
       <dwr:include method="saveItem"/>
-      <dwr:convert type="bean" class="com.scrumwall.domain.item.Item">
-        <dwr:include method="content"/>
-        <dwr:include method="id"/>
-        <dwr:include method="estimation"/>
-      </dwr:convert>
+      <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
+      <dwr:convert type="bean" class="scala.runtime.RichString" />
     </dwr:remote>
   </bean>
 

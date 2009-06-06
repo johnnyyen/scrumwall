@@ -13,7 +13,7 @@ class ItemDaoImpl extends ItemDao{
     
     val mapper: ParameterizedRowMapper[Item] = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
-			  val item: Item = new Item(rs.getInt("id"), rs.getString("content"), rs.getInt("estimation"))
+			  val item: Item = new Item(rs.getInt("id").intValue, rs.getString("content"), rs.getInt("estimation").intValue)
             	item
       }
     };
