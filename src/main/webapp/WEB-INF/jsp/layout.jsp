@@ -5,6 +5,15 @@
 	<title>Basic layout</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/layout.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-1.3.2/jquery-ui.css"/>
+	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
+  <script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
+  <script type="text/javascript">
+  function test() {
+	  var item = {id: 1, estimation: 5, content: "TestContent"}
+	  ItemService.saveItem(item);
+  }
+  </script>
+	
 </head>
 <body>
 	<div id="menu">
@@ -17,6 +26,7 @@
 		<input type="button" value="Goals"/><br/>
 		<input type="button" value="Impediments"/><br/>
 		<input type="button" value="Options"/><br/><br/>
+		<a href="#" onclick="test()">TEST</a>
 		<div class="burndown">burndown chart goes here</div><br/>
 		<div id="itemCreator">Click me to create items</div>
 		

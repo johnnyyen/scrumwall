@@ -168,8 +168,17 @@
       <artifactId>org.springframework.test</artifactId>
       <version>${version.spring}</version>
     </dependency>
+    <dependency>
+      <groupId>org.directwebremoting</groupId>
+      <artifactId>dwr</artifactId>
+      <version>3.0.M1</version>
+    </dependency>
 	</dependencies>
 	<repositories>
+        <repository>
+            <id>maven2</id>
+            <url>http://repo2.maven.org/maven2/</url>
+        </repository>
         <repository>
             <id>springsource-milestone</id>
             <url>http://repository.springsource.com/maven/bundles/milestone</url>

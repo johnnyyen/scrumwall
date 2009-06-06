@@ -17,4 +17,7 @@
   <logger name="com.scrumwall">
     <level value="debug"/> 
   </logger>
+  <logger name="org.directwebremoting">
+    <level value="debug"/> 
+  </logger>
 </log4j:configuration>

@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.directwebremoting.org/schema/spring-dwr
+           http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+
+  <dwr:controller id="dwrController" debug="true" />
 
   <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
        <props>
             <prop key="/Welcome.form">welcomeController</prop>
             <prop key="/Layout.form">layoutController</prop>
+            <prop key="/**/*.js">dwrController</prop>
+            <prop key="exec/*">dwrController</prop>
        </props>
      </property>
   </bean>
+  
+  <bean id="dwrUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="alwaysUseFullPath" value="true"/>
+    <property name="mappings">
+      <props>
+        <prop key="/dwr/**/*">dwrController</prop>
+      </props>
+    </property>
+  </bean>
+  
   
   <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
