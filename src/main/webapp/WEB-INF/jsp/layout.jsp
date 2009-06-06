@@ -5,15 +5,6 @@
 	<title>Basic layout</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/layout.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-1.3.2/jquery-ui.css"/>
-	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
-  <script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
-  <script type="text/javascript">
-  function test() {
-	  var item = {id: 1, estimation: 5, content: "TestContent"}
-	  ItemService.saveItem(item);
-  }
-  </script>
-	
 </head>
 <body>
 	<div id="menu">
@@ -29,7 +20,6 @@
 		<a href="#" onclick="test()">TEST</a>
 		<div class="burndown">burndown chart goes here</div><br/>
 		<div id="itemCreator">Click me to create items</div>
-		
 	</div>
 	<div id="tabbar">
 		<ul>
@@ -51,11 +41,13 @@
 		</ul>
 	</div>
 	<div id="columnContainer"></div>
+	<div id="errorHandler" title="Oops! Something went wrong" class="errorHandler" style="display:none"></div>
 	<script type="text/javascript" src="js/jquery-1.3.2/jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.core.js"></script>
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.draggable.js"></script>
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.droppable.js"></script>
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.tabs.js"></script>
+	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.dialog.js"></script>
 	<script type="text/javascript" src="js/jquery-1.3.2/jquery.create.js"></script>
 	<script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
 	<script type="text/javascript" src="js/common/global.js"></script>
@@ -63,11 +55,18 @@
 	<script type="text/javascript" src="js/item.js"></script>
 	<script type="text/javascript" src="js/menu.js"></script>
 	<script type="text/javascript" src="js/layout.js"></script>
-	<script type="text/javascript">
+	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
+  	<script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
+  	<script type="text/javascript">
+  		function test() {
+	  		var item = {id: 1, estimation: 5, content: "TestContent"}
+	  		ItemService.saveItem(item,{exceptionHandler:exceptionHandler});
+  		}
+  		
 		var config = {
 			columns:7
 		};
-		$(document).ready(function(){
+		$("#menu").ready(function(){
 			new scrumwall.layout(config);
 		});
 	</script>

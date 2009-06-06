@@ -1,11 +1,12 @@
 
 scrumwall.create("item", {
 	
-	init:function(parentEl,id,owner){
-		var pos = $(parentEl).offset();
+	init:function(config){
+		var pos = $(config.parentEl).offset();
 		
 		this.el = $.create("div",{"class":"item"});	
-		this.el.guid = "i"+id;
+		this.el.guid = "i"+config.id;
+		this.el.saveUrl = config.url;
 		
 		$(this.el).css({left:pos.left + "px",top:pos.top+ "px"});
 		$(this.el).draggable();
@@ -23,7 +24,7 @@ scrumwall.create("item", {
 		var estWrapper = $.create("div",{"class":"estWrapper"});
 		
 		this.el.owner = $.create("input",{"type":"text","class":"owner"});
-		$(this.el.owner).attr("value", owner);
+		$(this.el.owner).attr("value", config.owner);
 		
 		//FIXME: this needs to be replaced by some other heuristic 
 		//of detecting when the item needs to be collapsed 
@@ -56,7 +57,7 @@ scrumwall.create("item", {
 	},
 	collapse:function(event){
 		var item = event.data.item;
-		$(item).width(100);
+		$(item).width(120);
 		$(item).height(100);
 		$(item.content).addClass("hidden");
 		$(item.contentText).removeClass("hidden");

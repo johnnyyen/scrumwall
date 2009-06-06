@@ -98,3 +98,9 @@
 	overflow: hidden;
 	font-size:0.75em;
 }
+.errorHandler{
+	font-size:1em;
+}
+body .ui-dialog .ui-dialog-title{
+	font-size:0.9em;
+}

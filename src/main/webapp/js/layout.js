@@ -38,7 +38,9 @@ scrumwall.create("layout", {
 		if(defaultOwner == "Your name"){
 			defaultOwner =  "";
 		}
-		var item = new scrumwall.item(event.target, itemCount++, defaultOwner);
+		var config = {parentEl:event.target,id:itemCount,owner:defaultOwner};
+		itemCount++;
+		var item = new scrumwall.item(config);
 		
 	}
 });

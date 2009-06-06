@@ -16,6 +16,7 @@
       <dwr:include method="saveItem"/>
       <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
       <dwr:convert type="bean" class="scala.runtime.RichString" />
+      <dwr:convert type="bean" class="scala.runtime.RichInt" />
     </dwr:remote>
   </bean>
 
