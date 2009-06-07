@@ -4,6 +4,8 @@ import com.scrumwall.domain.item.Item
 
 trait ItemService {
 	
-  def saveItem(item: Item)
+  def get(id: Int) : Item
+  
+  def save(item: Item) : Item
   
 }

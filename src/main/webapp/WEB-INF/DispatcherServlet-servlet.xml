@@ -12,7 +12,6 @@
   <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
        <props>
-            <prop key="/Welcome.form">welcomeController</prop>
             <prop key="/Layout.form">layoutController</prop>
             <prop key="/**/*.js">dwrController</prop>
             <prop key="exec/*">dwrController</prop>
@@ -34,10 +33,6 @@
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
     <property name="prefix" value="/WEB-INF/jsp/"/>
     <property name="suffix" value=".jsp"/>
-  </bean>
-
-  <bean id="welcomeController" class="com.scrumwall.controller.WelcomeController">
-    <constructor-arg ref="itemDao" />
   </bean>
   
 	<bean id="layoutController" class="com.scrumwall.controller.LayoutController"/>

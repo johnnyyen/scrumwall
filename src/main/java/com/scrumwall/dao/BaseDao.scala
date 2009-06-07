@@ -5,4 +5,8 @@ import com.scrumwall.util.debug.LogsToLog4J
 
 class BaseDao extends SimpleJdbcDaoSupport with LogsToLog4J {
 
+  def getLastInsertedId() : Int = {
+    getJdbcTemplate.queryForInt("call IDENTITY()")
+  }
+  
 }

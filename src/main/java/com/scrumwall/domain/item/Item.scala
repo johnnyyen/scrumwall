@@ -1,28 +1,27 @@
 package com.scrumwall.domain.item
 
 import scala.runtime.RichInt
-import scala.runtime.RichString
-
 
 class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 
 	def this() = this(null, null, null)
-	def this(id: RichInt, content: String) = this(id, content, null)
+	def this(id: Int, content: String) = this(id, content, null)
+	def this(content: String, estimation: RichInt) = this(null, content, estimation)
  
-	def getId() : RichInt = {
-	  this.id
+	def getId() : Int = {
+	  this.id.asInstanceOf[Int]
 	}
 
-	def setId(id: RichInt) = {
-	  this.id = id
+	def setId(id: Int) = {
+	  this.id = new RichInt(id)
 	}
  
-	def getEstimation() : RichInt = {
-	  this.estimation
+	def getEstimation() : Int = {
+	  this.estimation.asInstanceOf[Int]
 	}
  
-	def setEstimation(estimation: RichInt) = {
-	  this.estimation = estimation
+	def setEstimation(estimation: Int) = {
+	  this.estimation = new RichInt(estimation)
 	}
  
 	def getContent() : String = {
@@ -34,7 +33,12 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	} 
  
 	override def toString() : String = {
-	  return "[" + List[String](this.id.toString, this.estimation.toString, this.content) + "]"
+	  var result = "["
+	  if(this.id != null) result += this.id + ", "
+	  if(this.content != null) result += this.content + ", "
+	  if(this.estimation != null) result += this.estimation
+	  result += "]"
+	  result
 	}
  
 }
