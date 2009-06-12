@@ -38,11 +38,11 @@
   </dwr:configuration>
 
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
-    <constructor-arg index="0" ref="itemDao" />
+  	<aop:scoped-proxy/>
+  	<property name="itemDao" ref="itemDao"/>
     <dwr:remote javascript="ItemService">
       <dwr:include method="save"/>
       <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
-      <dwr:convert type="bean" class="scala.runtime.RichInt" />
     </dwr:remote>
   </bean>
 

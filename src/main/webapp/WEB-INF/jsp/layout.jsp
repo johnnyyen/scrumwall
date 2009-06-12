@@ -60,7 +60,7 @@
   	<script type="text/javascript">
   		function test() {
 	  		var item = {id: 1, estimation: 5, content: "TestContent"}
-	  		ItemService.saveItem(item,{exceptionHandler:exceptionHandler});
+	  		ItemService.save(item,{exceptionHandler:exceptionHandler});
   		}
   		
 		var config = {
