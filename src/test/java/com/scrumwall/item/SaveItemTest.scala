@@ -8,10 +8,8 @@ import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.ModelAndViewAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.junit.Test
-import org.springframework.test.context.transaction.TransactionConfiguration
 import org.springframework.test.annotation.Rollback
 
-@TransactionConfiguration{val transactionManager="txManager", val defaultRollback=true}
 class SaveItemTest extends BaseTestCase {
 
   var itemService: ItemService = _
