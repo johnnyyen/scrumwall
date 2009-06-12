@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       
        xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.directwebremoting.org/schema/spring-dwr
-           http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+           http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
+  <tx:advice id="txAdvice" transaction-manager="txManager">
+	  <!-- the transactional semantics... -->
+	  <tx:attributes>
+	    <!-- all methods starting with 'get' are read-only -->
+	    <tx:method name="get*" read-only="true" rollback-for="IllegalStateException" propagation="REQUIRED" />
+	    <!-- other methods use the default transaction settings (see below) -->
+	    <tx:method name="*" propagation="REQUIRED" rollback-for="IllegalStateExeption" />
+	  </tx:attributes>
+  </tx:advice>
+  
+
+  <aop:config>
+    <aop:pointcut id="transactionsPointcut" expression="execution(* com.scrumwall.service.item.ItemService.*(..))"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionsPointcut"/>
+  </aop:config>
+  
+
+  <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+  
   <dwr:configuration>
+    <dwr:convert type="bean" class="java.lang.Exception"></dwr:convert>
   </dwr:configuration>
 
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
@@ -20,9 +47,7 @@
   </bean>
 
   <bean id="itemDao" class="com.scrumwall.dao.item.ItemDaoImpl">
-    <property name="dataSource">
-      <ref bean="dataSource" />
-    </property>
+    <property name="dataSource" ref="dataSource" />
   </bean>
 
 </beans>

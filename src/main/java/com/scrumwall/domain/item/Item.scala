@@ -9,7 +9,7 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	def this(content: String, estimation: RichInt) = this(null, content, estimation)
  
 	def getId() : Int = {
-	  this.id.asInstanceOf[Int]
+	  this.id.abs
 	}
 
 	def setId(id: Int) = {
@@ -17,7 +17,7 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	}
  
 	def getEstimation() : Int = {
-	  this.estimation.asInstanceOf[Int]
+	  this.estimation.abs
 	}
  
 	def setEstimation(estimation: Int) = {

@@ -13,6 +13,7 @@ class ItemServiceImpl(val itemDao: ItemDao) extends ItemService with LogsToLog4J
   def get(id: Int) : Item = {
     debug( "Getting item with id: " + id )
     itemDao get id
+    throw new IllegalStateException
   }
   
 }

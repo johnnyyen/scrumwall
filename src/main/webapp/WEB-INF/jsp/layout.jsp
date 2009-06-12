@@ -11,7 +11,7 @@
 	  function test() {
 		  var item = {id: 1, estimation: 5, content: "TestContent"}
 		  ItemService.save(item);
-  	  }
+  	}
   </script>
 </head>
 <body>
@@ -63,14 +63,7 @@
 	<script type="text/javascript" src="js/item.js"></script>
 	<script type="text/javascript" src="js/menu.js"></script>
 	<script type="text/javascript" src="js/layout.js"></script>
-	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
-  	<script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
-  	<script type="text/javascript">
-  		function test() {
-	  		var item = {id: 1, estimation: 5, content: "TestContent"}
-	  		ItemService.saveItem(item,{exceptionHandler:exceptionHandler});
-  		}
-  		
+  <script type="text/javascript">  		
 		var config = {
 			columns:7
 		};

@@ -4,6 +4,7 @@ import com.scrumwall.domain.item.Item
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper
 import java.sql.ResultSet
 import scala.runtime.RichInt
+import java.util.HashMap
 
 class ItemDaoImpl extends ItemDao {
   
@@ -12,11 +13,14 @@ class ItemDaoImpl extends ItemDao {
     
     val mapper = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
-		new Item( (rs getInt "id").intValue, rs getString "content", (rs getInt "estimation").intValue)
+		new Item( new RichInt(rs getInt "id"), rs getString "content", new RichInt(rs getInt "estimation") )
       }
     }
     
-    getSimpleJdbcTemplate.queryForObject(ItemDaoImpl.SQL_GET, mapper, new RichInt(itemId)).asInstanceOf[Item]
+    var map = new HashMap[String, Object]
+    map.put( "id", new RichInt(itemId) )
+    
+    getNamedParameterJdbcTemplate.queryForObject(ItemDaoImpl.SQL_GET, map, mapper).asInstanceOf[Item]
   }
   
   override def save(item: Item) : Item = {
@@ -29,14 +33,24 @@ class ItemDaoImpl extends ItemDao {
   
   private def saveItem(item: Item) : Item = {
     debug("Saveing item : " + item)
-    getSimpleJdbcTemplate.update(ItemDaoImpl.SQL_SAVE, Map("content" -> item.content, "estimation" -> item.estimation))
+    var map = new HashMap[String, Object]
+    map.put("content", item.content)
+    map.put("estimation", item.estimation)
+    getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_SAVE, map)
     item.setId( getLastInsertedId() )
     item
   }
   
   private def update(item: Item) : Item = {
     debug("Updating item : " + item)
-    getSimpleJdbcTemplate.update(ItemDaoImpl.SQL_UPDATE, Map("content" -> item.content, "estimation" -> item.estimation, "id" -> item.id))
+    
+    var map = new HashMap[String, Object]
+    map.put("content", item.content)
+    map.put("estimation",item.estimation)
+    map.put("id", item.id)
+    
+    getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_UPDATE, map)
+    
     item
   }
   
