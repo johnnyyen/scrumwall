@@ -5,14 +5,6 @@
 	<title>Basic layout</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/layout.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-1.3.2/jquery-ui.css"/>
-	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
-	<script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
-	<script type="text/javascript">
-	  function test() {
-		  var item = {id: 1, estimation: 5, content: "TestContent"}
-		  ItemService.save(item);
-  	}
-  </script>
 </head>
 <body>
 	<div id="menu">
@@ -63,7 +55,14 @@
 	<script type="text/javascript" src="js/item.js"></script>
 	<script type="text/javascript" src="js/menu.js"></script>
 	<script type="text/javascript" src="js/layout.js"></script>
-  <script type="text/javascript">  		
+	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
+  	<script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
+  	<script type="text/javascript">
+  		function test() {
+	  		var item = {id: 1, estimation: 5, content: "TestContent"}
+	  		ItemService.saveItem(item,{exceptionHandler:exceptionHandler});
+  		}
+  		
 		var config = {
 			columns:7
 		};
