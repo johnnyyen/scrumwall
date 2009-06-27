@@ -21,15 +21,7 @@ scrumwall.create("layout", {
 		var item;
 		
 		for(var i = 0; i < items.length; i++){
-			config = {
-				parentEl:$(this.menu),
-				id:items[i].id,
-				owner:items[i].owner,
-				content: items[i].content,
-				estimate: items[i].estimate,
-				sprintId: items[i].sprintId
-			};
-			item = new scrumwall.item(config);
+			item = new scrumwall.item(items[i], this.cols);
 			
 		}
 	},

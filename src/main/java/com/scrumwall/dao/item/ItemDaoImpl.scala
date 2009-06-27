@@ -17,6 +17,9 @@ class ItemDaoImpl extends ItemDao {
 		var item : Item = new Item( new RichInt(rs getInt "id"), rs getString "content", new RichInt(rs getInt "estimation"))
 		var owner : String = rs getString "owner"
 		item setOwner owner
+		var sprintId = rs getInt "sprint_id"
+		item setSprintId sprintId
+  
 		item
       }
     }
@@ -39,8 +42,22 @@ class ItemDaoImpl extends ItemDao {
     val mapper = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
 		var item = new Item( new RichInt(rs getInt "id"), rs getString "content", new RichInt(rs getInt "estimation"))
-		var sprintid = rs getInt "sprint_id"
+		
+		var sprintId = rs getInt "sprint_id"
 		item setSprintId sprintId
+		
+		var owner : String = rs getString "owner"
+		item setOwner owner
+  
+		var column : Int = rs getInt "col"
+		item setColumn column
+		
+		var offsetX : Int = rs getInt "offset_x"
+		item setOffsetX offsetX
+		
+		var offsetY : Int = rs getInt "offset_y"
+		item setOffsetY offsetY
+		
 		item
       }
     }
@@ -77,11 +94,11 @@ class ItemDaoImpl extends ItemDao {
 }
 
 object ItemDaoImpl {
-  val SQL_GET = "SELECT id, content, estimation FROM item WHERE id = :id"
+  val SQL_GET = "SELECT id, content, estimation, sprint_id, owner FROM item WHERE id = :id"
   
   val SQL_SAVE = "INSERT INTO item(content, estimation) VALUES(:content, :estimation)"
   
   val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation  WHERE id = :id"
   
-  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprint_id from item where sprint_id = :sprintId"
+  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprint_id, owner, col, offset_x, offset_y from item where sprint_id = :sprintId"
 }

@@ -1,4 +1,4 @@
-
+	
 scrumwall.create("column", {
 	width:0,
 	parentEl: null,
@@ -32,13 +32,7 @@ scrumwall.create("column", {
 	},
 	onItemDrop:function(event){
 		var item = event.originalTarget;
-		if(this.items[item.guid]){
-			//item already present in the column
-			return;
-		}
-		this.items[item.guid] = item;
-		this.size++;
-		$(this.header).text("Items:" + this.size);
+		this.addItem(item);
 	},
 	onDragStop:function(event){
 		var item = event.originalTarget;
@@ -48,5 +42,17 @@ scrumwall.create("column", {
 			this.size--;
 		}
 		$(this.header).text("Items:" + this.size);
+	},
+	addItem:function(item){
+		if(!this.col.items){
+			this.col.items = new Array();
+		}
+		if(this.col.items[item.guid]){
+			//item already present in the column
+			return;
+		}
+		this.col.items[item.guid] = item;
+		this.col.size++;
+		$(this.col.header).text("Items:" + this.col.size);
 	}
 });
