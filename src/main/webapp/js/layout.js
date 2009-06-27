@@ -3,16 +3,35 @@ scrumwall.create("layout", {
 	init: function(config){
 		$("#newItem").click(function(ev){alert("button clicked");});
 		$("#tabbar").tabs();
-		var menu = new scrumwall.menu();
+		this.menu = new scrumwall.menu();
 		
-		$("#itemCreator").bind("click",{owner:$(menu.owner)},this.createItem);
+		$("#itemCreator").bind("click",{owner:$(this.menu.owner)},this.createItem);
 		var creator = $("#itemCreator");
 		creator.itemCount = 0;
 		
 		this.config = config;
 		this.createColumns($("#columnContainer"));
 		
+		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});
+		
 		$(window).bind("resize",{cols:this.cols},this.onWindowResize);
+	},
+	loadItems:function(items){
+		
+		var item;
+		
+		for(var i = 0; i < items.length; i++){
+			config = {
+				parentEl:$(this.menu),
+				id:items[i].id,
+				owner:items[i].owner,
+				content: items[i].content,
+				estimate: items[i].estimate,
+				sprintId: items[i].sprintId
+			};
+			item = new scrumwall.item(config);
+			
+		}
 	},
 	createColumns:function(parentEl){
 		//get column area width

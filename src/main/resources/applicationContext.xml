@@ -42,6 +42,7 @@
   	<property name="itemDao" ref="itemDao"/>
     <dwr:remote javascript="ItemService">
       <dwr:include method="save"/>
+      <dwr:include method="getForSprint"/>
       <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
     </dwr:remote>
   </bean>

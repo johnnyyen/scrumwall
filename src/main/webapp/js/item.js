@@ -14,11 +14,19 @@ scrumwall.create("item", {
 		//the text displayed in item.
 		//use separate containers for collapsed and expanded mode
 		this.el.contentText = $.create("div",{"class":"itemText"});
-		$(this.el.contentText).text("I am a new item. Double click me");
+		if(config.content){
+			$(this.el.contentText).text(config.content);
+		}else{
+			$(this.el.contentText).text("I am a new item. Double click me");
+		}
 		this.el.content = $.create("textarea",{"class":"itemContent hidden"});
 		
 		//construct estimate
 		this.el.estimate = $.create("input",{"type":"text","class":"estimate"})
+		if(config.estimate){
+			$(this.el.estimate).attr("value",config.estimate);
+		}
+		
 		var estLabel = $.create("span",{"class":"label"});
 		$(estLabel).text("est.");
 		var estWrapper = $.create("div",{"class":"estWrapper"});

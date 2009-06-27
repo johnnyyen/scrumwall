@@ -3,11 +3,13 @@ package com.scrumwall.domain.item
 import scala.runtime.RichInt
 
 class Item(var id: RichInt, var content: String, var estimation: RichInt) {
-
+	var sprintId : RichInt = _
+	var owner : String = _
+  
 	def this() = this(null, null, null)
 	def this(id: Int, content: String) = this(id, content, null)
 	def this(content: String, estimation: RichInt) = this(null, content, estimation)
- 
+	
 	def getId() : Int = {
 	  this.id.abs
 	}
@@ -31,6 +33,22 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	def setContent(content: String) = {
 	  this.content = content
 	} 
+	
+	def getSprintId() : Int = {
+	  this.sprintId.abs
+	}
+ 
+	def setSprintId(sprintId: Int) = {
+	  this.sprintId = new RichInt(sprintId)
+	}
+	
+	def getOwner : String = {
+	  this.owner
+	}
+ 
+	def setOwner(owner : String) = {
+	  this.owner = owner
+	}
  
 	override def toString() : String = {
 	  var result = "["

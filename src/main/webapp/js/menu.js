@@ -5,7 +5,6 @@ scrumwall.create("menu",{
 		this.owner.blur(this.onOwnerBlur);
 	},
 	clearOwner:function(){
-		//this == ownerInput
 		
 		if(!$(this).attr("value") || $(this).attr("value") == "Your name"){
 			$(this).removeAttr("value");
