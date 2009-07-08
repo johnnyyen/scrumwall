@@ -6,12 +6,13 @@ import junit.framework.TestCase
 import org.junit.runner.RunWith
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.transaction.TransactionConfiguration
+import org.springframework.test.AbstractTransactionalDataSourceSpringContextTests
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional()
 @TransactionConfiguration{val transactionManager="txManager", val defaultRollback=true}
 @RunWith(classOf[org.springframework.test.context.junit4.SpringJUnit4ClassRunner])
 @ContextConfiguration{val locations = Array("classpath:applicationContext.xml", "classpath:test-ds.xml"), val inheritLocations = false}
-abstract class BaseTestCase extends TestCase with JUnit3Suite {
+abstract class BaseTestCase extends AbstractTransactionalDataSourceSpringContextTests with JUnit3Suite {
   
 }
