@@ -8,7 +8,7 @@ scrumwall.create("column", {
 		
 		this.col = jQuery.create("div",{"class":"column","id":id}); 
 		$(this.col).width(colWidth);
-		
+		this.col.addItem = this.addItem;
 		this.col.items = new Array();
 		this.col.size = 0;
 		
@@ -30,29 +30,36 @@ scrumwall.create("column", {
 	resize:function(newWidth){
 		$(this.col).width(newWidth);
 	},
-	onItemDrop:function(event){
-		var item = event.originalTarget;
-		this.addItem(item);
+	onItemDrop:function(event, ui){
+		var item = ui.draggable[0];
+		this.addItem(item, null);
 	},
-	onDragStop:function(event){
-		var item = event.originalTarget;
+	onDragStop:function(event, ui){
+		var item = ui.draggable[0];
 		if(this.items[item.guid]){
 			//item present in the column
-			this.items[item.guid] = null;
 			this.size--;
+			delete this.items[item.guid];
+			
 		}
 		$(this.header).text("Items:" + this.size);
 	},
-	addItem:function(item){
-		if(!this.col.items){
-			this.col.items = new Array();
+	addItem:function(item, colScope){
+		if(!colScope){
+			colScope = this;
 		}
-		if(this.col.items[item.guid]){
+		
+		if(colScope.items[item.guid]){
 			//item already present in the column
 			return;
 		}
-		this.col.items[item.guid] = item;
-		this.col.size++;
-		$(this.col.header).text("Items:" + this.col.size);
+		if(colScope.items){
+			colScope.items[item.guid] = item;
+		}else{
+			colScope.items = new Array();
+			colScope.items[item.guid] = item;
+		}
+		colScope.size++;
+		$(colScope.header).text("Items:" + colScope.size);
 	}
 });

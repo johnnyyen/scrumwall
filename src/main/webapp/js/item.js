@@ -32,9 +32,9 @@ scrumwall.create("item", {
 		$(this.el.owner).attr("value", config.owner);
 		
 		//set the initial position of item
-		if(cols.length > config.column){
+		if(cols && cols.length > config.column){
 			var col = cols[config.column];
-			col.addItem(this.el);
+			col.addItem(this.el, col.col);
 			var pos = $(col.col).offset();
 			var x = 0;
 			var y = 0;
