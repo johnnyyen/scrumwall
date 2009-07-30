@@ -44,6 +44,9 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+          			<javaRebelPath>${user.home}/install/javarebel/javarebel.jar</javaRebelPath>
+        		</configuration>				
 			</plugin>
 			<plugin>  
 				<artifactId>maven-surefire-plugin</artifactId>  

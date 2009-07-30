@@ -1,76 +1,73 @@
 
 scrumwall.create("item", {
 	
-	init:function(config, cols){
+	initialize:function(config, cols){
+		this.guid = "i"+config.id;
+		this.saveUrl = config.url;
+		$(this).draggable();
 		
-		this.el = $.create("div",{"class":"item"});	
-		this.el.guid = "i"+config.id;
-		this.el.saveUrl = config.url;
-		
-		$(this.el).draggable();
-		
+		this.sprintId=config.sprintId;
 		//the text displayed in item.
 		//use separate containers for collapsed and expanded mode
-		this.el.contentText = $.create("div",{"class":"itemText"});
+		this.contentText = $.create("div",{"class":"itemText"});
 		if(config.content){
-			$(this.el.contentText).text(config.content);
+			$(this.contentText).text(config.content);
 		}else{
-			$(this.el.contentText).text("I am a new item. Double click me");
+			$(this.contentText).text("I am a new item. Double click me");
 		}
-		this.el.content = $.create("textarea",{"class":"itemContent hidden"});
-		
-		this.el.estimate = $.create("input",{"type":"text","class":"estimate"})
+		this.content = $.create("textarea",{"class":"itemContent hidden"});
+		$(this.content).val(config.content)
+		this.estimate = $.create("input",{"type":"text","class":"estimate"})
 		if(config.estimate){
-			$(this.el.estimate).attr("value",config.estimate);
+			$(this.estimate).attr("value",config.estimate);
 		}
 		
 		var estLabel = $.create("span",{"class":"label"});
 		$(estLabel).text("est.");
 		var estWrapper = $.create("div",{"class":"estWrapper"});
 		
-		this.el.owner = $.create("input",{"type":"text","class":"owner"});
-		$(this.el.owner).attr("value", config.owner);
+		this.owner = $.create("input",{"type":"text","class":"owner"});
+		$(this.owner).attr("value", config.owner);
 		
 		//set the initial position of item
 		if(cols && cols.length > config.column){
 			var col = cols[config.column];
-			col.addItem(this.el, col.col);
-			var pos = $(col.col).offset();
+			col.addItem(this);
+			var pos = $(col).offset();
 			var x = 0;
 			var y = 0;
 			if(config.offsetX){
-				x = config.offsetX * $(col.col).width() / 100;
+				x = config.offsetX * $(col).width() / 100;
 			}
 			if(config.offsetY){
-				y = config.offsetY * $(col.col).height() / 100;;
+				y = config.offsetY * $(col).height() / 100;;
 			}
 			
-			pos.left = pos.left + x;
-			pos.top = pos.top + y;
+			pos.left = pos.left + Math.round(x);
+			pos.top = pos.top + Math.round(y);
 			
-			$(this.el).css({left:pos.left + "px",top:pos.top+ "px"});
-			
+			$(this).css({left:pos.left + "px",top:pos.top+ "px"});
 		}
 		
 		//FIXME: this needs to be replaced by some other heuristic of detecting when the item needs to be collapsed 
-		this.el.collapseButton = $.create("input",{"type":"button","value":"Collapse","class":"collapseButton hidden"});
+		this.collapseButton = $.create("input",{"type":"button","value":"Collapse","class":"collapseButton hidden"});
 		
 		//update DOM with item
 		$(estWrapper).append(estLabel);
-		$(estWrapper).append(this.el.estimate);
-		$("#menu").append($(this.el));
-		$(this.el).append($(this.el.contentText));
-		$(this.el).append($(this.el.content));
-		$(this.el).append($(this.el.owner));
-		$(this.el).append($(estWrapper));
-		$(this.el).append($(this.el.collapseButton));
+		$(estWrapper).append(this.estimate);
+		$("body").append($(this));
+		$(this).append($(this.contentText));
+		$(this).append($(this.content));
+		$(this).append($(this.owner));
+		$(this).append($(estWrapper));
+		$(this).append($(this.collapseButton));
 		
-		$(this.el).show();
+		$(this).show();
 		
 		//add event listeners
-		$(this.el.collapseButton).bind("click",{item:this.el},this.collapse);
-		$(this.el).dblclick(this.expand);
-		$(this.el).blur(this.collapse);
+		$(this.collapseButton).bind("click",{item:this},this.collapse);
+		$(this).dblclick(this.expand);
+		$(this).blur(this.collapse);
 	},
 	expand:function(event){
 		$(this).width(300);
@@ -89,8 +86,41 @@ scrumwall.create("item", {
 		$(item.contentText).text($(item.content).attr("value"));
 		$(item.collapseButton).addClass("hidden");
 	},
+	saveable:function(){
+		var coords = this.getRelativeCoords();
+		return {id: this.guid.replace("i",""),
+			column: this.column.id.replace("col",""),
+			content: $(this.content).val(),
+			estimation: this.estimate.value,
+			offsetX: coords.left,
+			offsetY: coords.top,
+			owner: this.owner.value,
+			sprintId: this.sprintId}
+	},
 	save:function(){
+		ItemService.save(this.saveable(),{exceptionHandler:exceptionHandler});
 		
+	},
+	setColumn:function(column){
+		this.column = column;
+	},
+	getRelativeCoords:function(){
+		var columnOffsets = $(this.column).offset();
+		var columnLeft = columnOffsets.left;
+		var columnTop = columnOffsets.top;
+		var itemOffsets = $(this).offset();
+		var itemLeft = itemOffsets.left;
+		var itemTop = itemOffsets.top;
+		
+		var offsetTop = itemTop - columnTop;
+		var offsetLeft = itemLeft - columnLeft;
+		
+		var columnHeight = $(this.column).height();
+		var columnWidth = $(this.column).width();
+		
+		var relativeTop = offsetTop / columnHeight * 100;
+		var relativeLeft = offsetLeft / columnWidth * 100;
+		return {top: relativeTop, left: relativeLeft}
 	}
 	
 });

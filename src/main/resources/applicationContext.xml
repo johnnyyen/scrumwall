@@ -35,6 +35,8 @@
   
   <dwr:configuration>
     <dwr:convert type="bean" class="java.lang.Exception"></dwr:convert>
+    <dwr:convert type="bean" class="java.lang.StackTraceElement"></dwr:convert>
+    <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
   </dwr:configuration>
 
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
@@ -43,7 +45,6 @@
     <dwr:remote javascript="ItemService">
       <dwr:include method="save"/>
       <dwr:include method="getForSprint"/>
-      <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
     </dwr:remote>
   </bean>
 

@@ -26,7 +26,11 @@ class SaveItemTest extends BaseTestCase {
   }
   
   @Test def canUpdateCorrectItem() {
-    var item = new Item(2, "TestItemFromTestCase", 5)
+    var item = new Item("TestItemFromTestCase", 5)
+    
+    item = itemService save item
+    
+    item.content = "TestItemFromTestCaseUpdated"
     
     item = itemService save item
     

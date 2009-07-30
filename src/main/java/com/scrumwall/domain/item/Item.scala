@@ -1,13 +1,14 @@
 package com.scrumwall.domain.item
 
 import scala.runtime.RichInt
+import scala.runtime.RichDouble
 
 class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	var sprintId : RichInt = _
 	var owner : String = _
 	var column: RichInt = _
-	var offsetX: RichInt = _
-	var offsetY: RichInt = _
+	var offsetX: RichDouble = _
+	var offsetY: RichDouble = _
  
 	def this() = this(null, null, null)
 	def this(id: Int, content: String) = this(id, content, null)
@@ -53,20 +54,30 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	  this.owner = owner
 	}
  
-    def getOffsetX : Int = {
-	  this.offsetX.abs
+    def getOffsetX : Double = {
+      //FIXME: obvious
+	  var multiplier = -1;
+	  if(this.offsetX > 0) {
+	    multiplier = 1;
+	  }
+	  return multiplier * this.offsetX.abs
 	}
 
-	def setOffsetX (offsetX : Int) = {
-	  this.offsetX = new RichInt(offsetX)
+	def setOffsetX (offsetX : Double) = {
+	  this.offsetX = new RichDouble(offsetX)
 	}
 	
-	def getOffsetY : Int = {
-	  this.offsetY.abs
+	def getOffsetY : Double = {
+	  //FIXME: obvious
+	  var multiplier = -1;
+	  if(this.offsetY > 0) {
+	    multiplier = 1;
+	  }
+	  return multiplier * this.offsetY.abs
 	}
 
-	def setOffsetY(offsetY : Int) = {
-	  this.offsetY = new RichInt(offsetY)
+	def setOffsetY(offsetY : Double) = {
+	  this.offsetY = new RichDouble(offsetY)
 	}
  
 	def getColumn : Int = {
@@ -80,7 +91,12 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	  var result = "["
 	  if(this.id != null) result += this.id + ", "
 	  if(this.content != null) result += this.content + ", "
-	  if(this.estimation != null) result += this.estimation
+	  if(this.estimation != null) result += this.estimation + ", "
+	  if(this.owner != null) result += this.owner + ", "
+	  if(this.offsetX != null) result += this.offsetX + ", "
+	  if(this.offsetY != null) result += this.offsetY + ", "
+	  if(this.column != null) result += this.column + ", "
+	  if(this.sprintId != null) result += this.sprintId
 	  result += "]"
 	  result
 	}

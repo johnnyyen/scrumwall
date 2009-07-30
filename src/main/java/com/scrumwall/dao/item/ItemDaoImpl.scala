@@ -14,11 +14,13 @@ class ItemDaoImpl extends ItemDao {
     
     val mapper = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
-		var item : Item = new Item( new RichInt(rs getInt "id"), rs getString "content", new RichInt(rs getInt "estimation"))
-		var owner : String = rs getString "owner"
+		var item : Item = new Item( new RichInt(rs getInt ItemDaoImpl.ID), rs getString ItemDaoImpl.CONTENT, new RichInt(rs getInt ItemDaoImpl.ESTIMATION))
+		var owner : String = rs getString ItemDaoImpl.OWNER
 		item setOwner owner
-		var sprintId = rs getInt "sprint_id"
-		item setSprintId sprintId
+		var sprintId = rs getBigDecimal ItemDaoImpl.SPRINTID
+		if(sprintId != null) {
+			item setSprintId sprintId.intValue
+		}
   
 		item
       }
@@ -41,21 +43,21 @@ class ItemDaoImpl extends ItemDao {
   override def getForSprint(sprintId: Int) : List[Item] = {
     val mapper = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
-		var item = new Item( new RichInt(rs getInt "id"), rs getString "content", new RichInt(rs getInt "estimation"))
+		var item = new Item( new RichInt(rs getInt ItemDaoImpl.ID), rs getString ItemDaoImpl.CONTENT, new RichInt(rs getInt ItemDaoImpl.ESTIMATION))
 		
-		var sprintId = rs getInt "sprint_id"
+		var sprintId = rs getInt ItemDaoImpl.SPRINTID
 		item setSprintId sprintId
 		
-		var owner : String = rs getString "owner"
+		var owner = rs getString ItemDaoImpl.OWNER
 		item setOwner owner
   
-		var column : Int = rs getInt "col"
+		var column = rs getInt ItemDaoImpl.COLUMN
 		item setColumn column
 		
-		var offsetX : Int = rs getInt "offset_x"
+		var offsetX = rs getDouble ItemDaoImpl.OFFSETX
 		item setOffsetX offsetX
 		
-		var offsetY : Int = rs getInt "offset_y"
+		var offsetY = rs getDouble ItemDaoImpl.OFFSETY
 		item setOffsetY offsetY
 		
 		item
@@ -73,6 +75,11 @@ class ItemDaoImpl extends ItemDao {
     var map = new HashMap[String, Object]
     map.put("content", item.content)
     map.put("estimation", item.estimation)
+    map.put("offsetX", item.offsetX)
+    map.put("offsetY", item.offsetY)
+    map.put("owner", item.owner)
+    map.put("sprintId", item.sprintId)
+    
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_SAVE, map)
     item.setId( getLastInsertedId() )
     item
@@ -85,6 +92,10 @@ class ItemDaoImpl extends ItemDao {
     map.put("content", item.content)
     map.put("estimation",item.estimation)
     map.put("id", item.id)
+    map.put("offsetX", item.offsetX)
+    map.put("offsetY", item.offsetY)
+    map.put("owner", item.owner)
+    map.put("sprintId", item.sprintId)
     
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_UPDATE, map)
     
@@ -94,11 +105,17 @@ class ItemDaoImpl extends ItemDao {
 }
 
 object ItemDaoImpl {
-  val SQL_GET = "SELECT id, content, estimation, sprint_id, owner FROM item WHERE id = :id"
+  val SPRINTID = "sprintid"
+  val OFFSETX = "offsetx"
+  val OFFSETY = "offsety"
+  val ESTIMATION = "estimation"
+  val ID = "id"
+  val OWNER = "owner"
+  val CONTENT = "content" 
+  val COLUMN = "col"
   
-  val SQL_SAVE = "INSERT INTO item(content, estimation) VALUES(:content, :estimation)"
-  
-  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation  WHERE id = :id"
-  
-  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprint_id, owner, col, offset_x, offset_y from item where sprint_id = :sprintId"
+  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid FROM item WHERE id = :id"  
+  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId)"  
+  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId WHERE id = :id"  
+  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY from item where sprintId = :sprintId"
 }

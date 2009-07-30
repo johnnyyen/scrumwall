@@ -21,7 +21,10 @@ scrumwall.create("layout", {
 		var item;
 		
 		for(var i = 0; i < items.length; i++){
-			item = new scrumwall.item(items[i], this.cols);
+			item = $.create("div",{"class":"item"});
+			$.extend( item, new scrumwall.item() );
+			item.initialize(items[i], this.cols);
+			var n=0;
 			
 		}
 	},
@@ -31,7 +34,11 @@ scrumwall.create("layout", {
 		var colwidth = Math.round(width/config.columns)-2;
 		this.cols = new Array();
 		for(var i=0; i < config.columns; i++){
-			this.cols[this.cols.length] = new scrumwall.column(colwidth, "col"+i, parentEl);
+			var id = "col"+i;
+			var col = jQuery.create("div",{"class":"column","id":id});
+			$.extend( col, new scrumwall.column() );
+			col.initialize(colwidth, id, parentEl);
+			this.cols[this.cols.length] = col;
 		}
 		
 	},
