@@ -17,87 +17,84 @@ scrumwall.create("item", {
 		}
 		this.content = $.create("textarea",{"class":"itemContent hidden"});
 		$(this.content).val(config.content)
-		this.estimate = $.create("input",{"type":"text","class":"estimate"})
-		if(config.estimate){
-			$(this.estimate).attr("value",config.estimate);
+		this.estimation = $.create("input",{"maxlength":"2","type":"text","class":"estimation"})
+		if(config.estimation){
+			$(this.estimation).val(config.estimation);
 		}
 		
+		this.expander = $.create("div",{"class":"expandIcon"});
+		
 		var estLabel = $.create("span",{"class":"label"});
-		$(estLabel).text("est.");
 		var estWrapper = $.create("div",{"class":"estWrapper"});
 		
 		this.owner = $.create("input",{"type":"text","class":"owner"});
 		$(this.owner).attr("value", config.owner);
-		
+		this.offsetX = config.offsetX;
+		this.offsetY = config.offsetY;
 		//set the initial position of item
 		if(cols && cols.length > config.column){
-			var col = cols[config.column];
-			col.addItem(this);
-			var pos = $(col).offset();
-			var x = 0;
-			var y = 0;
-			if(config.offsetX){
-				x = config.offsetX * $(col).width() / 100;
-			}
-			if(config.offsetY){
-				y = config.offsetY * $(col).height() / 100;;
-			}
-			
-			pos.left = pos.left + Math.round(x);
-			pos.top = pos.top + Math.round(y);
-			
-			$(this).css({left:pos.left + "px",top:pos.top+ "px"});
+			this.col = cols[config.column];
+			this.col.addItem(this);
+			this.redraw();
 		}
-		
-		//FIXME: this needs to be replaced by some other heuristic of detecting when the item needs to be collapsed 
-		this.collapseButton = $.create("input",{"type":"button","value":"Collapse","class":"collapseButton hidden"});
 		
 		//update DOM with item
 		$(estWrapper).append(estLabel);
-		$(estWrapper).append(this.estimate);
+		$(estWrapper).append(this.estimation);
 		$("body").append($(this));
 		$(this).append($(this.contentText));
 		$(this).append($(this.content));
+		$(this).append($(this.expander));
 		$(this).append($(this.owner));
 		$(this).append($(estWrapper));
-		$(this).append($(this.collapseButton));
 		
 		$(this).show();
 		
 		//add event listeners
-		$(this.collapseButton).bind("click",{item:this},this.collapse);
-		$(this).dblclick(this.expand);
-		$(this).blur(this.collapse);
+		$(this.expander).bind("click", {parent: this, object:this}, this.expand);
+		$(this).bind("dblclick", {parent: this, object: this.expander}, this.expand);
 	},
 	expand:function(event){
-		$(this).width(300);
-		$(this).height(300);
-		$(this.content).removeClass("hidden");
-		$(this.contentText).addClass("hidden");
-		$(this.content).attr("value", $(this.contentText).text());
-		$(this.collapseButton).removeClass("hidden");
+		var parent = event.data.parent;
+		var object = event.data.object;
+		$(parent).width(300);
+		$(parent).height(300);
+		$(parent.content).removeClass("hidden");
+		$(parent.contentText).addClass("hidden");
+		$(parent.content).attr("value", $(parent.contentText).text());
+		$(object).unbind("click", parent.expand);
+		$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+		//event.stopPropagation();
+		//return false;
 	},
 	collapse:function(event){
-		var item = event.data.item;
-		$(item).width(120);
-		$(item).height(100);
-		$(item.content).addClass("hidden");
-		$(item.contentText).removeClass("hidden");
-		$(item.contentText).text($(item.content).attr("value"));
-		$(item.collapseButton).addClass("hidden");
+		var parent = event.data.parent;
+		var object = event.data.object;
+		$(parent).width(120);
+		$(parent).height(100);
+		$(parent.content).addClass("hidden");
+		$(parent.contentText).removeClass("hidden");
+		$(parent.contentText).text($(parent.content).attr("value"));
+		$(object).unbind("click", parent.collapse);
+		$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
+		//event.stopPropagation();
+		//return false;
 	},
 	saveable:function(){
 		var coords = this.getRelativeCoords();
+		this.offsetX = coords.left;
+		this.offsetY = coords.top;
 		return {id: this.guid.replace("i",""),
 			column: this.column.id.replace("col",""),
 			content: $(this.content).val(),
-			estimation: this.estimate.value,
+			estimation: this.estimation.value,
 			offsetX: coords.left,
 			offsetY: coords.top,
 			owner: this.owner.value,
 			sprintId: this.sprintId}
 	},
 	save:function(){
+		
 		ItemService.save(this.saveable(),{exceptionHandler:exceptionHandler});
 		
 	},
@@ -121,6 +118,23 @@ scrumwall.create("item", {
 		var relativeTop = offsetTop / columnHeight * 100;
 		var relativeLeft = offsetLeft / columnWidth * 100;
 		return {top: relativeTop, left: relativeLeft}
+	},
+	redraw: function(){
+		
+		var pos = $(this.col).offset();
+		var x = 0;
+		var y = 0;
+		if(this.offsetX){
+			x = this.offsetX * $(this.col).width() / 100;
+		}
+		if(this.offsetY){
+			y = this.offsetY * $(this.col).height() / 100;;
+		}
+		
+		pos.left = pos.left + Math.round(x);
+		pos.top = pos.top + Math.round(y);
+		
+		$(this).css({left:pos.left + "px",top:pos.top+ "px"});
 	}
 	
 });

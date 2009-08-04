@@ -21,7 +21,11 @@ class ItemDaoImpl extends ItemDao {
 		if(sprintId != null) {
 			item setSprintId sprintId.intValue
 		}
-  
+		
+		val column = rs getBigDecimal ItemDaoImpl.COLUMN
+		if(column != null) {
+			item.setColumn(column.intValue)
+		}
 		item
       }
     }
@@ -79,6 +83,7 @@ class ItemDaoImpl extends ItemDao {
     map.put("offsetY", item.offsetY)
     map.put("owner", item.owner)
     map.put("sprintId", item.sprintId)
+    map.put("col", item.column)
     
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_SAVE, map)
     item.setId( getLastInsertedId() )
@@ -96,6 +101,7 @@ class ItemDaoImpl extends ItemDao {
     map.put("offsetY", item.offsetY)
     map.put("owner", item.owner)
     map.put("sprintId", item.sprintId)
+    map.put("col", item.column)
     
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_UPDATE, map)
     
@@ -114,8 +120,8 @@ object ItemDaoImpl {
   val CONTENT = "content" 
   val COLUMN = "col"
   
-  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid FROM item WHERE id = :id"  
-  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId)"  
-  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId WHERE id = :id"  
+  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col FROM item WHERE id = :id"  
+  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId, col) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col)"  
+  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col WHERE id = :id"  
   val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY from item where sprintId = :sprintId"
 }

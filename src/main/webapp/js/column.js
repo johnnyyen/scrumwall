@@ -28,10 +28,14 @@ scrumwall.create("column", {
 	},
 	resize:function(newWidth){
 		$(this).width(newWidth);
+		for(var i in this.items){
+			this.items[i].redraw();
+		}
 	},
 	onItemDrop:function(event, ui){
 		var item = ui.draggable[0];
 		this.addItem(item, null);
+		item.col = this;
 		item.save();
 	},
 	onDragStop:function(event, ui){

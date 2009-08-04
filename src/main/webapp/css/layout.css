@@ -66,8 +66,17 @@
 .itemContent{
 	width:100%;
 }
-.estimate{
-	width:35px;
+
+.expandIcon{
+	background-image: url('../images/expandIcon.jpeg');
+	margin-left:auto;
+	margin-right:auto;
+	height: 24px;
+	width:24px;
+}
+	
+.estimation{
+	width:1.8em;
 	
 }
 .estWrapper{
