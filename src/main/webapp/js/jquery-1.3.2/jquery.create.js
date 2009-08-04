@@ -27,10 +27,11 @@ jQuery.create = function() {
                                 jQuery(elem).attr(attr, attributes[attr]);
 
                             // Add children of this element.
-                            var children = arguments[2];
-                            children = jQuery.create.apply(null, children);
-                            jQuery(elem).append(children);
-
+                            if(arguments.length > 2){
+                            	var children = arguments[2];
+                            	children = jQuery.create.apply(null, children);
+                            	jQuery(elem).append(children);
+                            }
                             // If there are more siblings, render those too.
                             if (arguments.length > 3) {
                                     siblings =
