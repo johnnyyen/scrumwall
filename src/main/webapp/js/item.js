@@ -2,11 +2,12 @@
 scrumwall.create("item", {
 	
 	initialize:function(config, cols){
+		var FIX_SPRINT_ID=1;
 		this.guid = "i"+config.id;
 		this.saveUrl = config.url;
 		$(this).draggable();
 		
-		this.sprintId=config.sprintId;
+		this.sprintId=config.sprintId ? config.sprintId : FIX_SPRINT_ID;
 		//the text displayed in item.
 		//use separate containers for collapsed and expanded mode
 		this.contentText = $.create("div",{"class":"itemText"});
@@ -64,8 +65,6 @@ scrumwall.create("item", {
 		$(parent.content).attr("value", $(parent.contentText).text());
 		$(object).unbind("click", parent.expand);
 		$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
-		//event.stopPropagation();
-		//return false;
 	},
 	collapse:function(event){
 		var parent = event.data.parent;
@@ -77,8 +76,6 @@ scrumwall.create("item", {
 		$(parent.contentText).text($(parent.content).attr("value"));
 		$(object).unbind("click", parent.collapse);
 		$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
-		//event.stopPropagation();
-		//return false;
 	},
 	saveable:function(){
 		var coords = this.getRelativeCoords();

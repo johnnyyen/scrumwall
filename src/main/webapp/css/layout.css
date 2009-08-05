@@ -10,7 +10,7 @@
 }
 
 #menu{
-	position: absolute;
+	/*position: absolute;*/
 	float:left;	
 	width: 10%;
 	text-align: center;
@@ -46,7 +46,7 @@
      display: none;
 }
 #tabbar{
-	margin-left:15%;
+	margin-left:11%;
 	height:47px;
 }
 

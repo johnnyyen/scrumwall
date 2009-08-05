@@ -21,9 +21,7 @@ scrumwall.create("layout", {
 		var item;
 		
 		for(var i = 0; i < items.length; i++){
-			item = $.create("div",{"class":"item"});
-			$.extend( item, new scrumwall.item() );
-			item.initialize(items[i], this.cols);
+			item = newItem(items[i], this.cols);
 			var n=0;
 			
 		}
@@ -51,14 +49,19 @@ scrumwall.create("layout", {
 		}
 	},
 	createItem:function(event){
+		//FIXME fix sprint id
+		var FIX_SPRINT_ID=1;
 		var owner = event.data.owner;
 		var defaultOwner = $(owner).attr("value");
 		if(defaultOwner == "Your name"){
 			defaultOwner =  "";
 		}
-		var config = {parentEl:event.target,id:itemCount,owner:defaultOwner};
+		var config = {parentEl:event.target,
+			id:itemCount,
+			owner:defaultOwner,
+			sprintId:FIX_SPRINT_ID};
 		itemCount++;
-		var item = new scrumwall.item(config);
+		var item = newItem(config,null);
 		
 	}
 });

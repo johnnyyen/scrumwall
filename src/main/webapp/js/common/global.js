@@ -8,3 +8,8 @@ function exceptionHandler(msg){
 	$(el).text("The server says: " + msg);
 	$(el).dialog({ buttons: { "Ok": function() { $(this).dialog("destroy"); }}});	
 }
+function newItem(config, columns){
+	var item = $.create("div",{"class":"item"});
+	$.extend( item, new scrumwall.item() );
+	item.initialize(config, columns);	
+}
