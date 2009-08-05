@@ -12,4 +12,5 @@ function newItem(config, columns){
 	var item = $.create("div",{"class":"item"});
 	$.extend( item, new scrumwall.item() );
 	item.initialize(config, columns);	
+	return item;
 }

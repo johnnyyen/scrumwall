@@ -3,21 +3,24 @@ scrumwall.create("item", {
 	
 	initialize:function(config, cols){
 		var FIX_SPRINT_ID=1;
-		this.guid = "i"+config.id;
+		this.guid =  config.id ? "item." + config.id : "new." + itemCount;
 		this.saveUrl = config.url;
 		$(this).draggable();
 		
-		this.sprintId=config.sprintId ? config.sprintId : FIX_SPRINT_ID;
+		//FIXME use real sprints
+		this.sprintId=FIX_SPRINT_ID;
+		this.content = $.create("textarea",{"class":"itemContent hidden"});
 		//the text displayed in item.
 		//use separate containers for collapsed and expanded mode
 		this.contentText = $.create("div",{"class":"itemText"});
-		if(config.content){
+		if(config.id){
 			$(this.contentText).text(config.content);
+			$(this.content).val(config.content);
 		}else{
-			$(this.contentText).text("I am a new item. Double click me");
+			var newItemText = "I am a new item. Double click me";
+			$(this.contentText).text(newItemText);
+			$(this.content).val(newItemText);
 		}
-		this.content = $.create("textarea",{"class":"itemContent hidden"});
-		$(this.content).val(config.content)
 		this.estimation = $.create("input",{"maxlength":"2","type":"text","class":"estimation"})
 		if(config.estimation){
 			$(this.estimation).val(config.estimation);
@@ -78,31 +81,55 @@ scrumwall.create("item", {
 		$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
 	},
 	saveable:function(){
-		var coords = this.getRelativeCoords();
-		this.offsetX = coords.left;
-		this.offsetY = coords.top;
-		return {id: this.guid.replace("i",""),
-			column: this.column.id.replace("col",""),
+		this.setRelativeCoords();
+		
+		var item = {column: this.column.id.replace("col",""),
 			content: $(this.content).val(),
 			estimation: this.estimation.value,
-			offsetX: coords.left,
-			offsetY: coords.top,
+			offsetX: this.offsetX,
+			offsetY: this.offsetY,
 			owner: this.owner.value,
-			sprintId: this.sprintId}
+			sprintId: this.sprintId};
+		var id = this.guid;
+		
+		if(id && id.indexOf("item.") >= 0){
+			id = this.guid.replace("item.","");
+			item.id = id;
+		}
+		return item;
 	},
 	save:function(){
 		
-		ItemService.save(this.saveable(),{exceptionHandler:exceptionHandler});
+		ItemService.save(this.saveable(),
+				{scope: this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
+		
+		
+	},
+	saveCallback:function(item){
+		this.guid = "item." + item.id;
+	},
+	remove:function(){
+		var id = this.saveable().id;
+		if(id){
+			ItemService.remove(id,{exceptionHandler:exceptionHandler});
+		}
+		$(this).remove();
 		
 	},
 	setColumn:function(column){
 		this.column = column;
 	},
-	getRelativeCoords:function(){
+	setRelativeCoords:function(coords){
+		coords = this.getRelativeCoords(coords);
+		this.offsetX = coords.left;
+		this.offsetY = coords.top;
+	},
+	getRelativeCoords:function(coords){
+		
 		var columnOffsets = $(this.column).offset();
 		var columnLeft = columnOffsets.left;
 		var columnTop = columnOffsets.top;
-		var itemOffsets = $(this).offset();
+		var itemOffsets = (coords) ? coords : $(this).offset();
 		var itemLeft = itemOffsets.left;
 		var itemTop = itemOffsets.top;
 		
@@ -118,14 +145,14 @@ scrumwall.create("item", {
 	},
 	redraw: function(){
 		
-		var pos = $(this.col).offset();
+		var pos = $(this.column).offset();
 		var x = 0;
 		var y = 0;
 		if(this.offsetX){
-			x = this.offsetX * $(this.col).width() / 100;
+			x = this.offsetX * $(this.column).width() / 100;
 		}
 		if(this.offsetY){
-			y = this.offsetY * $(this.col).height() / 100;;
+			y = this.offsetY * $(this.column).height() / 100;;
 		}
 		
 		pos.left = pos.left + Math.round(x);

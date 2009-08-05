@@ -108,6 +108,13 @@ class ItemDaoImpl extends ItemDao {
     item
   }
   
+  def remove(id: Int) = {
+    debug("Removing item with id: " + id)
+    var map = new HashMap[String, Object]
+    map.put("id", new RichInt(id))
+    getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_REMOVE, map)
+  }
+  
 }
 
 object ItemDaoImpl {
@@ -124,4 +131,5 @@ object ItemDaoImpl {
   val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId, col) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col)"  
   val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col WHERE id = :id"  
   val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY from item where sprintId = :sprintId"
+  val SQL_REMOVE = "DELETE FROM item WHERE id = :id"
 }

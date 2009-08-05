@@ -5,7 +5,8 @@ scrumwall.create("layout", {
 		$("#tabbar").tabs();
 		this.menu = new scrumwall.menu();
 		
-		$("#itemCreator").bind("click",{owner:$(this.menu.owner)},this.createItem);
+		//$("#itemCreator").bind("click",{owner:$(this.menu.owner)},this.createItem);
+		$(".sector").draggable({helper: 'clone'});
 		var creator = $("#itemCreator");
 		creator.itemCount = 0;
 		
@@ -15,6 +16,7 @@ scrumwall.create("layout", {
 		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});
 		
 		$(window).bind("resize",{cols:this.cols},this.onWindowResize);
+		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
 	},
 	loadItems:function(items){
 		
@@ -49,20 +51,19 @@ scrumwall.create("layout", {
 		}
 	},
 	createItem:function(event){
-		//FIXME fix sprint id
-		var FIX_SPRINT_ID=1;
 		var owner = event.data.owner;
 		var defaultOwner = $(owner).attr("value");
 		if(defaultOwner == "Your name"){
 			defaultOwner =  "";
 		}
 		var config = {parentEl:event.target,
-			id:itemCount,
-			owner:defaultOwner,
-			sprintId:FIX_SPRINT_ID};
+			owner:defaultOwner};
 		itemCount++;
 		var item = newItem(config,null);
 		
+	},
+	onItemDelete:function(event, ui){
+		ui.draggable[0].remove();
 	}
 });
 

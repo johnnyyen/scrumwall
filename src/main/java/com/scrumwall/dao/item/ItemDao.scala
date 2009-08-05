@@ -17,4 +17,9 @@ trait ItemDao extends BaseDao {
 	* 
 	*/
 	def getForSprint(sprintId: Int) : List[Item]
+ 
+	/**
+	* Removes the item from the database 
+	*/
+	def remove(id: Int)
 }

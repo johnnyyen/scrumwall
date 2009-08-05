@@ -10,7 +10,8 @@ class ItemServiceImpl extends ItemService with LogsToLog4J {
   def setItemDao(itemDao:ItemDao){
     this.itemDao = itemDao
   }
-  def save(item: Item) : Item = {    
+  def save(item: Item) : Item = {
+    debug( "Saveing item with id: " + item.id )
     itemDao save item
   }
   
@@ -22,5 +23,9 @@ class ItemServiceImpl extends ItemService with LogsToLog4J {
   def getForSprint(sprintId: Int) : List[Item] = {
     debug("fetching items for sprint " + sprintId)
     itemDao getForSprint sprintId
+  }
+  
+  def remove(id: Int) = {
+    itemDao remove id
   }
 }

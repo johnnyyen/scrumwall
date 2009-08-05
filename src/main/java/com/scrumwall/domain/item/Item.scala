@@ -2,8 +2,9 @@ package com.scrumwall.domain.item
 
 import scala.runtime.RichInt
 import scala.runtime.RichDouble
+import com.scrumwall.util.debug.LogsToLog4J
 
-class Item(var id: RichInt, var content: String, var estimation: RichInt) {
+class Item(var id: RichInt, var content: String, var estimation: RichInt) extends LogsToLog4J {
 	var sprintId : RichInt = _
 	var owner : String = _
 	var column: RichInt = _
@@ -19,6 +20,7 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) {
 	}
 
 	def setId(id: Int) = {
+	  debug("###############setting id " + id + " " + new RichInt(id))
 	  this.id = new RichInt(id)
 	}
  

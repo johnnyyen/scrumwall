@@ -39,7 +39,15 @@
 		<input type="button" value="Options"/><br/><br/>
 		<a href="#" onclick="test()">TEST</a>
 		<div class="burndown">burndown chart goes here</div><br/>
-		<div id="itemCreator">Click me to create items</div>
+		<div id="itemCreator">
+			<div class="sector red"></div>
+			<div class="sector green"></div>
+			<div class="sector blue"></div>
+			<div class="sector yellow"></div>
+		</div>
+	</div>
+	<div id="trashcanWrapper">
+		<div id="trashcan"></div>
 	</div>
 	<div id="columnContainer"></div>
 	<div id="errorHandler" title="Oops! Something went wrong" class="errorHandler" style="display:none"></div>

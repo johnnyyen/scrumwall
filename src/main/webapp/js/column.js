@@ -34,8 +34,16 @@ scrumwall.create("column", {
 	},
 	onItemDrop:function(event, ui){
 		var item = ui.draggable[0];
-		this.addItem(item, null);
-		item.col = this;
+		
+		if($(item).hasClass("sector")){
+			var coords = $(ui.helper).offset();
+			item = newItem({});
+			item.column = this;
+			item.setRelativeCoords(coords);
+			item.redraw();
+			$(ui.helper).remove();
+		}
+		this.addItem(item);
 		item.save();
 	},
 	onDragStop:function(event, ui){
