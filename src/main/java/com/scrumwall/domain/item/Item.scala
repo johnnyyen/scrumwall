@@ -10,6 +10,7 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	var column: RichInt = _
 	var offsetX: RichDouble = _
 	var offsetY: RichDouble = _
+	var color: String = _
  
 	def this() = this(null, null, null)
 	def this(id: Int, content: String) = this(id, content, null)
@@ -86,9 +87,18 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	  this.column.abs
 	}
  
-	def setColumn (column : Int) = {
+	def setColumn(column : Int) = {
 	  this.column = new RichInt(column)
 	}
+ 
+	def getColor : String = {
+	  this.color
+	}
+ 
+	def setColor(color: String) = {
+	  this.color = color
+	}
+ 
 	override def toString() : String = {
 	  var result = "["
 	  if(this.id != null) result += this.id + ", "

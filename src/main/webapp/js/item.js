@@ -10,6 +10,7 @@ scrumwall.create("item", {
 		//FIXME use real sprints
 		this.sprintId=FIX_SPRINT_ID;
 		this.content = $.create("textarea",{"class":"itemContent hidden"});
+		$(this.content).bind("blur", this, this.save );
 		//the text displayed in item.
 		//use separate containers for collapsed and expanded mode
 		this.contentText = $.create("div",{"class":"itemText"});
@@ -21,10 +22,10 @@ scrumwall.create("item", {
 			$(this.contentText).text(newItemText);
 			$(this.content).val(newItemText);
 		}
-		this.estimation = $.create("input",{"maxlength":"2","type":"text","class":"estimation"})
-		if(config.estimation){
-			$(this.estimation).val(config.estimation);
-		}
+		this.estimation = $.create("input",{"maxlength":"2","type":"text","class":"estimation"});
+		
+		$(this.estimation).val(config.estimation);
+		$(this.estimation).bind("blur", this, this.save );
 		
 		this.expander = $.create("div",{"class":"expandIcon"});
 		
@@ -33,6 +34,8 @@ scrumwall.create("item", {
 		
 		this.owner = $.create("input",{"type":"text","class":"owner"});
 		$(this.owner).attr("value", config.owner);
+		$(this.owner).bind("blur", this, this.save );
+		
 		this.offsetX = config.offsetX;
 		this.offsetY = config.offsetY;
 		//set the initial position of item
@@ -41,6 +44,12 @@ scrumwall.create("item", {
 			this.col.addItem(this);
 			this.redraw();
 		}
+
+		this.color = config.color;
+		$(this).css("background-color", this.color);
+		$(this.content).css("background-color", this.color);
+		$(this.estimation).css("background-color", this.color);
+		$(this.owner).css("background-color", this.color);
 		
 		//update DOM with item
 		$(estWrapper).append(estLabel);
@@ -61,8 +70,9 @@ scrumwall.create("item", {
 	expand:function(event){
 		var parent = event.data.parent;
 		var object = event.data.object;
-		$(parent).width(300);
-		$(parent).height(300);
+		$(parent).animate( { width:"300px" }, { queue:false, duration:250 } )
+			.animate( {height: "300px"}, 250);
+
 		$(parent.content).removeClass("hidden");
 		$(parent.contentText).addClass("hidden");
 		$(parent.content).attr("value", $(parent.contentText).text());
@@ -72,36 +82,40 @@ scrumwall.create("item", {
 	collapse:function(event){
 		var parent = event.data.parent;
 		var object = event.data.object;
-		$(parent).width(120);
-		$(parent).height(100);
+		$(parent).animate( { width:"120px" }, { queue:false, duration:250 } )
+			.animate( {height: "100px"}, 250);
 		$(parent.content).addClass("hidden");
 		$(parent.contentText).removeClass("hidden");
 		$(parent.contentText).text($(parent.content).attr("value"));
 		$(object).unbind("click", parent.collapse);
 		$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
 	},
-	saveable:function(){
-		this.setRelativeCoords();
+	saveable:function(scope){
+		if(!scope) scope = this;
+		scope.setRelativeCoords();
 		
-		var item = {column: this.column.id.replace("col",""),
-			content: $(this.content).val(),
-			estimation: this.estimation.value,
-			offsetX: this.offsetX,
-			offsetY: this.offsetY,
-			owner: this.owner.value,
-			sprintId: this.sprintId};
-		var id = this.guid;
+		var item = {column: scope.column.id.replace("col",""),
+			content: $(scope.content).val(),
+			estimation: scope.estimation.value,
+			offsetX: scope.offsetX,
+			offsetY: scope.offsetY,
+			owner: scope.owner.value,
+			sprintId: scope.sprintId,
+			color: scope.color};
+		var id = scope.guid;
 		
 		if(id && id.indexOf("item.") >= 0){
-			id = this.guid.replace("item.","");
-			item.id = id;
+			item.id = id.replace("item.", "");
 		}
 		return item;
 	},
-	save:function(){
-		
-		ItemService.save(this.saveable(),
-				{scope: this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
+	save:function(event){
+		var scope = this;
+		if(event) {
+			scope = event.data;
+		}
+		ItemService.save(scope.saveable(scope),
+				{scope: scope, callback:scope.saveCallback,exceptionHandler:exceptionHandler});
 		
 		
 	},

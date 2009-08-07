@@ -58,6 +58,8 @@
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.tabs.js"></script>
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.dialog.js"></script>
 	<script type="text/javascript" src="js/jquery-1.3.2/jquery.create.js"></script>
+	<script type="text/javascript" src="js/jquery-1.3.2/effects.core.js"></script>
+	<script type="text/javascript" src="js/jquery-1.3.2/effects.scale.js"></script>
 	<script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
 	<script type="text/javascript" src="js/common/global.js"></script>
 	<script type="text/javascript" src="js/column.js"></script>
@@ -65,18 +67,16 @@
 	<script type="text/javascript" src="js/menu.js"></script>
 	<script type="text/javascript" src="js/layout.js"></script>
 	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
+	<script type='text/javascript' src='/scrumwall/dwr/interface/ColumnService.js'></script>
   	<script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
   	<script type="text/javascript">
   		function test() {
 	  		var item = {id: 1, estimation: 5, content: "TestContent"}
-	  		ItemService.save(item,{exceptionHandler:exceptionHandler});
+	  		//ItemService.save(item,{exceptionHandler:exceptionHandler});
   		}
-  		
-		var config = {
-			columns:7
-		};
+
 		$("#menu").ready(function(){
-			new scrumwall.layout(config);
+			new scrumwall.layout();
 		});
 	</script>
 </body>

@@ -37,6 +37,7 @@
     <dwr:convert type="bean" class="java.lang.Exception"></dwr:convert>
     <dwr:convert type="bean" class="java.lang.StackTraceElement"></dwr:convert>
     <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
+    <dwr:convert type="bean" class="com.scrumwall.domain.item.Column" />
   </dwr:configuration>
 
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
@@ -49,7 +50,20 @@
     </dwr:remote>
   </bean>
 
+
+  <bean id="columnService" class="com.scrumwall.service.column.ColumnServiceImpl">
+    <aop:scoped-proxy/>
+    <property name="columnDao" ref="columnDao"/>
+    <dwr:remote javascript="ColumnService">
+      <dwr:include method="getColumns"/>
+    </dwr:remote>
+  </bean>
+
   <bean id="itemDao" class="com.scrumwall.dao.item.ItemDaoImpl">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+  
+  <bean id="columnDao" class="com.scrumwall.dao.column.ColumnDaoImpl">
     <property name="dataSource" ref="dataSource" />
   </bean>
 

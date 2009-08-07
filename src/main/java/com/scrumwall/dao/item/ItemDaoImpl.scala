@@ -1,9 +1,9 @@
 package com.scrumwall.dao.item
 
+import scala.runtime.RichInt
 import com.scrumwall.domain.item.Item
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper
 import java.sql.ResultSet
-import scala.runtime.RichInt
 import java.util.HashMap
 import java.util.List
 
@@ -26,6 +26,10 @@ class ItemDaoImpl extends ItemDao {
 		if(column != null) {
 			item.setColumn(column.intValue)
 		}
+  
+		var color = rs getString ItemDaoImpl.COLOR
+		item setColor color
+  
 		item
       }
     }
@@ -63,6 +67,9 @@ class ItemDaoImpl extends ItemDao {
 		
 		var offsetY = rs getDouble ItemDaoImpl.OFFSETY
 		item setOffsetY offsetY
+  
+		var color = rs getString ItemDaoImpl.COLOR
+		item setColor color
 		
 		item
       }
@@ -84,6 +91,7 @@ class ItemDaoImpl extends ItemDao {
     map.put("owner", item.owner)
     map.put("sprintId", item.sprintId)
     map.put("col", item.column)
+    map.put("color", item.color)
     
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_SAVE, map)
     item.setId( getLastInsertedId() )
@@ -102,6 +110,7 @@ class ItemDaoImpl extends ItemDao {
     map.put("owner", item.owner)
     map.put("sprintId", item.sprintId)
     map.put("col", item.column)
+    map.put("color", item.color)
     
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_UPDATE, map)
     
@@ -126,10 +135,11 @@ object ItemDaoImpl {
   val OWNER = "owner"
   val CONTENT = "content" 
   val COLUMN = "col"
+  val COLOR = "color"
   
-  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col FROM item WHERE id = :id"  
-  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId, col) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col)"  
-  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col WHERE id = :id"  
-  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY from item where sprintId = :sprintId"
+  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color FROM item WHERE id = :id"  
+  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId, col, color) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col, :color)"  
+  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col, color = :color WHERE id = :id"  
+  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY, color FROM item WHERE sprintId = :sprintId"
   val SQL_REMOVE = "DELETE FROM item WHERE id = :id"
 }

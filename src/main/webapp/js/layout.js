@@ -1,6 +1,6 @@
 scrumwall.create("layout", {
 	itemCount:0,
-	init: function(config){
+	init: function(){
 		$("#newItem").click(function(ev){alert("button clicked");});
 		$("#tabbar").tabs();
 		this.menu = new scrumwall.menu();
@@ -10,12 +10,9 @@ scrumwall.create("layout", {
 		var creator = $("#itemCreator");
 		creator.itemCount = 0;
 		
-		this.config = config;
-		this.createColumns($("#columnContainer"));
+		ColumnService.getColumns({scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		
-		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});
-		
-		$(window).bind("resize",{cols:this.cols},this.onWindowResize);
+		$(window).bind("resize", {cols:this.cols}, this.onWindowResize);
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
 	},
 	loadItems:function(items){
@@ -28,24 +25,27 @@ scrumwall.create("layout", {
 			
 		}
 	},
-	createColumns:function(parentEl){
+	createColumns:function(columns){
+		var parentEl = $("#columnContainer");
 		//get column area width
 		var width = $(parentEl).width();
-		var colwidth = Math.round(width/config.columns)-2;
+		var colWidth = Math.round(width/columns.length)-2;
 		this.cols = new Array();
-		for(var i=0; i < config.columns; i++){
-			var id = "col"+i;
-			var col = jQuery.create("div",{"class":"column","id":id});
+		for(var i=0; i < columns.length; i++){
+			var col = jQuery.create("div",{"class":"column"});
 			$.extend( col, new scrumwall.column() );
-			col.initialize(colwidth, id, parentEl);
+			columns[i].colWidth = colWidth;
+			columns[i].parentEl = parentEl;
+			col.initialize(columns[i]);
 			this.cols[this.cols.length] = col;
 		}
-		
+
+		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
 	},
 	onWindowResize:function(event){
 		var cols = event.data.cols;	
 		var width = $("#columnContainer").width();
-		var colWidth = Math.round(width/config.columns)-2;
+		var colWidth = Math.round(width/cols.length)-2;
 		for(var i = 0; i < cols.length; i++){
 			cols[i].resize(colWidth);
 		}

@@ -3,26 +3,27 @@ scrumwall.create("column", {
 	width:0,
 	parentEl: null,
 	items:null,
-	initialize:function(colWidth, id, parentEl){
-		this.id = id;
+	initialize:function(config){
+		this.id = config.id;
 		 
-		$(this).width(colWidth);
+		$(this).width(config.colWidth);
 		this.addItem = this.addItem;
 		this.items = new Array();
 		this.size = 0;
 		
 		this.header = jQuery.create("div",{"class":"colHeader"});
-		$(this.header).text("Items:" + this.size);
+		$(this.header).text(config.name);
 		$(this).append($(this.header));
 		
 		this.body = jQuery.create("div",{"class":"colBody"});
 		$(this).append($(this.body));
 		
-		this.parentEl = parentEl;
+		this.parentEl = config.parentEl;
 		$(this.parentEl).append($(this));
 		
 		this.header = this.header;
 		this.body = this.body;
+		$(this).attr("id",this.id);
 		
 		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
 	},
@@ -37,7 +38,11 @@ scrumwall.create("column", {
 		
 		if($(item).hasClass("sector")){
 			var coords = $(ui.helper).offset();
-			item = newItem({});
+			var ownerName = $('#ownerInput').val();
+			if(ownerName == "Your name" || this.id == "col0") { //FIXME: need to do this in a better way
+				ownerName = "";
+			}
+			item = newItem({color: $(ui.helper).css("background-color"), owner: ownerName});
 			item.column = this;
 			item.setRelativeCoords(coords);
 			item.redraw();
@@ -54,7 +59,6 @@ scrumwall.create("column", {
 			delete this.items[item.guid];
 			
 		}
-		$(this.header).text("Items:" + this.size);
 	},
 	addItem:function(item){		
 		if(this.items[item.guid]){
@@ -68,7 +72,6 @@ scrumwall.create("column", {
 			this.items[item.guid] = item;
 		}
 		this.size++;
-		$(this.header).text("Items:" + this.size);
 		item.setColumn(this);
 	}
 });
