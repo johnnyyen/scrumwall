@@ -9,7 +9,6 @@ import com.scrumwall.util.debug.LogsToLog4J
 class LayoutController extends AbstractController with LogsToLog4J {
 	
 	override def handleRequestInternal(request: HttpServletRequest, response: HttpServletResponse) : ModelAndView = {
-		debug("-----------------------------------------------teretere");
 		return new ModelAndView("layout");
 	}
 }
