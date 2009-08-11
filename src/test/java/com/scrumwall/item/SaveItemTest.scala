@@ -2,7 +2,7 @@ package com.scrumwall.item
 
 import com.scrumwall.helper.BaseTestCase
 import com.scrumwall.service.item.ItemService
-import com.scrumwall.domain.item.Item
+import com.scrumwall.domain.Item
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.ModelAndViewAssert

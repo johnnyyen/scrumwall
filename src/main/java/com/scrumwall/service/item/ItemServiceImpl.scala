@@ -1,6 +1,6 @@
 package com.scrumwall.service.item
 
-import com.scrumwall.domain.item.Item
+import com.scrumwall.domain.Item
 import com.scrumwall.util.debug.LogsToLog4J
 import com.scrumwall.dao.item.ItemDao
 import java.util.List

@@ -1,7 +1,7 @@
 package com.scrumwall.dao.item
 
 import scala.runtime.RichInt
-import com.scrumwall.domain.item.Item
+import com.scrumwall.domain.Item
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper
 import java.sql.ResultSet
 import java.util.HashMap

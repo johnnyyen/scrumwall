@@ -36,8 +36,8 @@
   <dwr:configuration>
     <dwr:convert type="bean" class="java.lang.Exception"></dwr:convert>
     <dwr:convert type="bean" class="java.lang.StackTraceElement"></dwr:convert>
-    <dwr:convert type="bean" class="com.scrumwall.domain.item.Item" />
-    <dwr:convert type="bean" class="com.scrumwall.domain.item.Column" />
+    <dwr:convert type="bean" class="com.scrumwall.domain.Item" />
+    <dwr:convert type="bean" class="com.scrumwall.domain.Column" />
   </dwr:configuration>
 
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">

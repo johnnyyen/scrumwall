@@ -1,13 +1,13 @@
 package com.scrumwall.dao.column
 
+import com.scrumwall.domain.Column
 import scala.runtime.RichInt
-import com.scrumwall.domain.item.Column
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper
 import java.sql.ResultSet
 import java.util.HashMap
 import java.util.List
 
-class ColumnDaoImpl extends ColumnDao{
+class ColumnDaoImpl extends ColumnDao {
 
   override def getColumns : List[Column] = {
     val mapper = new ParameterizedRowMapper[Column]() {

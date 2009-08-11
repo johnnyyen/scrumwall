@@ -1,6 +1,6 @@
 package com.scrumwall.service.column
 
-import com.scrumwall.domain.item.Column
+import com.scrumwall.domain.Column
 import java.util.List
 
 trait ColumnService {

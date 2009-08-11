@@ -1,4 +1,4 @@
-package com.scrumwall.domain.item
+package com.scrumwall.domain
 
 import scala.runtime.RichInt
 import scala.runtime.RichDouble

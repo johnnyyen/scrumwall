@@ -1,6 +1,6 @@
 package com.scrumwall.dao.item
 
-import com.scrumwall.domain.item.Item
+import com.scrumwall.domain.Item
 import com.scrumwall.dao.BaseDao
 import java.util.List
 

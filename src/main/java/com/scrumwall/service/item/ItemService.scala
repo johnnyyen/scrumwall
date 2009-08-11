@@ -1,6 +1,6 @@
 package com.scrumwall.service.item
 
-import com.scrumwall.domain.item.Item
+import com.scrumwall.domain.Item
 import java.util.List
 
 trait ItemService {

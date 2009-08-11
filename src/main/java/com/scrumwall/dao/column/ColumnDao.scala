@@ -1,7 +1,7 @@
 package com.scrumwall.dao.column
 
 import com.scrumwall.dao.BaseDao
-import com.scrumwall.domain.item.Column
+import com.scrumwall.domain.Column
 import java.util.List
 
 trait ColumnDao extends BaseDao {

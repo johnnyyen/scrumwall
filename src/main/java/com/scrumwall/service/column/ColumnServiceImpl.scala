@@ -2,7 +2,7 @@ package com.scrumwall.service.column
 
 import com.scrumwall.util.debug.LogsToLog4J
 import com.scrumwall.dao.column.ColumnDao
-import com.scrumwall.domain.item.Column
+import com.scrumwall.domain.Column
 import java.util.List
 
 class ColumnServiceImpl extends ColumnService with LogsToLog4J{
