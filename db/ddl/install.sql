@@ -24,6 +24,15 @@ INSERT INTO col(name, columntype, columnorder)
 
 INSERT INTO col(name, columntype, columnorder)
     VALUES('DONE', 'DONE', 1000000);
+
+INSERT INTO col(id, name, columntype, columnorder)
+    VALUES(-2, 'GOALS', 'GOALS', 0);
+    
+INSERT INTO col(id, name, columntype, columnorder)
+    VALUES(-1, 'UCB', 'UCB', 0);
+    
+INSERT INTO col(id, name, columntype, columnorder)
+    VALUES(-3, 'IMPEDIMENTS', 'IMPEDIMENTS', 0);
     
 ALTER TABLE item 
     ADD CONSTRAINT ItemToColumn FOREIGN KEY (col)

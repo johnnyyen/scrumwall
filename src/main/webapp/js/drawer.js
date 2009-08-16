@@ -23,7 +23,7 @@ scrumwall.create("drawer", {
 		var offset = $(notStarted).offset().left + $(notStarted).width();
 		var width = $(window).width() - offset;
 		$("body").append(scope); 	
-		$(scope).animate( { "width":parseInt(width)+"px", queue: false }, 500,  
+		$(scope).animate( { "width":parseInt(width)+"px", queue: false }, 250,  
 			function(){
 				ItemService.getItems(scope.guid, 
 						{"scope": scope, callback:scope.loadItems, exceptionHandler:exceptionHandler});

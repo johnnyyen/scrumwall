@@ -36,7 +36,7 @@
 		</div>
 		<input type="button" value="UCB" id="ucbButton"/><br/>
 		<input type="button" value="Goals" id="goalsButton"/><br/>
-		<input type="button" value="Impediments"/><br/>
+		<input type="button" value="Impediments" id="impedimentsButton"/><br/>
 		<input type="button" value="Options"/><br/><br/>
 		<div class="burndown">burndown chart goes here</div><br/>
 		<div id="itemCreator">
