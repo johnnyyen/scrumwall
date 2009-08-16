@@ -5,6 +5,7 @@ scrumwall.create("column", {
 	items:null,
 	NOT_STARTED: "NOT_STARTED",
 	initialize:function(config){
+		this.menu = config.menu;
 		this.guid = config.id; 
 		$(this).width(config.colWidth);
 		this.addItem = this.addItem;
@@ -35,6 +36,11 @@ scrumwall.create("column", {
 		}
 	},
 	onItemDrop:function(event, ui){
+		if(this.menu.eventPropagationStopped == true){
+			this.menu.eventPropagationStopped = false;
+			return;
+		}
+		
 		var item = ui.draggable[0];
 		
 		if($(item).hasClass("sector")){

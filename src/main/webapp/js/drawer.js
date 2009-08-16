@@ -1,10 +1,13 @@
 scrumwall.create("drawer", {
 	items:null,
 	initialize:function(config){
+		this.guid = config.id;
+		this.menu = config.menu;
 		if(config.button){
-			$(config.button).bind("click", {"scope":this}, this.onUcbExpand);
+			$(config.button).bind("click", {"scope":this, menu: this.menu}, this.onUcbExpand);
 		}
 		this.items = new Array();
+		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
 	},
 	onUcbExpand:function(event){
 		var scope = event.data.scope;
@@ -23,9 +26,6 @@ scrumwall.create("drawer", {
 				$(button).bind("click", {"scope":scope}, scope.onUcbCollapse);
 			}
 		);
-		
-		
-		
 	},
 	onUcbCollapse:function(event){
 		$(this).unbind("click");
@@ -92,6 +92,7 @@ scrumwall.create("drawer", {
 		}
 		this.addItem(item);
 		item.save();
+		this.menu.eventPropagationStopped = true;
 	},
 	onDragStop:function(event, ui){
 		var item = ui.draggable[0];

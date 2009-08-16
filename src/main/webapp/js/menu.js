@@ -4,9 +4,9 @@ scrumwall.create("menu",{
 		this.owner.focus(this.clearOwner);
 		this.owner.blur(this.onOwnerBlur);
 		this.ucb = $("#ucbButton");
-		this.ucbDrawer = newDrawer({button: this.ucb});
+		this.ucbDrawer = newDrawer({button: this.ucb, id: -1, menu: this});
 		
-		
+		this.eventPropagationStopped = false;
 	},
 	clearOwner:function(){
 		

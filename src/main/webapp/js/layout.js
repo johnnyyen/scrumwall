@@ -36,6 +36,7 @@ scrumwall.create("layout", {
 			$.extend( col, new scrumwall.column() );
 			columns[i].colWidth = colWidth;
 			columns[i].parentEl = parentEl;
+			columns[i].menu = this.menu;
 			col.initialize(columns[i]);
 			this.cols[this.cols.length] = col;
 		}
