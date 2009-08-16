@@ -147,11 +147,16 @@ body .ui-dialog .ui-dialog-title{
 	width:10%;
 }
 
-.ucbInitial{
+.drawer{
     width:0;
-    background-color:red;
-    height:500px;
+    background-color:pink;
+    height:100%;
     position:absolute;
     right:0;
     top:0;
+    z-index:100;
+}
+
+html, body  {
+ height: 100%;
 }

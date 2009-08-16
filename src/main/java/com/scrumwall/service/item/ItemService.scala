@@ -10,6 +10,8 @@ trait ItemService {
   def save(item: Item) : Item
   
   def getForSprint(sprintId: Int) : List[Item]
+  
+  def getItems(columnId: Int) : List[Item]
 
   def remove(id: Int)
   

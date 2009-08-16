@@ -12,32 +12,10 @@ class ItemDaoImpl extends ItemDao {
   override def get(itemId: Int) : Item = {
     debug( "Getting item with id: " + itemId )
     
-    val mapper = new ParameterizedRowMapper[Item]() {
-	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
-		var item : Item = new Item( new RichInt(rs getInt ItemDaoImpl.ID), rs getString ItemDaoImpl.CONTENT, new RichInt(rs getInt ItemDaoImpl.ESTIMATION))
-		var owner : String = rs getString ItemDaoImpl.OWNER
-		item setOwner owner
-		var sprintId = rs getBigDecimal ItemDaoImpl.SPRINTID
-		if(sprintId != null) {
-			item setSprintId sprintId.intValue
-		}
-		
-		val column = rs getBigDecimal ItemDaoImpl.COLUMN
-		if(column != null) {
-			item.setColumn(column.intValue)
-		}
-  
-		var color = rs getString ItemDaoImpl.COLOR
-		item setColor color
-  
-		item
-      }
-    }
-    
     var map = new HashMap[String, Object]
     map.put( "id", new RichInt(itemId) )
     
-    getNamedParameterJdbcTemplate.queryForObject(ItemDaoImpl.SQL_GET, map, mapper).asInstanceOf[Item]
+    getNamedParameterJdbcTemplate.queryForObject(ItemDaoImpl.SQL_GET, map, ItemDaoImpl.mapper).asInstanceOf[Item]
   }
   
   override def save(item: Item) : Item = {
@@ -49,36 +27,12 @@ class ItemDaoImpl extends ItemDao {
   }
   
   override def getForSprint(sprintId: Int) : List[Item] = {
-    val mapper = new ParameterizedRowMapper[Item]() {
-	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
-		var item = new Item( new RichInt(rs getInt ItemDaoImpl.ID), rs getString ItemDaoImpl.CONTENT, new RichInt(rs getInt ItemDaoImpl.ESTIMATION))
-		
-		var sprintId = rs getInt ItemDaoImpl.SPRINTID
-		item setSprintId sprintId
-		
-		var owner = rs getString ItemDaoImpl.OWNER
-		item setOwner owner
-  
-		var column = rs getInt ItemDaoImpl.COLUMN
-		item setColumn column
-		
-		var offsetX = rs getDouble ItemDaoImpl.OFFSETX
-		item setOffsetX offsetX
-		
-		var offsetY = rs getDouble ItemDaoImpl.OFFSETY
-		item setOffsetY offsetY
-  
-		var color = rs getString ItemDaoImpl.COLOR
-		item setColor color
-		
-		item
-      }
-    }
+    
     
     var map = new HashMap[String, Object]
     map.put( "sprintId", new RichInt(sprintId) )
     
-    getNamedParameterJdbcTemplate.query[Item](ItemDaoImpl.SQL_GET_SPRINT, map, mapper)
+    getNamedParameterJdbcTemplate.query[Item](ItemDaoImpl.SQL_GET_SPRINT, map, ItemDaoImpl.mapper)
     
   }
   private def saveItem(item: Item) : Item = {
@@ -123,6 +77,12 @@ class ItemDaoImpl extends ItemDao {
     map.put("id", new RichInt(id))
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_REMOVE, map)
   }
+
+  def getItems(columnId: Int) : List[Item] = {
+    var map = new HashMap[String, Object]
+    map.put("column", new RichInt(columnId))
+    getNamedParameterJdbcTemplate.query[Item](ItemDaoImpl.SQL_GET_ITEMS, map, ItemDaoImpl.mapper)
+  }
   
 }
 
@@ -142,4 +102,31 @@ object ItemDaoImpl {
   val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col, color = :color WHERE id = :id"  
   val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY, color FROM item WHERE sprintId = :sprintId"
   val SQL_REMOVE = "DELETE FROM item WHERE id = :id"
+  val SQL_GET_ITEMS = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color FROM item WHERE col = :column"
+  
+  val mapper = new ParameterizedRowMapper[Item]() {
+	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
+		var item = new Item( new RichInt(rs getInt ID), rs getString CONTENT, new RichInt(rs getInt ESTIMATION))
+		
+		var sprintId = rs getInt SPRINTID
+		item setSprintId sprintId
+		
+		var owner = rs getString OWNER
+		item setOwner owner
+  
+		var column = rs getInt COLUMN
+		item setColumn column
+		
+		var offsetX = rs getDouble OFFSETX
+		item setOffsetX offsetX
+		
+		var offsetY = rs getDouble OFFSETY
+		item setOffsetY offsetY
+  
+		var color = rs getString COLOR
+		item setColor color
+		
+		item
+      }
+    }
 }

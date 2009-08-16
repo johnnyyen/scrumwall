@@ -46,6 +46,7 @@
     <dwr:remote javascript="ItemService">
       <dwr:include method="save"/>
       <dwr:include method="getForSprint"/>
+      <dwr:include method="getItems"/>
       <dwr:include method="remove"/>
     </dwr:remote>
   </bean>

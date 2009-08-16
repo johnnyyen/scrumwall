@@ -13,6 +13,11 @@ trait ItemDao extends BaseDao {
 	def save(item: Item) : Item
  
 	/**
+	* Returns all of the items for a column 
+	*/
+	def getItems(columnId: Int) : List[Item]
+ 
+	/**
 	* Fetches all items that belong to specified sprint
 	* 
 	*/

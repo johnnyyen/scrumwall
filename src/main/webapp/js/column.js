@@ -3,12 +3,14 @@ scrumwall.create("column", {
 	width:0,
 	parentEl: null,
 	items:null,
+	NOT_STARTED: "NOT_STARTED",
 	initialize:function(config){
 		this.guid = config.id; 
 		$(this).width(config.colWidth);
 		this.addItem = this.addItem;
 		this.items = new Array();
 		this.size = 0;
+		this.columnType = config.columnType;
 		
 		this.header = jQuery.create("div",{"class":"colHeader"});
 		$(this.header).text(config.name);
@@ -72,5 +74,10 @@ scrumwall.create("column", {
 		}
 		this.size++;
 		item.setColumn(this);
+		if(this.columnType == this.NOT_STARTED) {
+			$(item).css("z-index", "1000000");
+		} else {
+			$(item).css("z-index", "10");
+		}
 	}
 });

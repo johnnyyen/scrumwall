@@ -14,3 +14,9 @@ function newItem(config, columns){
 	item.initialize(config, columns);	
 	return item;
 }
+function newDrawer(config){
+	var drawer= $.create("div",{"class":"drawer"});
+	$.extend( drawer, new scrumwall.drawer() );
+	drawer.initialize(config);	
+	return drawer;
+}

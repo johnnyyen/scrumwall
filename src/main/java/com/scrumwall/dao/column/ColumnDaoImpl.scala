@@ -26,5 +26,5 @@ object ColumnDaoImpl {
   val COLUMN_TYPE = "columntype"
   val NAME = "name"
   
-  val SQL_GET_COLUMNS = "SELECT id, columntype, name FROM col ORDER BY columnorder"
+  val SQL_GET_COLUMNS = "SELECT id, columntype, name FROM col WHERE id >= 0 ORDER BY columnorder"
 }

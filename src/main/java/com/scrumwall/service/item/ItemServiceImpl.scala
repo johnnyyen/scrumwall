@@ -19,6 +19,11 @@ class ItemServiceImpl extends ItemService with LogsToLog4J {
     debug( "Getting item with id: " + id )
     itemDao get id
   }
+
+  def getItems(columnId: Int) : List[Item] = {
+    debug( "Getting items for column: " + columnId )
+    itemDao getItems columnId
+  }
   
   def getForSprint(sprintId: Int) : List[Item] = {
     debug("fetching items for sprint " + sprintId)
