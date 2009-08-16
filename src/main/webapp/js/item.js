@@ -94,7 +94,7 @@ scrumwall.create("item", {
 		if(!scope) scope = this;
 		scope.setRelativeCoords();
 		
-		var item = {column: scope.column.id.replace("col",""),
+		var item = {column: scope.column.guid,
 			content: $(scope.content).val(),
 			estimation: scope.estimation.value,
 			offsetX: scope.offsetX,

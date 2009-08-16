@@ -4,8 +4,7 @@ scrumwall.create("column", {
 	parentEl: null,
 	items:null,
 	initialize:function(config){
-		this.id = config.id;
-		 
+		this.guid = config.id; 
 		$(this).width(config.colWidth);
 		this.addItem = this.addItem;
 		this.items = new Array();
@@ -23,7 +22,7 @@ scrumwall.create("column", {
 		
 		this.header = this.header;
 		this.body = this.body;
-		$(this).attr("id",this.id);
+		$(this).attr("id", "col." + config.id);
 		
 		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
 	},

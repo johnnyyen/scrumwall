@@ -1,7 +1,9 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<title>Basic layout</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/layout.css"/>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-1.3.2/jquery-ui.css"/>
@@ -33,11 +35,10 @@
 			05.05.2009 - 27.05.2009
 		</div>
 		<input type="button" id="newItem" value="New Item"/><br/>
-		<input type="button" value="UCB"/><br/>
+		<input type="button" value="UCB" id="ucbButton"/><br/>
 		<input type="button" value="Goals"/><br/>
 		<input type="button" value="Impediments"/><br/>
 		<input type="button" value="Options"/><br/><br/>
-		<a href="#" onclick="test()">TEST</a>
 		<div class="burndown">burndown chart goes here</div><br/>
 		<div id="itemCreator">
 			<div class="sector red"></div>
@@ -60,6 +61,7 @@
 	<script type="text/javascript" src="js/jquery-1.3.2/jquery.create.js"></script>
 	<script type="text/javascript" src="js/jquery-1.3.2/effects.core.js"></script>
 	<script type="text/javascript" src="js/jquery-1.3.2/effects.scale.js"></script>
+	<script type="text/javascript" src="js/jquery-1.3.2/effects.slide.js"></script>
 	<script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
 	<script type="text/javascript" src="js/common/global.js"></script>
 	<script type="text/javascript" src="js/column.js"></script>
@@ -70,11 +72,6 @@
 	<script type='text/javascript' src='/scrumwall/dwr/interface/ColumnService.js'></script>
   	<script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
   	<script type="text/javascript">
-  		function test() {
-	  		var item = {id: 1, estimation: 5, content: "TestContent"}
-	  		//ItemService.save(item,{exceptionHandler:exceptionHandler});
-  		}
-
 		$("#menu").ready(function(){
 			new scrumwall.layout();
 		});

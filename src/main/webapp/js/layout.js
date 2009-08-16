@@ -10,7 +10,7 @@ scrumwall.create("layout", {
 		var creator = $("#itemCreator");
 		creator.itemCount = 0;
 		
-		ColumnService.getColumns({scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
+		ColumnService.getColumns({async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		
 		$(window).bind("resize", {cols:this.cols}, this.onWindowResize);
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
@@ -29,7 +29,7 @@ scrumwall.create("layout", {
 		var parentEl = $("#columnContainer");
 		//get column area width
 		var width = $(parentEl).width();
-		var colWidth = Math.round(width/columns.length)-2;
+		var colWidth = Math.round(width/columns.length)-10;
 		this.cols = new Array();
 		for(var i=0; i < columns.length; i++){
 			var col = jQuery.create("div",{"class":"column"});
