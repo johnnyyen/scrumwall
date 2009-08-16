@@ -3,8 +3,11 @@ scrumwall.create("menu",{
 		this.owner = $("#ownerInput");
 		this.owner.focus(this.clearOwner);
 		this.owner.blur(this.onOwnerBlur);
+		this.drawers = new Array();
 		this.ucb = $("#ucbButton");
-		this.ucbDrawer = newDrawer({button: this.ucb, id: -1, menu: this});
+		this.drawers.push(newDrawer({button: this.ucb, id: -1, menu: this, color: "green"}));
+		this.goals=$("#goalsButton");
+		this.drawers.push(newDrawer({button: this.goals, id: -2, menu: this, color: "pink"}));
 		
 		this.eventPropagationStopped = false;
 	},
@@ -19,5 +22,12 @@ scrumwall.create("menu",{
 			$(this).attr("value","Your name");
 		}
 		
+	},
+	collapseDrawers:function(openDrawer){
+		for(var i in this.drawers){
+			if(this.drawers[i].expanded){
+				$(this.drawers[i].button).click();
+			}
+		}
 	}
 });

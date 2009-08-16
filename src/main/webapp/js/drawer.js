@@ -1,43 +1,48 @@
 scrumwall.create("drawer", {
 	items:null,
+	expanded:false,
 	initialize:function(config){
+		$(this).css("background-color", config.color); //FIXME: remove this crap
 		this.guid = config.id;
 		this.menu = config.menu;
 		if(config.button){
-			$(config.button).bind("click", {"scope":this, menu: this.menu}, this.onUcbExpand);
+			this.button = config.button;
+			$(config.button).bind("click", {"scope":this, menu: this.menu}, this.onExpand);
 		}
 		this.items = new Array();
 		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
 	},
-	onUcbExpand:function(event){
+	onExpand:function(event){
 		var scope = event.data.scope;
 		$(this).unbind("click");
+		scope.menu.collapseDrawers(scope);
 
 		var button = this;
 		
 		var notStarted = $("div[id=col.0]");
 		var offset = $(notStarted).offset().left + $(notStarted).width();
-		var ucbWidth = $(window).width() - offset;
+		var width = $(window).width() - offset;
 		$("body").append(scope); 	
-		$(scope).animate( { width:parseInt(ucbWidth)+"px", queue: false }, 250,  
+		$(scope).animate( { "width":parseInt(width)+"px", queue: false }, 500,  
 			function(){
-				ItemService.getItems(-1, 
+				ItemService.getItems(scope.guid, 
 						{"scope": scope, callback:scope.loadItems, exceptionHandler:exceptionHandler});
-				$(button).bind("click", {"scope":scope}, scope.onUcbCollapse);
+				$(button).bind("click", {"scope":scope}, scope.onCollapse);
 			}
 		);
+		scope.expanded = true;
 	},
-	onUcbCollapse:function(event){
+	onCollapse:function(event){
 		$(this).unbind("click");
 		var scope = event.data.scope;
 		var button = this;
 		scope.removeItems(scope);
 		
-		$(scope).animate({ width:"hide", queue:false}, 250, function(){
-				$(button).bind("click",{"scope":scope},scope.onUcbExpand);
+		$(scope).animate({ width:"0px", queue:false}, 250, function(){
+				$(button).bind("click",{"scope":scope},scope.onExpand);
 			}
 		);
-		
+		scope.expanded = false;
 	},
 	removeItems:function(scope){
 		for(var i in scope.items) {

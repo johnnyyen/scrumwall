@@ -34,9 +34,8 @@
 		<div class="sprintdate">
 			05.05.2009 - 27.05.2009
 		</div>
-		<input type="button" id="newItem" value="New Item"/><br/>
 		<input type="button" value="UCB" id="ucbButton"/><br/>
-		<input type="button" value="Goals"/><br/>
+		<input type="button" value="Goals" id="goalsButton"/><br/>
 		<input type="button" value="Impediments"/><br/>
 		<input type="button" value="Options"/><br/><br/>
 		<div class="burndown">burndown chart goes here</div><br/>
