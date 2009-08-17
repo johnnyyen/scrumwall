@@ -27,9 +27,12 @@ scrumwall.create("item", {
 		$(this.estimation).val(config.estimation);
 		$(this.estimation).bind("blur", this, this.save );
 		
+		this.hoursLeft = $.create("input",{"maxlength":"2", "type":"text", "class": "estimation"});
+		$(this.hoursLeft).val(config.hoursLeft);
+		$(this.hoursLeft).bind("blur", this, this.save);
+		
 		this.expander = $.create("div",{"class":"expandIcon"});
 		
-		var estLabel = $.create("span",{"class":"label"});
 		var estWrapper = $.create("div",{"class":"estWrapper"});
 		
 		this.owner = $.create("input",{"type":"text","class":"owner"});
@@ -45,14 +48,12 @@ scrumwall.create("item", {
 			this.redraw();
 		}
 
-		this.color = config.color;
-		$(this).css("background-color", this.color);
-		$(this.content).css("background-color", this.color);
-		$(this.estimation).css("background-color", this.color);
-		$(this.owner).css("background-color", this.color);
+//		$(this.content).css("background-color", this.color);
+//		$(this.estimation).css("background-color", this.color);
+//		$(this.owner).css("background-color", this.color);
 		
 		//update DOM with item
-		$(estWrapper).append(estLabel);
+		$(estWrapper).append(this.hoursLeft);
 		$(estWrapper).append(this.estimation);
 		$("body").append($(this));
 		$(this).append($(this.contentText));
@@ -60,12 +61,22 @@ scrumwall.create("item", {
 		$(this).append($(this.expander));
 		$(this).append($(this.owner));
 		$(this).append($(estWrapper));
-		
+
+		this.color = config.color;
+		this.paint($(this).children(), this, this.color);
+		$(this).css("background-color", this.color);
 		$(this).show();
 		
 		//add event listeners
 		$(this.expander).bind("click", {parent: this, object:this.expander}, this.expand);
 		$(this).bind("dblclick", {parent: this, object: this.expander}, this.expand);
+	},
+	paint:function(children, scope, color){
+		children.each( function() {
+				$(this).css("background-color", color);
+				scope.paint($(this).children(), scope, color);
+		});
+		 
 	},
 	animate:function(scope, options, callback){
 		if(callback){
@@ -119,7 +130,8 @@ scrumwall.create("item", {
 			offsetY: scope.offsetY,
 			owner: scope.owner.value,
 			sprintId: scope.sprintId,
-			color: scope.color};
+			color: scope.color,
+			hoursLeft: scope.hoursLeft.value == "" ? null : scope.hoursLeft.value};
 		var id = scope.guid;
 		
 		if(id && id.indexOf("item.") >= 0){

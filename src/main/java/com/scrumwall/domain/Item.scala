@@ -12,6 +12,7 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	var offsetX: RichDouble = _
 	var offsetY: RichDouble = _
 	var color: String = _
+	var hoursLeft: RichInt = _
  
 	def this() = this(null, null, null)
 	def this(id: Int, content: String) = this(id, content, null)
@@ -22,7 +23,6 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	}
 
 	def setId(id: Int) = {
-	  debug("###############setting id " + id + " " + new RichInt(id))
 	  this.id = new RichInt(id)
 	}
  
@@ -104,6 +104,20 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
  
 	def setColor(color: String) = {
 	  this.color = color
+	}
+ 
+	def setHoursLeft(hoursLeft: Integer) = {
+	  if(hoursLeft != null) {
+		  this.hoursLeft = new RichInt(hoursLeft.intValue)
+	  }
+	}
+ 
+	def getHoursLeft() : Integer = {
+	  if(this.hoursLeft != null) {
+		  this.hoursLeft.abs
+	  } else {
+	    null
+	  }
 	}
  
 	override def toString() : String = {

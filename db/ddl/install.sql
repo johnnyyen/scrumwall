@@ -4,11 +4,12 @@ CREATE CACHED TABLE item(
     content VARCHAR,
     estimation INT DEFAULT NULL,
     sprintid INTEGER DEFAULT NULL,
-    offsetx DECIMAL,
-    offsety DECIMAL,
+    offsetx DECIMAL DEFAULT 0,
+    offsety DECIMAL DEFAULT 0,
     col INTEGER DEFAULT 1,
     owner VARCHAR DEFAULT NULL,
-    color VARCHAR NOT NULL
+    color VARCHAR NOT NULL,
+    hoursleft INTEGER DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS col;

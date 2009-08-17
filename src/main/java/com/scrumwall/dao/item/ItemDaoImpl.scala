@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.simple.ParameterizedRowMapper
 import java.sql.ResultSet
 import java.util.HashMap
 import java.util.List
+import java.lang.Integer
 
 class ItemDaoImpl extends ItemDao {
   
@@ -46,6 +47,7 @@ class ItemDaoImpl extends ItemDao {
     map.put("sprintId", item.sprintId)
     map.put("col", item.column)
     map.put("color", item.color)
+    map.put("hoursleft", item.hoursLeft)
     
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_SAVE, map)
     item.setId( getLastInsertedId() )
@@ -65,6 +67,7 @@ class ItemDaoImpl extends ItemDao {
     map.put("sprintId", item.sprintId)
     map.put("col", item.column)
     map.put("color", item.color)
+    map.put("hoursleft", item.hoursLeft)
     
     getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_UPDATE, map)
     
@@ -96,13 +99,14 @@ object ItemDaoImpl {
   val CONTENT = "content" 
   val COLUMN = "col"
   val COLOR = "color"
+  val HOURSLEFT = "hoursleft"
   
-  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color FROM item WHERE id = :id"  
-  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId, col, color) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col, :color)"  
-  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col, color = :color WHERE id = :id"  
-  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY, color FROM item WHERE sprintId = :sprintId"
+  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color, hoursleft FROM item WHERE id = :id"  
+  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId, col, color, hoursleft) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col, :color, :hoursleft)"  
+  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col, color = :color, hoursleft = :hoursleft WHERE id = :id"  
+  val SQL_GET_SPRINT = "SELECT id, content, estimation, sprintId, owner, col, offsetX, offsetY, color, hoursleft FROM item WHERE sprintId = :sprintId"
   val SQL_REMOVE = "DELETE FROM item WHERE id = :id"
-  val SQL_GET_ITEMS = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color FROM item WHERE col = :column"
+  val SQL_GET_ITEMS = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color, hoursleft FROM item WHERE col = :column"
   
   val mapper = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
@@ -130,6 +134,12 @@ object ItemDaoImpl {
 		var color = rs getString COLOR
 		item setColor color
 		
+		var hoursLeft: Integer = null
+	    if((rs getBigDecimal HOURSLEFT) != null) {
+	      hoursLeft = new Integer((rs getBigDecimal HOURSLEFT).intValue)
+	    }
+		item setHoursLeft hoursLeft
+  
 		item
       }
     }
