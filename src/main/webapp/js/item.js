@@ -6,6 +6,7 @@ scrumwall.create("item", {
 		this.guid =  config.id ? "item." + config.id : "new." + itemCount;
 		this.saveUrl = config.url;
 		$(this).draggable();
+		$(this).resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
 		
 		//FIXME use real sprints
 		this.sprintId=FIX_SPRINT_ID;
@@ -48,10 +49,6 @@ scrumwall.create("item", {
 			this.redraw();
 		}
 
-//		$(this.content).css("background-color", this.color);
-//		$(this.estimation).css("background-color", this.color);
-//		$(this.owner).css("background-color", this.color);
-		
 		//update DOM with item
 		$(estWrapper).append(this.hoursLeft);
 		$(estWrapper).append(this.estimation);
@@ -71,18 +68,18 @@ scrumwall.create("item", {
 		$(this.expander).bind("click", {parent: this, object:this.expander}, this.expand);
 		$(this).bind("dblclick", {parent: this, object: this.expander}, this.expand);
 	},
+	onResizeStop:function(event, ui){
+		var item = ui.helper;
+		item.width = ui.size.width;
+		item.height = ui.size.height;
+		
+	},
 	paint:function(children, scope, color){
 		children.each( function() {
 				$(this).css("background-color", color);
 				scope.paint($(this).children(), scope, color);
 		});
 		 
-	},
-	animate:function(scope, options, callback){
-		if(callback){
-			
-		}
-		$(scope).animate()
 	},
 	expand:function(event){
 		var parent = event.data.parent;
@@ -131,7 +128,10 @@ scrumwall.create("item", {
 			owner: scope.owner.value,
 			sprintId: scope.sprintId,
 			color: scope.color,
-			hoursLeft: scope.hoursLeft.value == "" ? null : scope.hoursLeft.value};
+			hoursLeft: scope.hoursLeft.value == "" ? null : scope.hoursLeft.value,
+			width: scope.width,
+			height: scope.height
+		};
 		var id = scope.guid;
 		
 		if(id && id.indexOf("item.") >= 0){

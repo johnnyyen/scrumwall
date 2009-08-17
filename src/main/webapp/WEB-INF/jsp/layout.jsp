@@ -57,6 +57,7 @@
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.droppable.js"></script>
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.tabs.js"></script>
 	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.dialog.js"></script>
+	<script type="text/javascript" src="js/jquery.ui-1.7.1/ui.resizable.js"></script>
 	<script type="text/javascript" src="js/jquery-1.3.2/jquery.create.js"></script>
 	<script type="text/javascript" src="js/jquery-1.3.2/effects.core.js"></script>
 	<script type="text/javascript" src="js/jquery-1.3.2/effects.scale.js"></script>
