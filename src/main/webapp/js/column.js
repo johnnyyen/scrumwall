@@ -46,7 +46,7 @@ scrumwall.create("column", {
 		if($(item).hasClass("sector")){
 			var coords = $(ui.helper).offset();
 			var ownerName = $('#ownerInput').val();
-			if(ownerName == "Your name" || this.id == "col0") { //FIXME: need to do this in a better way
+			if(ownerName == "Your name" || this.id == "col.0") { //FIXME: need to do this in a better way
 				ownerName = "";
 			}
 			item = newItem({color: $(ui.helper).css("background-color"), owner: ownerName});

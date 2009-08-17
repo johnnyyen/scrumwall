@@ -106,7 +106,11 @@ object ItemDaoImpl {
   
   val mapper = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
-		var item = new Item( new RichInt(rs getInt ID), rs getString CONTENT, new RichInt(rs getInt ESTIMATION))
+	    var estimation: RichInt = null
+	    if((rs getBigDecimal ESTIMATION) != null) {
+	      estimation = new RichInt((rs getBigDecimal ESTIMATION).intValue)
+	    }
+		var item = new Item( new RichInt(rs getInt ID), rs getString CONTENT, estimation)
 		
 		var sprintId = rs getInt SPRINTID
 		item setSprintId sprintId

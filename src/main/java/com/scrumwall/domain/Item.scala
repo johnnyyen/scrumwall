@@ -3,6 +3,7 @@ package com.scrumwall.domain
 import scala.runtime.RichInt
 import scala.runtime.RichDouble
 import com.scrumwall.util.debug.LogsToLog4J
+import java.lang.Integer
 
 class Item(var id: RichInt, var content: String, var estimation: RichInt) extends LogsToLog4J {
 	var sprintId : RichInt = _
@@ -25,12 +26,18 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	  this.id = new RichInt(id)
 	}
  
-	def getEstimation() : Int = {
-	  this.estimation.abs
+	def getEstimation() : Integer = {
+	  if(this.estimation != null) {
+		  this.estimation.abs
+	  } else {
+	    null
+	  }
 	}
  
-	def setEstimation(estimation: Int) = {
-	  this.estimation = new RichInt(estimation)
+	def setEstimation(estimation: Integer) = {
+	  if(estimation != null) {
+		  this.estimation = new RichInt(estimation.intValue)
+	  }
 	}
  
 	def getContent() : String = {

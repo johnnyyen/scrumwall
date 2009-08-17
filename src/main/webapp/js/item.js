@@ -64,31 +64,49 @@ scrumwall.create("item", {
 		$(this).show();
 		
 		//add event listeners
-		$(this.expander).bind("click", {parent: this, object:this}, this.expand);
+		$(this.expander).bind("click", {parent: this, object:this.expander}, this.expand);
 		$(this).bind("dblclick", {parent: this, object: this.expander}, this.expand);
+	},
+	animate:function(scope, options, callback){
+		if(callback){
+			
+		}
+		$(scope).animate()
 	},
 	expand:function(event){
 		var parent = event.data.parent;
 		var object = event.data.object;
-		$(parent).animate( { width:"300px" }, { queue:false, duration:250 } )
-			.animate( {height: "300px"}, 250);
+		$(object).unbind("click");
+		$(parent).animate( { width:"300px"}, {queue:false, duration:250})
+			.animate( {height: "300px"}, {queue: false, duration:250,
+				step:function(){
+					$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+				}
+			}
+		);
 
 		$(parent.content).removeClass("hidden");
 		$(parent.contentText).addClass("hidden");
 		$(parent.content).attr("value", $(parent.contentText).text());
-		$(object).unbind("click", parent.expand);
-		$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+		
+		
 	},
 	collapse:function(event){
 		var parent = event.data.parent;
 		var object = event.data.object;
-		$(parent).animate( { width:"120px" }, { queue:false, duration:250 } )
-			.animate( {height: "100px"}, 250);
+		$(object).unbind("click");
+		$(parent).animate( { width:"120px"}, {queue:false, duration: 250})
+			.animate( {height: "100px"}, {queue: false, duration: 250,
+				step:function(){
+					$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
+				}
+			}
+		);
+		
 		$(parent.content).addClass("hidden");
 		$(parent.contentText).removeClass("hidden");
 		$(parent.contentText).text($(parent.content).attr("value"));
-		$(object).unbind("click", parent.collapse);
-		$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
+		
 	},
 	saveable:function(scope){
 		if(!scope) scope = this;
@@ -96,7 +114,7 @@ scrumwall.create("item", {
 		
 		var item = {column: scope.column.guid,
 			content: $(scope.content).val(),
-			estimation: scope.estimation.value,
+			estimation: scope.estimation.value == "" ? null : scope.estimation.value,
 			offsetX: scope.offsetX,
 			offsetY: scope.offsetY,
 			owner: scope.owner.value,
