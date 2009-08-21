@@ -1,6 +1,5 @@
 
 scrumwall.create("item", {
-	
 	initialize:function(config, cols){
 		var FIX_SPRINT_ID=1;
 		this.guid =  config.id ? "item." + config.id : "new." + itemCount;
@@ -64,15 +63,26 @@ scrumwall.create("item", {
 		$(this).css("background-color", this.color);
 		$(this).show();
 		
+		if(config.width){
+			this.width = config.width;
+			this.height = config.height;
+		}else{
+			//FIXME: use a constant instead
+			this.width = 120;
+			this.height = 100;
+		}
+		
+		$(this).width(this.width);
+		$(this).height(this.height);
 		//add event listeners
 		$(this.expander).bind("click", {parent: this, object:this.expander}, this.expand);
 		$(this).bind("dblclick", {parent: this, object: this.expander}, this.expand);
 	},
 	onResizeStop:function(event, ui){
-		var item = ui.helper;
+		var item = ui.helper[0];
 		item.width = ui.size.width;
 		item.height = ui.size.height;
-		
+		item.save();
 	},
 	paint:function(children, scope, color){
 		children.each( function() {
@@ -85,14 +95,31 @@ scrumwall.create("item", {
 		var parent = event.data.parent;
 		var object = event.data.object;
 		$(object).unbind("click");
-		$(parent).animate( { width:"300px"}, {queue:false, duration:250})
-			.animate( {height: "300px"}, {queue: false, duration:250,
+		if(parent.width < 300 && parent.height < 300){
+			$(parent).animate( { width:"300px"}, {queue:false, duration:250})
+				.animate( {height: "300px"}, {queue: false, duration:250,
+					step:function(){
+						$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+					}
+				}
+			);
+		}else if(parent.width < 300){
+			$(parent).animate( { width:"300px"}, {queue: false, duration:250,
 				step:function(){
 					$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
 				}
 			}
 		);
-
+		}else if(parent.height < 300){
+			$(parent).animate( { height:"300px"}, {queue: false, duration:250,
+				step:function(){
+					$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+				}
+			}
+		);
+		}else{
+			$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+		}
 		$(parent.content).removeClass("hidden");
 		$(parent.contentText).addClass("hidden");
 		$(parent.content).attr("value", $(parent.contentText).text());
@@ -103,8 +130,9 @@ scrumwall.create("item", {
 		var parent = event.data.parent;
 		var object = event.data.object;
 		$(object).unbind("click");
-		$(parent).animate( { width:"120px"}, {queue:false, duration: 250})
-			.animate( {height: "100px"}, {queue: false, duration: 250,
+		
+		$(parent).animate( { width: parent.width + "px"}, {queue:false, duration: 250})
+			.animate( {height: parent.height + "px"}, {queue: false, duration: 250,
 				step:function(){
 					$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
 				}

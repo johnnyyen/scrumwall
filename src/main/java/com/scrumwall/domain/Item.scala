@@ -13,6 +13,8 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	var offsetY: RichDouble = _
 	var color: String = _
 	var hoursLeft: RichInt = _
+	var width: RichInt = _
+	var height: RichInt = _
  
 	def this() = this(null, null, null)
 	def this(id: Int, content: String) = this(id, content, null)
@@ -120,6 +122,22 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	  }
 	}
  
+    def getWidth : Int = {
+	  return this.width.abs
+	}
+
+	def setWidth (width : Int) = {
+	  this.width = new RichInt(width)
+	}
+ 
+    def getHeight : Int = {
+	  return this.height.abs
+	}
+
+	def setHeight (height : Int) = {
+	  this.height = new RichInt(height)
+	}
+ 
 	override def toString() : String = {
 	  var result = "["
 	  if(this.id != null) result += this.id + ", "
@@ -129,6 +147,8 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	  if(this.offsetX != null) result += this.offsetX + ", "
 	  if(this.offsetY != null) result += this.offsetY + ", "
 	  if(this.column != null) result += this.column + ", "
+	  if(this.width != null) result += this.width + ", "
+   	  if(this.height != null) result += this.height + ", "
 	  if(this.sprintId != null) result += this.sprintId
 	  result += "]"
 	  result
