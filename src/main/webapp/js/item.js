@@ -37,7 +37,7 @@ scrumwall.create("item", {
 		
 		this.owner = $.create("input",{"type":"text","class":"owner"});
 		$(this.owner).attr("value", config.owner);
-		$(this.owner).bind("blur", this, this.save );
+		$(this.owner).bind("change", this, this.save );
 		
 		this.offsetX = config.offsetX;
 		this.offsetY = config.offsetY;

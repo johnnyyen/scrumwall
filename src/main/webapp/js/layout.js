@@ -13,6 +13,8 @@ scrumwall.create("layout", {
 		ColumnService.getColumns({async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		
 		$(window).bind("resize", {cols:this.cols}, this.onWindowResize);
+		$(window).bind("beforeunload", {cols: this.cols}, this.onPageUnload);
+
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
 	},
 	loadItems:function(items){
@@ -65,6 +67,13 @@ scrumwall.create("layout", {
 	},
 	onItemDelete:function(event, ui){
 		ui.draggable[0].remove();
+	},
+	onPageUnload: function(event){
+		//FIXME: always saves all items when unloading page
+		var cols = event.data.cols;
+		for(var i in cols){
+			cols[i].saveItems(cols[i]);
+		}
 	}
 });
 
