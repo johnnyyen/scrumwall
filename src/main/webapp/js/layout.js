@@ -71,7 +71,7 @@ scrumwall.create("layout", {
 	onPageUnload: function(event){
 		//FIXME: always saves all items when unloading page
 		for(var i in this.cols){
-			this.cols[i].saveItems.apply(this.cols[i]);
+			this.cols[i].saveItems();
 		}
 		
 	}
