@@ -12,8 +12,8 @@ scrumwall.create("layout", {
 		
 		ColumnService.getColumns({async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		
-		$(window).bind("resize", {cols:this.cols}, this.onWindowResize);
-		$(window).bind("beforeunload", {cols: this.cols}, this.onPageUnload);
+		$(window).bind("resize", {}, this.onWindowResize, this);
+		$(window).bind("beforeunload", {},this.onPageUnload, this);
 
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
 	},
@@ -46,11 +46,11 @@ scrumwall.create("layout", {
 		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
 	},
 	onWindowResize:function(event){
-		var cols = event.data.cols;	
+		
 		var width = $("#columnContainer").width();
-		var colWidth = Math.round(width/cols.length)-2;
-		for(var i = 0; i < cols.length; i++){
-			cols[i].resize(colWidth);
+		var colWidth = Math.round(width/this.cols.length)-2;
+		for(var i = 0; i < this.cols.length; i++){
+			this.cols[i].resize(colWidth);
 		}
 	},
 	createItem:function(event){
@@ -70,10 +70,10 @@ scrumwall.create("layout", {
 	},
 	onPageUnload: function(event){
 		//FIXME: always saves all items when unloading page
-		var cols = event.data.cols;
-		for(var i in cols){
-			cols[i].saveItems(cols[i]);
+		for(var i in this.cols){
+			this.cols[i].saveItems.apply(this.cols[i]);
 		}
+		
 	}
 });
 

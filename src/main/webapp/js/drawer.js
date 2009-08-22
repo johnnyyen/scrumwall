@@ -7,47 +7,47 @@ scrumwall.create("drawer", {
 		this.menu = config.menu;
 		if(config.button){
 			this.button = config.button;
-			$(config.button).bind("click", {"scope":this, menu: this.menu}, this.onExpand);
+			$(config.button).bind("click", {"scope":this, menu: this.menu}, this.onExpand, this);
 		}
 		this.items = new Array();
 		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
 	},
 	onExpand:function(event){
-		var scope = event.data.scope;
-		$(this).unbind("click");
-		scope.menu.collapseDrawers(scope);
+		var scope = this;
+		$(this.button).unbind("click");
+		this.menu.collapseDrawers(this);
 
-		var button = this;
+		var button = this.button;
 		
 		var notStarted = $("div[id=col.0]");
 		var offset = $(notStarted).offset().left + $(notStarted).width();
 		var width = $(window).width() - offset;
-		$("body").append(scope); 	
-		$(scope).animate( { "width":parseInt(width)+"px", queue: false }, 250,  
+		$("body").append(this); 	
+		$(this).animate( { "width":parseInt(width)+"px", queue: false }, 250,  
 			function(){
 				ItemService.getItems(scope.guid, 
 						{"scope": scope, callback:scope.loadItems, exceptionHandler:exceptionHandler});
-				$(button).bind("click", {"scope":scope}, scope.onCollapse);
+				$(button).bind("click", {}, scope.onCollapse, scope);
 			}
 		);
-		scope.expanded = true;
+		this.expanded = true;
 	},
 	onCollapse:function(event){
-		$(this).unbind("click");
-		var scope = event.data.scope;
-		var button = this;
-		scope.removeItems(scope);
+		$(this.button).unbind("click");
+		var scope = this;
+		var button = this.button;
+		this.removeItems();
 		
-		$(scope).animate({ width:"0px", queue:false}, 250, function(){
-				$(button).bind("click",{"scope":scope},scope.onExpand);
+		$(this).animate({ width:"0px", queue:false}, 250, function(){
+				$(button).bind("click",{},scope.onExpand, scope);
 			}
 		);
 		scope.expanded = false;
 	},
-	removeItems:function(scope){
-		for(var i in scope.items) {
-			$(scope.items[i]).remove();
-			delete scope.items[i];
+	removeItems:function(){
+		for(var i in this.items) {
+			$(this.items[i]).remove();
+			delete this.items[i];
 		}
 	},
 	loadItems:function(items){

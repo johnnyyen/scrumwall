@@ -86,9 +86,9 @@ scrumwall.create("column", {
 			$(item).css("z-index", "10");
 		}
 	},
-	saveItems: function(col){
-		for(var i in col.items){
-			col.items[i].save();
+	saveItems: function(){
+		for(var i in this.items){
+			this.items[i].save();
 		}
 	}
 });

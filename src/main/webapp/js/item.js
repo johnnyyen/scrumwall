@@ -75,8 +75,8 @@ scrumwall.create("item", {
 		$(this).width(this.width);
 		$(this).height(this.height);
 		//add event listeners
-		$(this.expander).bind("click", {parent: this, object:this.expander}, this.expand);
-		$(this).bind("dblclick", {parent: this, object: this.expander}, this.expand);
+		$(this.expander).bind("click", {}, this.expand, this);
+		$(this).bind("dblclick", {}, this.expand, this);
 	},
 	onResizeStop:function(event, ui){
 		var item = ui.helper[0];
@@ -92,56 +92,54 @@ scrumwall.create("item", {
 		 
 	},
 	expand:function(event){
-		var parent = event.data.parent;
-		var object = event.data.object;
-		$(object).unbind("click");
-		if(parent.width < 300 && parent.height < 300){
-			$(parent).animate( { width:"300px"}, {queue:false, duration:250})
+		var scope = this;
+		
+		$(this.expander).unbind("click");
+		if(this.width < 300 && this.height < 300){
+			$(this).animate( { width:"300px"}, {queue:false, duration:250})
 				.animate( {height: "300px"}, {queue: false, duration:250,
 					step:function(){
-						$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+						$(scope.expander).bind("click", {}, scope.collapse, scope);
 					}
 				}
 			);
-		}else if(parent.width < 300){
-			$(parent).animate( { width:"300px"}, {queue: false, duration:250,
+		}else if(this.width < 300){
+			$(this).animate( { width:"300px"}, {queue: false, duration:250,
 				step:function(){
-					$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+					$(scope.expander).bind("click", {}, scope.collapse, scope);
 				}
 			}
 		);
-		}else if(parent.height < 300){
-			$(parent).animate( { height:"300px"}, {queue: false, duration:250,
+		}else if(this.height < 300){
+			$(this).animate( { height:"300px"}, {queue: false, duration:250,
 				step:function(){
-					$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+					$(scope.expander).bind("click", {}, scope.collapse, scope);
 				}
 			}
 		);
 		}else{
-			$(object).bind("click", {"parent": parent, "object": object}, parent.collapse);
+			$(this.expander).bind("click", {}, this.collapse, scope);
 		}
-		$(parent.content).removeClass("hidden");
-		$(parent.contentText).addClass("hidden");
-		$(parent.content).attr("value", $(parent.contentText).text());
-		
+		$(this.content).removeClass("hidden");
+		$(this.contentText).addClass("hidden");
+		$(this.content).attr("value", $(this.contentText).text());
 		
 	},
 	collapse:function(event){
-		var parent = event.data.parent;
-		var object = event.data.object;
-		$(object).unbind("click");
+		var scope = this;
+		$(this.expander).unbind("click");
 		
-		$(parent).animate( { width: parent.width + "px"}, {queue:false, duration: 250})
-			.animate( {height: parent.height + "px"}, {queue: false, duration: 250,
+		$(this).animate( { width: this.width + "px"}, {queue:false, duration: 250})
+			.animate( {height: this.height + "px"}, {queue: false, duration: 250,
 				step:function(){
-					$(object).bind("click", {"parent": parent, "object": object}, parent.expand);
+					$(scope.expander).bind("click", {}, scope.expand, scope);
 				}
 			}
 		);
 		
-		$(parent.content).addClass("hidden");
-		$(parent.contentText).removeClass("hidden");
-		$(parent.contentText).text($(parent.content).attr("value"));
+		$(this.content).addClass("hidden");
+		$(this.contentText).removeClass("hidden");
+		$(this.contentText).text($(this.content).attr("value"));
 		
 	},
 	saveable:function(scope){

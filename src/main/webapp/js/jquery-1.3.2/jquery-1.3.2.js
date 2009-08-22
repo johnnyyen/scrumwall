@@ -2434,7 +2434,7 @@ jQuery.event = {
 
 	// Bind an event to an element
 	// Original by Dean Edwards
-	add: function(elem, types, handler, data) {
+	add: function(elem, types, handler, data, scope) {
 		if ( elem.nodeType == 3 || elem.nodeType == 8 )
 			return;
 
@@ -2458,7 +2458,11 @@ jQuery.event = {
 			// Store data in unique handler
 			handler.data = data;
 		}
-
+		//Store the scope that the handler will be executed in
+		if( scope ){
+			handler.scope = scope;	
+		}
+		
 		// Init the element's event structure
 		var events = jQuery.data(elem, "events") || jQuery.data(elem, "events", {}),
 			handle = jQuery.data(elem, "handle") || jQuery.data(elem, "handle", function(){
@@ -2689,8 +2693,13 @@ jQuery.event = {
 				// So that we can later remove it
 				event.handler = handler;
 				event.data = handler.data;
-
-				var ret = handler.apply(this, arguments);
+				
+				var ret;
+				if( handler.scope ){
+					ret = handler.apply(handler.scope, arguments);
+				}else{
+					ret = handler.apply(this, arguments);
+				}
 
 				if( ret !== undefined ){
 					event.result = ret;
@@ -2892,9 +2901,12 @@ jQuery.each({
 });
 
 jQuery.fn.extend({
-	bind: function( type, data, fn ) {
+	/**
+	 * scope: if specified, the handler function will be executed in the specified scope
+	 */
+	bind: function( type, data, fn, scope ) {
 		return type == "unload" ? this.one(type, data, fn) : this.each(function(){
-			jQuery.event.add( this, type, fn || data, fn && data );
+			jQuery.event.add( this, type, fn || data, fn && data, scope );
 		});
 	},
 
