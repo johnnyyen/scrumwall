@@ -57,6 +57,7 @@
     <property name="columnDao" ref="columnDao"/>
     <dwr:remote javascript="ColumnService">
       <dwr:include method="getColumns"/>
+      <dwr:include method="save"/>
     </dwr:remote>
   </bean>
 

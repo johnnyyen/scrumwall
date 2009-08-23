@@ -19,14 +19,15 @@ CREATE CACHED TABLE col(
     id IDENTITY,
     name VARCHAR NOT NULL,
     columntype VARCHAR DEFAULT NULL,
-    columnorder INTEGER NOT NULL
+    columnorder INTEGER NOT NULL,
+    width DECIMAL NOT NULL
 );
 
 INSERT INTO col(name, columntype, columnorder)
-    VALUES('Not Started', 'NOT_STARTED', 0);
+    VALUES('Not Started', 'NOT_STARTED', 0, 50);
 
 INSERT INTO col(name, columntype, columnorder)
-    VALUES('DONE', 'DONE', 1000000);
+    VALUES('DONE', 'DONE', 1000000, 50);
 
 INSERT INTO col(id, name, columntype, columnorder)
     VALUES(-2, 'GOALS', 'GOALS', 0);

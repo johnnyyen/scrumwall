@@ -10,4 +10,8 @@ trait ColumnService {
   */
   def getColumns : List[Column]
   
+  /**
+  * Saves given column
+  */
+  def save(column: Column) : Column
 }

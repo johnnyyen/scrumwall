@@ -43,9 +43,13 @@ scrumwall.create("item", {
 		this.offsetY = config.offsetY;
 		//set the initial position of item
 		if(cols && cols.length > config.column){
-			this.col = cols[config.column];
-			this.col.addItem(this);
-			this.redraw();
+			this.column = cols[config.column];
+			if(this.column){
+				this.column.addItem(this);
+				this.redraw();
+			}else{
+				return false;
+			}
 		}
 
 		//update DOM with item
@@ -171,7 +175,7 @@ scrumwall.create("item", {
 			scope = event.data;
 		}
 		ItemService.save(scope.saveable(scope),
-				{scope: scope, callback:scope.saveCallback,exceptionHandler:exceptionHandler});
+				{"scope": scope, callback:scope.saveCallback,exceptionHandler:exceptionHandler});
 		
 		
 	},

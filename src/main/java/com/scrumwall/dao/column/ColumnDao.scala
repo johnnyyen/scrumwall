@@ -10,5 +10,9 @@ trait ColumnDao extends BaseDao {
   * Returns all the columns in order  
   */
   def getColumns : List[Column]
-  
+
+  /**
+  * Saves all columns 
+  */
+  def save(column: Column): Column
 }

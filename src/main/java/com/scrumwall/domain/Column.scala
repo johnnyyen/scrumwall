@@ -1,9 +1,13 @@
 package com.scrumwall.domain
 
 import scala.runtime.RichInt
+import scala.runtime.RichDouble
 
 class Column(var id: RichInt, var name: String, var columnType: String) {
   
+	var width: RichDouble = _
+	var order: RichInt = _
+ 
 	def this(id: Int, name: String) = this(id, name, null) 
  
 	def getId: Int = {
@@ -28,6 +32,22 @@ class Column(var id: RichInt, var name: String, var columnType: String) {
    
     def setName(name: String) = {
       this.name = name
+    }
+    
+    def getWidth: Double = {
+      this.width.abs
+    }
+    
+    def setWidth(width: Double){
+      this.width = new RichDouble(width)
+    }
+    
+    def getOrder: Int = {
+   	  this.order.abs
+   	}
+   
+    def setOrder(order: Int) = {
+      this.order = new RichInt(order)
     }
     
     override def toString = {

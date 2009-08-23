@@ -17,4 +17,9 @@ class ColumnServiceImpl extends ColumnService with LogsToLog4J{
     this.columnDao.getColumns
   }
   
+  override def save(column: Column): Column = {
+    debug("saving column " + column)
+    this.columnDao.save(column)
+    column
+  }
 }

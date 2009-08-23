@@ -5,15 +5,27 @@ scrumwall.create("column", {
 	items:null,
 	NOT_STARTED: "NOT_STARTED",
 	initialize:function(config){
+		
 		this.menu = config.menu;
+		this.layout = config.layout;
+		this.parent = $("#columnContainer"); 	
 		this.guid = config.id; 
-		$(this).width(config.colWidth);
+		if(config.width){
+			//FIXME: where did the "-3" come from???
+			this.columnWidth = parseInt(config.width * this.parent.width() / 100)-3;
+		}else{
+			this.columnWidth = config.colWidth;
+		}
+		$(this).width(this.columnWidth);
+		
 		this.addItem = this.addItem;
 		this.items = new Array();
 		this.size = 0;
 		this.columnType = config.columnType;
+		this.order = config.order ? config.order : 0;
 		
 		this.header = jQuery.create("div",{"class":"colHeader"});
+		this.name = config.name;
 		$(this.header).text(config.name);
 		$(this).append($(this.header));
 		
@@ -28,8 +40,21 @@ scrumwall.create("column", {
 		$(this).attr("id", "col." + config.id);
 		
 		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
+		$(this).resizable({minWidth:200, stop: this.onResizeStop, containment: 'parent', handles:"e"});
+
 	},
-	resize:function(newWidth){
+	
+	onResizeStop:function(){
+		var delta = $(this).width() - this.columnWidth;
+		this.columnResize($(this).width());
+		this.layout.onColumnResize(this.order, delta);
+		this.columnWidth = $(this).width();
+	},
+	resize:function(){
+		this.onResizeStop()
+	},
+	columnResize:function(newWidth){
+		this.columnWidth = $(this).width();
 		$(this).width(newWidth);
 		for(var i in this.items){
 			this.items[i].redraw();
@@ -90,5 +115,23 @@ scrumwall.create("column", {
 		for(var i in this.items){
 			this.items[i].save();
 		}
+	},
+	saveable:function(){
+		var widthPercent = this.columnWidth / this.parent.width() * 100;
+		var column = {id: this.guid,
+				width: widthPercent,
+				name: this.name,
+				order: this.order
+			};
+		return column;
+	},
+	save: function(){
+		ColumnService.save(this.saveable(),
+				{scope: this, callback: this.saveCallback, exceptionHandler:exceptionHandler});
+		
+		
+	},
+	saveCallback:function(column){
+		this.guid = column.id;
 	}
 });

@@ -14,7 +14,7 @@ scrumwall.create("layout", {
 		
 		$(window).bind("resize", {}, this.onWindowResize, this);
 		$(window).bind("beforeunload", {},this.onPageUnload, this);
-
+		$(this).bind("columnResize",{}, this.onColumnResize, this);
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
 	},
 	loadItems:function(items){
@@ -22,7 +22,7 @@ scrumwall.create("layout", {
 		var item;
 		
 		for(var i = 0; i < items.length; i++){
-			item = newItem(items[i], this.cols);
+			item = newItem(items[i], this.columns);
 			var n=0;
 			
 		}
@@ -32,15 +32,16 @@ scrumwall.create("layout", {
 		//get column area width
 		var width = $(parentEl).width();
 		var colWidth = Math.round(width/columns.length)-10;
-		this.cols = new Array();
+		this.columns = new Array();
 		for(var i=0; i < columns.length; i++){
 			var col = jQuery.create("div",{"class":"column"});
 			$.extend( col, new scrumwall.column() );
 			columns[i].colWidth = colWidth;
 			columns[i].parentEl = parentEl;
 			columns[i].menu = this.menu;
+			columns[i].layout = this;
 			col.initialize(columns[i]);
-			this.cols[this.cols.length] = col;
+			this.columns[columns[i].id] = col;
 		}
 
 		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
@@ -48,9 +49,9 @@ scrumwall.create("layout", {
 	onWindowResize:function(event){
 		
 		var width = $("#columnContainer").width();
-		var colWidth = Math.round(width/this.cols.length)-2;
-		for(var i = 0; i < this.cols.length; i++){
-			this.cols[i].resize(colWidth);
+		var colWidth = Math.round(width/this.columns.length)-2;
+		for(var i = 0; i < this.columns.length; i++){
+			this.columns[i].columnResize(colWidth);
 		}
 	},
 	createItem:function(event){
@@ -70,10 +71,32 @@ scrumwall.create("layout", {
 	},
 	onPageUnload: function(event){
 		//FIXME: always saves all items when unloading page
-		for(var i in this.cols){
-			this.cols[i].saveItems();
+		for(var i in this.columns){
+			this.columns[i].saveItems();
+		}
+		for(var i in this.menu.drawers){
+			this.menu.drawers[i].saveItems();
+		}
+	},
+	columnsOnRightCount:function(myOrder){
+		var count = 0;
+		for(var i in this.columns){
+			if(this.columns[i].order > myOrder){
+				count++;
+			}
 		}
 		
+		return count;
+	},
+	onColumnResize: function(order, delta){
+		var count = this.columnsOnRightCount(order);
+		var change = ( ( (delta) / count) * (-1) );
+		for(var i in this.columns){
+			if(this.columns[i].order > order){
+				var width = $(this.columns[i]).width() + change;
+				this.columns[i].columnResize(width);
+			}
+		}
 	}
 });
 

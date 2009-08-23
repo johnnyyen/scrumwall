@@ -93,7 +93,12 @@ class Item(var id: RichInt, var content: String, var estimation: RichInt) extend
 	}
  
 	def getColumn : Int = {
-	  this.column.abs
+	  //FIXME: obvious
+	  var multiplier = -1;
+	  if(this.column > 0) {
+	    multiplier = 1;
+	  }
+	  return multiplier * this.column.abs
 	}
  
 	def setColumn(column : Int) = {

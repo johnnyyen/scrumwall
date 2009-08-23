@@ -108,5 +108,10 @@ scrumwall.create("drawer", {
 			
 		}
 	},
+	saveItems: function(){
+		for(var i in this.items){
+			this.items[i].save();
+		}
+	}
 	
 } );
