@@ -1,4 +1,4 @@
-scrumwall.create("layout", {
+create("layout", {
 	itemCount:0,
 	init: function(){
 		$("#newItem").click(function(ev){alert("button clicked");});
@@ -22,7 +22,7 @@ scrumwall.create("layout", {
 		var item;
 		
 		for(var i = 0; i < items.length; i++){
-			item = newItem(items[i], this.columns);
+			item = New("item", items[i], this.columns);
 			var n=0;
 			
 		}
@@ -34,13 +34,11 @@ scrumwall.create("layout", {
 		var colWidth = Math.round(width/columns.length)-10;
 		this.columns = new Array();
 		for(var i=0; i < columns.length; i++){
-			var col = jQuery.create("div",{"class":"column"});
-			$.extend( col, new scrumwall.column() );
 			columns[i].colWidth = colWidth;
 			columns[i].parentEl = parentEl;
 			columns[i].menu = this.menu;
 			columns[i].layout = this;
-			col.initialize(columns[i]);
+			var col = New("column", columns[i]);
 			this.columns[columns[i].id] = col;
 		}
 
@@ -63,7 +61,7 @@ scrumwall.create("layout", {
 		var config = {parentEl:event.target,
 			owner:defaultOwner};
 		itemCount++;
-		var item = newItem(config,null);
+		var item = New("item", config);
 		
 	},
 	onItemDelete:function(event, ui){

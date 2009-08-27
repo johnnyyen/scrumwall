@@ -64,6 +64,7 @@
 	<script type="text/javascript" src="js/jquery-1.3.2/effects.slide.js"></script>
 	<script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
 	<script type="text/javascript" src="js/common/global.js"></script>
+	<script type="text/javascript" src="js/container.js"></script>
 	<script type="text/javascript" src="js/column.js"></script>
 	<script type="text/javascript" src="js/item.js"></script>
 	<script type="text/javascript" src="js/menu.js"></script>

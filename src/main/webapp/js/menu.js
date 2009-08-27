@@ -1,4 +1,4 @@
-scrumwall.create("menu",{
+create("menu",{
 	init:function(){
 		this.owner = $("#ownerInput");
 		this.owner.focus(this.clearOwner);
@@ -7,15 +7,14 @@ scrumwall.create("menu",{
 		this.drawers = new Array();
 		
 		this.ucb = $("#ucbButton");
-		this.drawers.push(newDrawer({button: this.ucb, id: -1, menu: this, color: "green"}));
+		this.drawers.push(New("drawer", {button: this.ucb, id: -1, menu: this, color: "green"}));
 		
 		this.goals=$("#goalsButton");
-		this.drawers.push(newDrawer({button: this.goals, id: -2, menu: this, color: "pink"}));
+		this.drawers.push(New("drawer", {button: this.goals, id: -2, menu: this, color: "pink"}));
 		
 		this.impediments = $("#impedimentsButton");
-		this.drawers.push( newDrawer({button: this.impediments, id: -3, menu: this, color: "yellow"}) );
+		this.drawers.push(New("drawer", {button: this.impediments, id: -3, menu: this, color: "yellow"}) );
 		
-		this.eventPropagationStopped = false;
 	},
 	clearOwner:function(){
 		

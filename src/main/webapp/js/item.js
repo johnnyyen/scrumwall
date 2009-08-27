@@ -1,5 +1,5 @@
 
-scrumwall.create("item", {
+create("item", {
 	initialize:function(config, cols){
 		var FIX_SPRINT_ID=1;
 		this.guid =  config.id ? "item." + config.id : "new." + itemCount;
