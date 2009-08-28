@@ -1,86 +1,86 @@
 
 create("item", {
+	FIX_SPRINT_ID: 1,
+	DEFAULT_WIDTH: 120,
+	DEFAULT_HEIGHT: 100,
 	initialize:function(config, cols){
-		var FIX_SPRINT_ID=1;
-		this.guid =  config.id ? "item." + config.id : "new." + itemCount;
-		this.saveUrl = config.url;
-		$(this).draggable();
-		$(this).resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
-		
-		//FIXME use real sprints
-		this.sprintId=FIX_SPRINT_ID;
-		this.content = $.create("textarea",{"class":"itemContent hidden"});
-		$(this.content).bind("blur", this, this.save );
-		//the text displayed in item.
-		//use separate containers for collapsed and expanded mode
-		this.contentText = $.create("div",{"class":"itemText"});
-		if(config.id){
-			$(this.contentText).text(config.content);
-			$(this.content).val(config.content);
-		}else{
-			var newItemText = "I am a new item. Double click me";
-			$(this.contentText).text(newItemText);
-			$(this.content).val(newItemText);
-		}
-		this.estimation = $.create("input",{"maxlength":"2","type":"text","class":"estimation"});
-		
-		$(this.estimation).val(config.estimation);
-		$(this.estimation).bind("blur", this, this.save );
-		
-		this.hoursLeft = $.create("input",{"maxlength":"2", "type":"text", "class": "estimation"});
-		$(this.hoursLeft).val(config.hoursLeft);
-		$(this.hoursLeft).bind("blur", this, this.save);
-		
-		this.expander = $.create("div",{"class":"expandIcon"});
-		
-		var estWrapper = $.create("div",{"class":"estWrapper"});
-		
-		this.owner = $.create("input",{"type":"text","class":"owner"});
-		$(this.owner).attr("value", config.owner);
-		$(this.owner).bind("change", this, this.save );
-		
-		this.offsetX = config.offsetX;
-		this.offsetY = config.offsetY;
-		//set the initial position of item
-		if(cols && cols.length > config.column){
-			this.column = cols[config.column];
-			if(this.column){
-				this.column.addItem(this);
-				this.redraw();
-			}else{
-				return false;
-			}
-		}
-
-		//update DOM with item
-		$(estWrapper).append(this.hoursLeft);
-		$(estWrapper).append(this.estimation);
-		$("body").append($(this));
-		$(this).append($(this.contentText));
-		$(this).append($(this.content));
-		$(this).append($(this.expander));
-		$(this).append($(this.owner));
-		$(this).append($(estWrapper));
-
-		this.color = config.color;
-		this.paint($(this).children(), this, this.color);
-		$(this).css("background-color", this.color);
-		$(this).show();
+		map(config, this);
+		this.sprintId=this.FIX_SPRINT_ID;
+		this.guid =  config.id !== "undefined" && config.id > -1 ? "item." + config.id : "new." + itemCount;
 		
 		if(config.width){
 			this.width = config.width;
 			this.height = config.height;
 		}else{
-			//FIXME: use a constant instead
-			this.width = 120;
-			this.height = 100;
+			this.width = this.DEFAULT_WIDTH;
+			this.height = this.DEFAULT_HEIGHT;
 		}
 		
-		$(this).width(this.width);
-		$(this).height(this.height);
-		//add event listeners
+		
+		this._initDOM();
+		this._initEvents();
+		
+		//set the initial position of item and draw it. has to be after dom is 
+		//created and events are bound 
+		if(cols && cols.length > config.column){
+			this.column = cols[config.column];
+			if(this.column){
+				this.column.addItem(this);
+				this.redraw();
+			}
+		}
+	},
+	_initDOM:function(){
+		this.jq = $(this);
+		this.contentElement = $.create("textarea",{"class":"itemContent hidden"});
+		var contentJq = $(this.contentElement);
+		
+		this.contentText = $.create("div",{"class":"itemText"});
+		var contentTextJq = $(this.contentText);
+		
+		if(this.guid.indexOf("new.") < 0){
+			contentTextJq.text(this.content);
+			contentJq.val(this.content);
+		}else{
+			var newItemText = "I am a new item. Double click me";
+			contentTextJq.text(newItemText);
+			contentJq.val(newItemText);
+		}
+		
+		this.estimationElement = $.create("input",{"maxlength":"2","type":"text","class":"estimation"});
+		var estimationJq = $(this.estimationElement); 
+		estimationJq.val(this.estimation);
+		
+		this.hoursLeftElement = $.create("input",{"maxlength":"2", "type":"text", "class": "estimation"});
+		var hoursLeftJq = $(this.hoursLeftElement);
+		hoursLeftJq.val(this.hoursLeft);
+		
+		var estWrapper = $.create("div",{"class":"estWrapper"});
+		var estWrapperJq = $(estWrapper);
+		this.ownerElement = $.create("input",{"type":"text","class":"owner"});
+		var ownerJq = $(this.ownerElement).attr("value", this.owner);
+		
+		$("body").append(this.jq);
+		this.expander = $.create("div",{"class":"expandIcon"});
+		this.jq.append(contentTextJq).append(contentJq).append(this.expander).
+			append(ownerJq).append(estWrapperJq);
+		estWrapperJq.append(hoursLeftJq).append(estimationJq);
+
+		this.paint(this.jq.children(), this, this.color);
+		this.jq.css("background-color", this.color);
+		
+		this.jq.width(this.width).height(this.height);
+		
+	},
+	_initEvents:function(){
 		$(this.expander).bind("click", {}, this.expand, this);
-		$(this).bind("dblclick", {}, this.expand, this);
+		$(this.contentElement).bind("blur", this, this.save );
+		this.jq.bind("dblclick", {}, this.expand, this);
+		this.jq.draggable();
+		$(this.estimationElement).bind("blur", this, this.save );
+		$(this.hoursLeftElement).bind("blur", this, this.save);
+		$(this.ownerElement).bind("change", this, this.save );
+		this.jq.resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
 	},
 	onResizeStop:function(event, ui){
 		var item = ui.helper[0];
@@ -124,9 +124,9 @@ create("item", {
 		}else{
 			$(this.expander).bind("click", {}, this.collapse, scope);
 		}
-		$(this.content).removeClass("hidden");
+		$(this.contentElement).removeClass("hidden");
+		$(this.contentElement).attr("value", $(this.contentText).text());
 		$(this.contentText).addClass("hidden");
-		$(this.content).attr("value", $(this.contentText).text());
 		
 	},
 	collapse:function(event){
@@ -141,9 +141,9 @@ create("item", {
 			}
 		);
 		
-		$(this.content).addClass("hidden");
+		$(this.contentElement).addClass("hidden");
 		$(this.contentText).removeClass("hidden");
-		$(this.contentText).text($(this.content).attr("value"));
+		$(this.contentText).text($(this.contentElement).attr("value"));
 		
 	},
 	saveable:function(scope){
@@ -151,14 +151,14 @@ create("item", {
 		scope.setRelativeCoords();
 		
 		var item = {column: scope.column.guid,
-			content: $(scope.content).val(),
-			estimation: scope.estimation.value == "" ? null : scope.estimation.value,
+			content: $(scope.contentElement).val(),
+			estimation: scope.estimationElement.value == "" ? null : scope.estimationElement.value,
 			offsetX: scope.offsetX,
 			offsetY: scope.offsetY,
-			owner: scope.owner.value,
+			owner: scope.ownerElement.value,
 			sprintId: scope.sprintId,
 			color: scope.color,
-			hoursLeft: scope.hoursLeft.value == "" ? null : scope.hoursLeft.value,
+			hoursLeft: scope.hoursLeftElement.value == "" ? null : scope.hoursLeftElement.value,
 			width: scope.width,
 			height: scope.height
 		};
@@ -184,7 +184,7 @@ create("item", {
 	},
 	remove:function(){
 		var id = this.saveable().id;
-		if(id){
+		if(id && id > -1){
 			ItemService.remove(id,{exceptionHandler:exceptionHandler});
 		}
 		$(this).remove();
@@ -232,7 +232,7 @@ create("item", {
 		pos.left = pos.left + Math.round(x);
 		pos.top = pos.top + Math.round(y);
 		
-		$(this).css({left:pos.left + "px",top:pos.top+ "px"});
+		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
 	}
 	
 });

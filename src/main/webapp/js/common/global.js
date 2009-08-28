@@ -12,6 +12,12 @@ function isEventPropagationStopped() {
 	return false;
 }
 
+function map(source, destination) {
+	for(var i in source) {
+		destination[i] = source[i];
+	}
+}
+
 function stopEventPropagation() {
 	eventPropagationStopped = true;
 }
@@ -46,7 +52,7 @@ function createExtending(object, parent, map) {
 		
 	}
 	scrumwall[object].prototype.supr = {};
-	for (i in map) {
+	for (var i in map) {
 		if(scrumwall[object].prototype[i]) {
 			scrumwall[object].prototype.supr[i] = scrumwall[object].prototype[i];
 		}

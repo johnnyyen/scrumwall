@@ -6,11 +6,12 @@ createExtending("column", "container", {
 	NOT_STARTED: "NOT_STARTED",
 	DONE: "DONE",
 	initialize:function(config){
-		this.menu = config.menu;
-		this.layout = config.layout;
+		map(config,this);
+		this.jq = $(this);
+		this.guid = config.id;		
 		this.parent = $("#columnContainer");
-		this.guid = config.id;
-		
+		this.items = new Array();
+
 		if(config.width){
 			//FIXME: where did the "-3" come from???
 			this.columnWidth = parseInt(config.width * this.parent.width() / 100)-3;
@@ -18,41 +19,33 @@ createExtending("column", "container", {
 			this.columnWidth = config.colWidth;
 		}
 		
-		this.items = new Array();
-		this.size = 0;
-		this.columnType = config.columnType;
-		this.order = config.order ? config.order : 0;		
-		this.name = config.name;
-		this.parentEl = config.parentEl;
-		
-		this._initDom();
+		this._initDOM();
 	},
-	_initDom:function(){
+	_initDOM:function(){
 		this.header = jQuery.create("div",{"class":"colHeader"});
 		this.body = jQuery.create("div",{"class":"colBody"});
 
-		$(this).width(this.columnWidth);
-		$(this).attr("id", "col." + this.guid);
+		this.jq.width(this.columnWidth);
+		this.jq.attr("id", "col." + this.guid);
 		$(this.header).text(this.name);
-		$(this).append($(this.header));
-		$(this).append($(this.body));
-		$(this.parentEl).append($(this));
+		$(this.parentEl).append(this.jq);
+		this.jq.append($(this.header)).append($(this.body));
 
-		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
-		$(this).resizable({minWidth:200, stop: this._onResizeStop, containment: 'parent', handles:"e"});
+		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
+		this.jq.resizable({minWidth:200, stop: this._onResizeStop, containment: 'parent', handles:"e"});
 	},	
 	_onResizeStop:function(){
-		var delta = $(this).width() - this.columnWidth;
-		this.columnResize($(this).width());
+		var delta = this.jq.width() - this.columnWidth;
+		this.columnResize(this.jq.width());
 		this.layout.onColumnResize(this.order, delta);
-		this.columnWidth = $(this).width();
+		this.columnWidth = this.jq.width();
 	},
 	resize:function(){
 		this._onResizeStop()
 	},
 	columnResize:function(newWidth){
-		this.columnWidth = $(this).width();
-		$(this).width(newWidth);
+		this.columnWidth = this.jq.width();
+		this.jq.width(newWidth);
 		for(var i in this.items){
 			this.items[i].redraw();
 		}
