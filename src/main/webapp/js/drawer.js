@@ -12,6 +12,7 @@ createExtending("drawer", "container", {
 		}
 		this.columnType = this.DRAWER;
 		this.items = new Array();
+		
 		$(this).droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
 	},
 	_onExpand:function(event){

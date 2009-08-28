@@ -6,7 +6,7 @@ CREATE CACHED TABLE item(
     sprintid INTEGER DEFAULT NULL,
     offsetx DECIMAL DEFAULT 0,
     offsety DECIMAL DEFAULT 0,
-    col INTEGER DEFAULT 1,
+    col INTEGER DEFAULT 0,
     owner VARCHAR DEFAULT NULL,
     color VARCHAR NOT NULL,
     hoursleft INTEGER DEFAULT NULL,
@@ -20,13 +20,13 @@ CREATE CACHED TABLE col(
     name VARCHAR NOT NULL,
     columntype VARCHAR DEFAULT NULL,
     columnorder INTEGER NOT NULL,
-    width DECIMAL NOT NULL
+    width DECIMAL DEFAULT NULL
 );
 
-INSERT INTO col(name, columntype, columnorder)
+INSERT INTO col(name, columntype, columnorder, width)
     VALUES('Not Started', 'NOT_STARTED', 0, 50);
 
-INSERT INTO col(name, columntype, columnorder)
+INSERT INTO col(name, columntype, columnorder, width)
     VALUES('DONE', 'DONE', 1000000, 50);
 
 INSERT INTO col(id, name, columntype, columnorder)

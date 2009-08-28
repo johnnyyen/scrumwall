@@ -5,7 +5,7 @@ import com.scrumwall.dao.column.ColumnDao
 import com.scrumwall.domain.Column
 import java.util.List
 
-class ColumnServiceImpl extends ColumnService with LogsToLog4J{
+class ColumnServiceImpl extends ColumnService {
 
   var columnDao: ColumnDao = _
   def setColumnDao(columnDao: ColumnDao){
@@ -13,12 +13,12 @@ class ColumnServiceImpl extends ColumnService with LogsToLog4J{
   }
   
   override def getColumns : List[Column] = {
-    debug("Getting columns")
+    debug("Getting all columns")
     this.columnDao.getColumns
   }
   
   override def save(column: Column): Column = {
-    debug("saving column " + column)
+    debug("Saving column " + column)
     this.columnDao.save(column)
     column
   }

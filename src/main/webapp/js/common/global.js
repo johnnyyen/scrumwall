@@ -12,7 +12,6 @@ function isEventPropagationStopped() {
 	return false;
 }
 
-
 function stopEventPropagation() {
 	eventPropagationStopped = true;
 }
@@ -26,7 +25,7 @@ function exceptionHandler(msg){
 function New(clazz, config, options){
 	if(!scrumwall[clazz]) {
 		throw "I don't think this \"class\" exists: " + clazz;
-	}	
+	}
 	
 	var instance = $.create("div",{"class":clazz});
 	$.extend( instance, new scrumwall[clazz]() );
@@ -46,7 +45,11 @@ function createExtending(object, parent, map) {
 		map = parent;
 		
 	}
+	scrumwall[object].prototype.supr = {};
 	for (i in map) {
+		if(scrumwall[object].prototype[i]) {
+			scrumwall[object].prototype.supr[i] = scrumwall[object].prototype[i];
+		}
 		scrumwall[object].prototype[i] = map[i];
 	}
 }

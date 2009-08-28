@@ -3,7 +3,7 @@ package com.scrumwall.service.item
 import com.scrumwall.domain.Item
 import java.util.List
 
-trait ItemService {
+trait ItemService extends BaseService{
 	
   def get(id: Int) : Item
   

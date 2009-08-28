@@ -5,7 +5,7 @@ import com.scrumwall.util.debug.LogsToLog4J
 import com.scrumwall.dao.item.ItemDao
 import java.util.List
 
-class ItemServiceImpl extends ItemService with LogsToLog4J {
+class ItemServiceImpl extends ItemService {
   var itemDao: ItemDao = _
   def setItemDao(itemDao:ItemDao){
     this.itemDao = itemDao
@@ -26,7 +26,7 @@ class ItemServiceImpl extends ItemService with LogsToLog4J {
   }
   
   def getForSprint(sprintId: Int) : List[Item] = {
-    debug("fetching items for sprint " + sprintId)
+    debug("Getting items for sprint " + sprintId)
     itemDao getForSprint sprintId
   }
   

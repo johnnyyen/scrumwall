@@ -3,7 +3,7 @@ package com.scrumwall.service.column
 import com.scrumwall.domain.Column
 import java.util.List
 
-trait ColumnService {
+trait ColumnService extends BaseService{
 
   /**
   * Returns all the columns in order  

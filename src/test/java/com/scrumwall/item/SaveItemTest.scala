@@ -9,38 +9,55 @@ import org.springframework.test.web.ModelAndViewAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.junit.Test
 import org.springframework.test.annotation.Rollback
+import scala.runtime.RichInt
 
 class SaveItemTest extends BaseTestCase {
 
+  val CONTENT = "TestItemFromTestCase"
+  
   var itemService: ItemService = _
   
   @Autowired def setItemService(itemService: ItemService) = { this.itemService = itemService }
   
-  @Test def loll = {}
+  @Rollback(true)
+  @Test def canSaveItem() {
+    var item = this createItem null
+    
+    item = itemService save item
+    
+    debug("Got item with id: " + item.id)
+    
+    assert(item.id != null)
+  }
   
-//  @Rollback(true)
-//  @Test def canSaveCorrectItem() {
-//    var item = new Item("TestItemFromTestCase", 5)
-//    
-//    item = itemService save item
-//    
-//    assert(item.id != null)
-//  }
-//  
-//  @Test def canUpdateCorrectItem() {
-//    var item = new Item("TestItemFromTestCase", 5)
-//    
-//    item = itemService save item
-//    
-//    item.content = "TestItemFromTestCaseUpdated"
-//    
-//    item = itemService save item
-//    
-//    val currentItem = itemService get item.getId
-//    
-//    Console println currentItem
-//    
-//    assert(currentItem.toString === item.toString)
-//  }
+  @Rollback(true)
+  @Test def canUpdateItem() {
+    var item = this createItem null
+    
+    item = itemService save item
+    
+    assert( item.content === CONTENT )
+    
+    item.content = "TestItemFromTestCaseUpdated"
+    
+    item = itemService save item
+    
+    val currentItem = itemService get item.getId
+    
+    assert(currentItem.toString === item.toString)
+  }
+
+  private def createItem(id: RichInt): Item = {
+    var item = new Item()
+    if(id != null) { item.id = id }
+    item setContent CONTENT
+    item setColumn 1
+    item setOffsetX 0
+    item setOffsetY 0
+    item setColor "testColor"
+    item setWidth 100
+    item setHeight 100
+    item
+  }
   
 }

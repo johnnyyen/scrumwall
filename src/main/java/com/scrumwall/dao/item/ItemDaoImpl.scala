@@ -10,85 +10,50 @@ import java.lang.Integer
 
 class ItemDaoImpl extends ItemDao {
   
-  override def get(itemId: Int) : Item = {
-    debug( "Getting item with id: " + itemId )
-    
+  override def get(itemId: Int) : Item = {    
     var map = new HashMap[String, Object]
-    map.put( "id", new RichInt(itemId) )
-    
-    getNamedParameterJdbcTemplate.queryForObject(ItemDaoImpl.SQL_GET, map, ItemDaoImpl.mapper).asInstanceOf[Item]
+    map.put( "id", new RichInt(itemId) )    
+    getNamedParameterJdbcTemplate.queryForObject( ItemDaoImpl.SQL_GET, map, ItemDaoImpl.mapper ).
+      asInstanceOf[Item]
   }
   
   override def save(item: Item) : Item = {
-    return if(item.id == null) {
-      saveItem(item)
+    return if( item.id == null ) {
+      saveItem( item )
     } else {
-      update(item)
+      update( item )
     }
   }
   
   override def getForSprint(sprintId: Int) : List[Item] = {
-    
-    
     var map = new HashMap[String, Object]
-    map.put( "sprintId", new RichInt(sprintId) )
-    
-    getNamedParameterJdbcTemplate.query[Item](ItemDaoImpl.SQL_GET_SPRINT, map, ItemDaoImpl.mapper)
+    map.put( "sprintId", new RichInt(sprintId) )    
+    getNamedParameterJdbcTemplate.query[Item]( ItemDaoImpl.SQL_GET_SPRINT, map, ItemDaoImpl.mapper )
     
   }
-  private def saveItem(item: Item) : Item = {
-    debug("Saveing item : " + item)
+  
+  override def remove(id: Int) = {
     var map = new HashMap[String, Object]
-    map.put("content", item.content)
-    map.put("estimation", item.estimation)
-    map.put("offsetX", item.offsetX)
-    map.put("offsetY", item.offsetY)
-    map.put("owner", item.owner)
-    map.put("sprintId", item.sprintId)
-    map.put("col", item.column)
-    map.put("color", item.color)
-    map.put("width", item.width)
-    map.put("height", item.height)
-    map.put("hoursleft", item.hoursLeft)
-    
-    getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_SAVE, map)
+    map.put( "id", new RichInt(id) )
+    getNamedParameterJdbcTemplate.update( ItemDaoImpl.SQL_REMOVE, map )
+  }
+
+  override def getItems(columnId: Int) : List[Item] = {
+    var map = new HashMap[String, Object]
+    map.put( "column", new RichInt(columnId) )
+    getNamedParameterJdbcTemplate.query[Item]( ItemDaoImpl.SQL_GET_ITEMS, map, ItemDaoImpl.mapper )
+  }
+  
+  private def saveItem(item: Item) : Item = {
+    getNamedParameterJdbcTemplate.update( ItemDaoImpl.SQL_SAVE, ItemDaoImpl getParameterMap item )
     item.setId( getLastInsertedId() )
     item
   }
   
   private def update(item: Item) : Item = {
-    debug("Updating item : " + item)
-    
-    var map = new HashMap[String, Object]
-    map.put("content", item.content)
-    map.put("estimation",item.estimation)
-    map.put("id", item.id)
-    map.put("offsetX", item.offsetX)
-    map.put("offsetY", item.offsetY)
-    map.put("owner", item.owner)
-    map.put("sprintId", item.sprintId)
-    map.put("col", item.column)
-    map.put("color", item.color)
-    map.put("width", item.width)
-    map.put("height", item.height)
-    map.put("hoursleft", item.hoursLeft)
-    
-    getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_UPDATE, map)
+    getNamedParameterJdbcTemplate.update( ItemDaoImpl.SQL_UPDATE, ItemDaoImpl getParameterMap item )
     
     item
-  }
-  
-  def remove(id: Int) = {
-    debug("Removing item with id: " + id)
-    var map = new HashMap[String, Object]
-    map.put("id", new RichInt(id))
-    getNamedParameterJdbcTemplate.update(ItemDaoImpl.SQL_REMOVE, map)
-  }
-
-  def getItems(columnId: Int) : List[Item] = {
-    var map = new HashMap[String, Object]
-    map.put("column", new RichInt(columnId))
-    getNamedParameterJdbcTemplate.query[Item](ItemDaoImpl.SQL_GET_ITEMS, map, ItemDaoImpl.mapper)
   }
   
 }
@@ -116,16 +81,35 @@ object ItemDaoImpl {
   val SQL_REMOVE = "DELETE FROM item WHERE id = :id"
   val SQL_GET_ITEMS = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color, hoursleft, height, width FROM item WHERE col = :column"
   
+  def getParameterMap(item: Item): HashMap[String, Object] = {
+	val parameterMap = new HashMap[String, Object]
+    parameterMap.put( "content", item.content )
+    parameterMap.put( "estimation",item.estimation )
+    parameterMap.put( "id", item.id )
+    parameterMap.put( "offsetX", item.offsetX )
+    parameterMap.put( "offsetY", item.offsetY )
+    parameterMap.put( "owner", item.owner )
+    parameterMap.put( "sprintId", item.sprintId )
+    parameterMap.put( "col", item.column )
+    parameterMap.put( "color", item.color )
+    parameterMap.put( "width", item.width )
+    parameterMap.put( "height", item.height )
+    parameterMap.put( "hoursleft", item.hoursLeft )
+    parameterMap
+  }
+  
   val mapper = new ParameterizedRowMapper[Item]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Item = {
 	    var estimation: RichInt = null
 	    if((rs getBigDecimal ESTIMATION) != null) {
 	      estimation = new RichInt((rs getBigDecimal ESTIMATION).intValue)
 	    }
-		var item = new Item( new RichInt(rs getInt ID), rs getString CONTENT, estimation)
+		var item = new Item( new RichInt(rs getInt ID), rs getString CONTENT, estimation )
 		
-		var sprintId = rs getInt SPRINTID
-		item setSprintId sprintId
+		var sprintId = rs getBigDecimal SPRINTID
+		if(sprintId != null) {
+			item setSprintId sprintId.intValue
+		}
 		
 		var owner = rs getString OWNER
 		item setOwner owner
