@@ -43,11 +43,18 @@ createExtending("column", "container", {
 	resize:function(){
 		this._onResizeStop()
 	},
-	columnResize:function(newWidth){
+	columnResize:function(newWidth, newHeight){
 		this.columnWidth = this.jq.width();
-		this.jq.width(newWidth);
-		for(var i in this.items){
-			this.items[i].redraw();
+		if(newWidth){
+			this.jq.width(newWidth);
+		}
+		if(newHeight){
+			this.jq.height(newHeight);
+		}
+		if(newWidth || newHeight){
+			for(var i in this.items){
+				this.items[i].redraw();
+			}
 		}
 	},
 	_saveable:function(){

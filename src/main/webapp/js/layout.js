@@ -16,6 +16,9 @@ create("layout", {
 		$(window).bind("beforeunload", {},this.onPageUnload, this);
 		$(this).bind("columnResize",{}, this.onColumnResize, this);
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
+		var container = $("#columnContainer");
+		this.containerWidth = container.width();
+		this.containerHeight = container.height();
 	},
 	loadItems:function(items){
 		
@@ -47,10 +50,12 @@ create("layout", {
 	onWindowResize:function(event){
 		
 		var width = $("#columnContainer").width();
-		var colWidth = Math.round(width/this.columns.length)-2;
-		for(var i = 0; i < this.columns.length; i++){
-			this.columns[i].columnResize(colWidth);
-		}
+		var height=$("#columnContainer").height();
+		var widthDelta = this.containerWidth - width;
+		this.containerWidth = width;
+		var heightDelta = height - this.containerHeight;
+		this.containerHeight = height;
+		this.onColumnResize(-1,widthDelta, heightDelta);
 	},
 	createItem:function(event){
 		var owner = event.data.owner;
@@ -86,14 +91,19 @@ create("layout", {
 		
 		return count;
 	},
-	onColumnResize: function(order, delta){
+	onColumnResize: function(order, widthDelta, heightDelta){
 		var count = this.columnsOnRightCount(order);
-		var change = ( ( (delta) / count) * (-1) );
+		var change = ( ( (widthDelta) / count) * (-1) );
+		var newHeight = $(this.columns[0]).height() + heightDelta;
+
 		for(var i in this.columns){
+			var newWidth = 0;
+			
 			if(this.columns[i].order > order){
-				var width = $(this.columns[i]).width() + change;
-				this.columns[i].columnResize(width);
+				newWidth = $(this.columns[i]).width() + change;
 			}
+			
+			this.columns[i].columnResize(newWidth, newHeight);
 		}
 	}
 });
