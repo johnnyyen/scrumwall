@@ -1,24 +1,24 @@
-DROP TABLE IF EXISTS item;
+DROP TABLE item IF EXISTS ;
 CREATE CACHED TABLE item(
     id IDENTITY,
-    content VARCHAR,
+    content VARCHAR(4096),
     estimation INT DEFAULT NULL,
     sprintid INTEGER DEFAULT NULL,
     offsetx DECIMAL DEFAULT 0,
     offsety DECIMAL DEFAULT 0,
     col INTEGER DEFAULT 0,
-    owner VARCHAR DEFAULT NULL,
-    color VARCHAR NOT NULL,
+    owner VARCHAR(25) DEFAULT NULL,
+    color VARCHAR(10) NOT NULL,
     hoursleft INTEGER DEFAULT NULL,
     height INTEGER NOT NULL,
     width INTEGER NOT NULL
 );
 
-DROP TABLE IF EXISTS col;
+DROP TABLE col IF EXISTS ;
 CREATE CACHED TABLE col(
     id IDENTITY,
-    name VARCHAR NOT NULL,
-    columntype VARCHAR DEFAULT NULL,
+    name VARCHAR(100) NOT NULL,
+    columntype VARCHAR(20) DEFAULT NULL,
     columnorder INTEGER NOT NULL,
     width DECIMAL DEFAULT NULL
 );
@@ -42,4 +42,3 @@ ALTER TABLE item
     ADD CONSTRAINT ItemToColumn FOREIGN KEY (col)
     REFERENCES col(id)
     ON DELETE SET DEFAULT;
-    
