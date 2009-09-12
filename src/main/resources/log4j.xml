@@ -10,14 +10,14 @@
       <param name="ConversionPattern" value="%p %d %c - %m%n"/> 
     </layout> 
   </appender> 
-  <root> 
-    <priority value="error" />
-    <appender-ref ref="R" /> 
-  </root>
   <logger name="com.scrumwall">
     <level value="debug"/> 
   </logger>
   <logger name="org.directwebremoting">
     <level value="debug"/> 
   </logger>
+  <root> 
+    <priority value="error" />
+    <appender-ref ref="R" /> 
+  </root>
 </log4j:configuration>
