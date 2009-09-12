@@ -27,7 +27,7 @@ INSERT INTO col(name, columntype, columnorder, width)
     VALUES('Not Started', 'NOT_STARTED', 0, 50);
 
 INSERT INTO col(name, columntype, columnorder, width)
-    VALUES('DONE', 'DONE', 1000000, 50);
+    VALUES('DONE', 'DONE', 1, 50);
 
 INSERT INTO col(id, name, columntype, columnorder)
     VALUES(-2, 'GOALS', 'GOALS', 0);

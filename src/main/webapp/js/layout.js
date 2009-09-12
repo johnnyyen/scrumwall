@@ -16,9 +16,29 @@ create("layout", {
 		$(window).bind("beforeunload", {},this.onPageUnload, this);
 		$(this).bind("columnResize",{}, this.onColumnResize, this);
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
-		var container = $("#columnContainer");
-		this.containerWidth = container.width();
-		this.containerHeight = container.height();
+		this.columnContainer = $("#columnContainer");
+		var scope = this;
+		this.columnContainer.sortable({
+			items: '.column',
+			handle : '.colHeader',
+			containment: 'parent',
+		    scroll: false,
+		    revert: true,
+		    tolerance: "intersect",
+		    update : function (event, ui) { 
+		    	//FIXME: move from inline function to a separate one
+				var columns = $(scope.columnContainer).children();
+				var order = 0;
+				
+				for(var i = 0; i < columns.length; i++){
+					columns[i].order = order;
+					order++;
+				}
+		    } 
+		  });
+		
+		this.containerWidth = this.columnContainer.width();
+		this.containerHeight = this.columnContainer.height();
 	},
 	loadItems:function(items){
 		
@@ -31,14 +51,14 @@ create("layout", {
 		}
 	},
 	createColumns:function(columns){
-		var parentEl = $("#columnContainer");
+		var parentEl =  $("#columnContainer");
 		//get column area width
 		var width = $(parentEl).width();
 		var colWidth = Math.round(width/columns.length)-10;
 		this.columns = new Array();
 		for(var i=0; i < columns.length; i++){
 			columns[i].colWidth = colWidth;
-			columns[i].parentEl = parentEl;
+			columns[i].parent = parentEl;
 			columns[i].menu = this.menu;
 			columns[i].layout = this;
 			var col = New("column", columns[i]);
@@ -46,6 +66,31 @@ create("layout", {
 		}
 
 		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
+	},
+	createColumn:function(event){
+		var parentEl =  $("#columnContainer");
+		
+		this.onColumnResize(-1,150);
+		
+		var config = {layout: this, parent: parentEl};
+		var column = New("column",config);
+		
+		$('.doneColumn').before($(column));
+		
+		this._updateColumnOrders();
+		
+		
+		column.save();
+		//this.columns[]=column;
+	},
+	_updateColumnOrders:function(){
+		var columns = $(this.columnContainer).children();
+		var order = 0;
+		
+		for(var i = 0; i < columns.length; i++){
+			columns[i].order = order;
+			order++;
+		}
 	},
 	onWindowResize:function(event){
 		

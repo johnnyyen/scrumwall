@@ -44,6 +44,10 @@ scrumwall.create("container", {
 		if(isEventPropagationStopped()) return;
 		var item = ui.draggable[0];
 		
+		if(!$(item).hasClass("item") && !$(item).hasClass("sector")){
+			return;
+		}
+		
 		if($(item).hasClass("sector")){
 			var coords = $(ui.helper).offset();
 			var ownerName = $('#ownerInput').val();

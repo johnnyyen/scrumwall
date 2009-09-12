@@ -8,7 +8,8 @@ class Column(var id: RichInt, var name: String, var columnType: String) {
 	var width: RichDouble = _
 	var order: RichInt = _
  
-	def this(id: Int, name: String) = this(id, name, null) 
+	def this(id: Int, name: String) = this(id, name, Column.REGULAR) 
+	def this() = this(null, null, Column.REGULAR)
  
 	def getId: Int = {
 	  this.id.abs
@@ -60,4 +61,5 @@ class Column(var id: RichInt, var name: String, var columnType: String) {
 object Column {
   val NOT_STARTED = "NOT_STARTED"
   val DONE = "DONE"
+  val REGULAR = "REGULAR"
 }

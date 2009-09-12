@@ -1,36 +1,58 @@
 	
 createExtending("column", "container", {
 	width:0,
-	parentEl: null,
 	items:null,
 	NOT_STARTED: "NOT_STARTED",
 	DONE: "DONE",
+	DEFAULT_WIDTH: 150,
 	initialize:function(config){
 		map(config,this);
 		this.jq = $(this);
-		this.guid = config.id;		
-		this.parent = $("#columnContainer");
+		this.guid = config.id;
 		this.items = new Array();
 
+		if(!this.name){
+			this.name = "Double click me";
+		}
 		if(config.width){
 			//FIXME: where did the "-3" come from???
 			this.columnWidth = parseInt(config.width * this.parent.width() / 100)-3;
-		}else{
+		}else if(config.colWidth){
 			this.columnWidth = config.colWidth;
+		}else{
+			this.columnWidth = this.DEFAULT_WIDTH;
 		}
 		
 		this._initDOM();
 	},
 	_initDOM:function(){
-		this.header = jQuery.create("div",{"class":"colHeader"});
-		this.body = jQuery.create("div",{"class":"colBody"});
+		this.header = $.create("div",{"class":"colHeader"});
+		this.body = $.create("div",{"class":"colBody"});
 
+		if(this.columnType == this.DONE) {
+			this.jq.addClass("doneColumn")
+		}
+		
 		this.jq.width(this.columnWidth);
-		this.jq.attr("id", "col." + this.guid);
+		if(this.guid != undefined){
+			this.jq.attr("id", "col." + this.guid);
+		}
+		
 		$(this.header).text(this.name);
-		$(this.parentEl).append(this.jq);
+		$(this.parent).append(this.jq);
 		this.jq.append($(this.header)).append($(this.body));
 
+		if(this.columnType == this.DONE) {
+			this.newColumnButton = $.create("a", {"id": "newColumnButton", "href": "#"});
+			$(this.newColumnButton).text("+").bind("click",{},this.layout.createColumn, this.layout);
+			$(this.header).append(this.newColumnButton);
+		}
+		
+		if(this.columnType != this.DONE && this.columnType != this.NOT_STARTED) {
+			this.closeColumnButton = $.create("a", {"id": "closeColumnButton", "href": "#"});
+			$(this.closeColumnButton).text("X").bind("click", {}, this.layout.closeColumn, this.layout);
+			$(this.header).append(this.closeColumnButton);
+		}
 		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
 		this.jq.resizable({minWidth:200, stop: this._onResizeStop, containment: 'parent', handles:"e"});
 	},	
@@ -59,11 +81,13 @@ createExtending("column", "container", {
 	},
 	_saveable:function(){
 		var widthPercent = this.columnWidth / this.parent.width() * 100;
-		var column = {id: this.guid,
-				width: widthPercent,
+		var column = {width: widthPercent,
 				name: this.name,
 				order: this.order
 			};
+		if(this.guid) {
+			column.id = this.guid;
+		}
 		return column;
 	},
 	save: function(){
@@ -74,6 +98,7 @@ createExtending("column", "container", {
 	},
 	_saveCallback:function(column){
 		this.guid = column.id;
+		this.id = "col."+column.id;
 	},
 	stopEventPropagation:function(){
 		

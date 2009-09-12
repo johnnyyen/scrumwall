@@ -16,7 +16,7 @@
   <logger name="org.directwebremoting">
     <level value="debug"/> 
   </logger>
-  <root> 
+  <root>
     <priority value="error" />
     <appender-ref ref="R" /> 
   </root>

@@ -48,14 +48,15 @@ object ColumnDaoImpl {
   val ORDER = "columnorder"
   
   val SQL_GET_COLUMNS = "SELECT id, columntype, name, columnorder, width FROM col WHERE id >= 0 ORDER BY columnorder"
-  val SQL_UPDATE = "UPDATE col set name=:name, width=:width, order=:order WHERE id=:id"
+  val SQL_UPDATE = "UPDATE col set name=:name, width=:width, columnorder=:columnorder WHERE id=:id"
   val SQL_SAVE = "INSERT INTO col (name,width,columnorder, columntype) values (:name, :width, :columnorder, :columntype)"
 
   def getParameterMap(column: Column) : HashMap[String, Object] = {
     var map = new HashMap[String, Object]
     map.put( "name", column.name )
     map.put( "width", column.width )
-    map.put( "order", column.order )
+    map.put( "columnorder", column.order )
+    map.put( "columntype", column.columnType )
     map
   }
   
