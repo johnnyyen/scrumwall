@@ -68,20 +68,22 @@ create("layout", {
 		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
 	},
 	createColumn:function(event){
-		var parentEl =  $("#columnContainer");
 		
 		this.onColumnResize(-1,150);
 		
-		var config = {layout: this, parent: parentEl};
+		
+		var config = {layout: this, parent: this.columnContainer};
 		var column = New("column",config);
 		
 		$('.doneColumn').before($(column));
 		
 		this._updateColumnOrders();
 		
-		
+		for(var i in this.columns){
+			this.columns[i].save();
+		}
 		column.save();
-		//this.columns[]=column;
+		this.columns[column.guid]=column;
 	},
 	_updateColumnOrders:function(){
 		var columns = $(this.columnContainer).children();
@@ -94,8 +96,8 @@ create("layout", {
 	},
 	onWindowResize:function(event){
 		
-		var width = $("#columnContainer").width();
-		var height=$("#columnContainer").height();
+		var width = this.columnContainer.width();
+		var height= this.columnContainer.height();
 		var widthDelta = this.containerWidth - width;
 		this.containerWidth = width;
 		var heightDelta = height - this.containerHeight;
@@ -137,20 +139,35 @@ create("layout", {
 		return count;
 	},
 	onColumnResize: function(order, widthDelta, heightDelta){
-		var count = this.columnsOnRightCount(order);
-		var change = ( ( (widthDelta) / count) * (-1) );
-		var newHeight = $(this.columns[0]).height() + heightDelta;
-
+		var newHeight = this.columns[0].jq.height() + heightDelta;
+		var totalWidth = 0;
+		
+		for(var i in this.columns){
+			if(this.columns[i].order > order){
+				totalWidth += this.columns[i].jq.width();
+			}
+		}
+		
 		for(var i in this.columns){
 			var newWidth = 0;
 			
 			if(this.columns[i].order > order){
-				newWidth = $(this.columns[i]).width() + change;
+				newWidth = this.columns[i].jq.width() - 
+							( (this.columns[i].jq.width()/totalWidth) * widthDelta);
 			}
 			
 			this.columns[i].columnResize(newWidth, newHeight);
 		}
+	},
+	deleteColumn: function(event){
+		//ColumnService.remove({scope: this, exceptionHandler:exceptionHandler});
+		var width = event.data.column.jq.width();
+		event.data.column.jq.remove();
+		this.onColumnResize(-1,(-1)*width);
+		
+		
 	}
+	
 });
 
 

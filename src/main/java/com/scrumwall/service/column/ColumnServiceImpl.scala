@@ -18,8 +18,11 @@ class ColumnServiceImpl extends ColumnService {
   }
   
   override def save(column: Column): Column = {
-    debug("Saving column " + column)
-    this.columnDao.save(column)
+    columnDao save column 
+    
+    //this.columnDao.updateOrders()
+    
+    
     column
   }
 }

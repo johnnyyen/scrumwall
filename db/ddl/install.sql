@@ -24,10 +24,13 @@ CREATE CACHED TABLE col(
 );
 
 INSERT INTO col(name, columntype, columnorder, width)
-    VALUES('Not Started', 'NOT_STARTED', 0, 50);
+    VALUES('Not Started', 'NOT_STARTED', 0, 33);
 
+    INSERT INTO col(name, columntype, columnorder, width)
+    VALUES('In progress', 'IN_PROGRESS', 1, 34);
+    
 INSERT INTO col(name, columntype, columnorder, width)
-    VALUES('DONE', 'DONE', 1, 50);
+    VALUES('DONE', 'DONE', 2, 33);
 
 INSERT INTO col(id, name, columntype, columnorder)
     VALUES(-2, 'GOALS', 'GOALS', 0);

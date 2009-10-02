@@ -24,17 +24,25 @@ class ColumnDaoImpl extends ColumnDao {
   }
   
   private def saveColumn(column: Column): Column = {
+    debug("Saving column: " + column)
     var parameters = ColumnDaoImpl getParameterMap column
 	parameters.put( "columntype", "REGULAR" )
  
 	getNamedParameterJdbcTemplate.update( ColumnDaoImpl.SQL_SAVE, parameters )
-	column.setId( getLastInsertedId() )
+	val id = getLastInsertedId()
+	column.setId( id )
+	debug("===================================")
     column
   }
   
   private def update(column: Column): Column = {
-    getNamedParameterJdbcTemplate.update( ColumnDaoImpl.SQL_UPDATE, ColumnDaoImpl getParameterMap column )
+    debug("Updating column: " + column)
     
+    val map = ColumnDaoImpl getParameterMap column;
+    map.put("id", column.id)
+    
+    getNamedParameterJdbcTemplate.update( ColumnDaoImpl.SQL_UPDATE, map )
+    debug("traalalla")
     column
   }
   

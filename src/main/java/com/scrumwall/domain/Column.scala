@@ -52,7 +52,7 @@ class Column(var id: RichInt, var name: String, var columnType: String) {
     }
     
     override def toString = {
-      "[" + this.id + ", " + this.columnType + ", " + this.name
+      "[" + this.id + ", " + this.columnType + ", " + this.name + ", " + this.width + "]"
       
     }
     

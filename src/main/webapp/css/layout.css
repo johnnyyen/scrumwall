@@ -7,6 +7,7 @@
 .column{	
 	float:left;
 	height:100%;
+	z-index:10;
 }
 
 #menu{
@@ -31,6 +32,7 @@
 	text-align: center;
 	border:1px solid black;
 	overflow:hidden;
+	z-index: 100;
 }
 
 .burndown{

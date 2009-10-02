@@ -4,6 +4,8 @@ createExtending("column", "container", {
 	items:null,
 	NOT_STARTED: "NOT_STARTED",
 	DONE: "DONE",
+	IN_PROGRESS: "IN_PROGRESS",
+	REGULAR: "REGULAR",
 	DEFAULT_WIDTH: 150,
 	initialize:function(config){
 		map(config,this);
@@ -21,6 +23,10 @@ createExtending("column", "container", {
 			this.columnWidth = config.colWidth;
 		}else{
 			this.columnWidth = this.DEFAULT_WIDTH;
+		}
+		
+		if(!this.columnType) {
+			this.columnType = this.REGULAR;
 		}
 		
 		this._initDOM();
@@ -48,13 +54,13 @@ createExtending("column", "container", {
 			$(this.header).append(this.newColumnButton);
 		}
 		
-		if(this.columnType != this.DONE && this.columnType != this.NOT_STARTED) {
-			this.closeColumnButton = $.create("a", {"id": "closeColumnButton", "href": "#"});
-			$(this.closeColumnButton).text("X").bind("click", {}, this.layout.closeColumn, this.layout);
-			$(this.header).append(this.closeColumnButton);
+		if(this.columnType == this.REGULAR) {
+			this.deleteColumnButton = $.create("a", {"id": "deleteColumnButton", "href": "#"});
+			$(this.deleteColumnButton).text("X").bind("click", {column:this}, this.layout.deleteColumn, this.layout);
+			$(this.header).append(this.deleteColumnButton);
 		}
 		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
-		this.jq.resizable({minWidth:200, stop: this._onResizeStop, containment: 'parent', handles:"e"});
+		this.jq.resizable({stop: this._onResizeStop, containment: 'parent', handles:"e"});
 	},	
 	_onResizeStop:function(){
 		var delta = this.jq.width() - this.columnWidth;
@@ -67,6 +73,7 @@ createExtending("column", "container", {
 	},
 	columnResize:function(newWidth, newHeight){
 		this.columnWidth = this.jq.width();
+		
 		if(newWidth){
 			this.jq.width(newWidth);
 		}
@@ -80,12 +87,13 @@ createExtending("column", "container", {
 		}
 	},
 	_saveable:function(){
-		var widthPercent = this.columnWidth / this.parent.width() * 100;
+		var widthPercent = this.jq.width() / this.parent.width() * 100;
 		var column = {width: widthPercent,
 				name: this.name,
-				order: this.order
+				order: this.order,
+				columnType: this.columnType
 			};
-		if(this.guid) {
+		if(this.guid !== undefined) {
 			column.id = this.guid;
 		}
 		return column;
