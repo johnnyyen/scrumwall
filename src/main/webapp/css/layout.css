@@ -165,3 +165,7 @@ body .ui-dialog .ui-dialog-title{
 html, body  {
  height: 100%;
 }
+
+#removeMode{
+  display:none !important;
+}

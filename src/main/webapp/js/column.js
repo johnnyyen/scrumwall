@@ -7,6 +7,12 @@ createExtending("column", "container", {
 	IN_PROGRESS: "IN_PROGRESS",
 	REGULAR: "REGULAR",
 	DEFAULT_WIDTH: 150,
+	REMOVE_MODES:{
+		MOVE_LEFT: 1,
+		MOVE_RIGHT: 2,
+		REMOVE: 3,
+		NO_ITEMS: 4
+	},
 	initialize:function(config){
 		map(config,this);
 		this.jq = $(this);
@@ -27,6 +33,10 @@ createExtending("column", "container", {
 		
 		if(!this.columnType) {
 			this.columnType = this.REGULAR;
+		}
+		
+		if(!this.sprintId || this.sprintId >= 0) {
+			this.sprintId = this.layout.getCurrentSprint();
 		}
 		
 		this._initDOM();
@@ -56,9 +66,14 @@ createExtending("column", "container", {
 		
 		if(this.columnType == this.REGULAR) {
 			this.deleteColumnButton = $.create("a", {"id": "deleteColumnButton", "href": "#"});
-			$(this.deleteColumnButton).text("X").bind("click", {column:this}, this.layout.deleteColumn, this.layout);
+			$(this.deleteColumnButton).text("X").bind("click", {}, this.deleteColumn, this);
 			$(this.header).append(this.deleteColumnButton);
 		}
+		
+		if(this.columnType != this.DONE && this.columnType != this.NOT_STARTED) {
+			this.jq.addClass("sortableColumn");
+		}
+		
 		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
 		this.jq.resizable({stop: this._onResizeStop, containment: 'parent', handles:"e"});
 	},	
@@ -91,7 +106,8 @@ createExtending("column", "container", {
 		var column = {width: widthPercent,
 				name: this.name,
 				order: this.order,
-				columnType: this.columnType
+				columnType: this.columnType,
+				sprintId: this.sprintId
 			};
 		if(this.guid !== undefined) {
 			column.id = this.guid;
@@ -99,8 +115,8 @@ createExtending("column", "container", {
 		return column;
 	},
 	save: function(){
-		ColumnService.save(this._saveable(),
-				{scope: this, callback: this._saveCallback, exceptionHandler:exceptionHandler});
+		ColumnService.save(this._saveable(), 
+				{async: false, scope: this, callback: this._saveCallback, exceptionHandler:exceptionHandler});
 		
 		
 	},
@@ -109,6 +125,29 @@ createExtending("column", "container", {
 		this.id = "col."+column.id;
 	},
 	stopEventPropagation:function(){
+		
+	},
+	deleteColumn:function(){
+		if(this.items.length > 0){
+			this._showRemoveModeDialog();
+		}else{
+			this._deleteColumn(this.REMOVE_MODES.NO_ITEMS);
+		}
+	},
+	_deleteColumn:function(removeMode) {
+		ColumnService.remove(this._saveable(), removeMode, {scope: this, exceptionHandler:exceptionHandler});
+		this.layout.deleteColumn(this, removeMode)
+	},
+	_showRemoveModeDialog:function(){
+		var dialog = $.create("div", {"id": "removeMode"});
+		var title = "What to do with items in the column?";
+		var layout = this.layout;
+		var column = this;
+		//FIXME: remove mode identifiers are hardcoded
+		var buttons = {"Move left": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_LEFT);}, 
+				"Delete": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.REMOVE);},
+				"Move right": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_RIGHT);}};
+		$(dialog).dialog({"title":title,"buttons": buttons, resizable:false, modal:true, height:150,width:380});
 		
 	}
 });

@@ -1,8 +1,10 @@
 package com.scrumwall.service.item
 
 import com.scrumwall.domain.Item
+import com.scrumwall.domain.Column
 import com.scrumwall.util.debug.LogsToLog4J
 import com.scrumwall.dao.item.ItemDao
+import com.scrumwall.identifiers.ItemRemoveMode
 import java.util.List
 
 class ItemServiceImpl extends ItemService {
@@ -33,4 +35,15 @@ class ItemServiceImpl extends ItemService {
   def remove(id: Int) = {
     itemDao remove id
   }
+  
+  def moveFromColumn(column:Column, direction: ItemRemoveMode) = {
+    debug("Moving items from column " + column.id + " to the " + direction.direction)
+    itemDao.moveFromColumn(column, direction)
+  }
+  
+  def removeFromColumn(columnId: Int) = {
+    debug("Removing items from column: " + columnId)
+    itemDao.removeFromColumn(columnId)
+  }
+  
 }

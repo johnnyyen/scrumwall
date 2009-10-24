@@ -1,11 +1,9 @@
 
 create("item", {
-	FIX_SPRINT_ID: 1,
 	DEFAULT_WIDTH: 120,
 	DEFAULT_HEIGHT: 100,
 	initialize:function(config, cols){
 		map(config, this);
-		this.sprintId=this.FIX_SPRINT_ID;
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item." + config.id : "new." + itemCount;
 		
 		if(config.width){

@@ -2,6 +2,8 @@ package com.scrumwall.dao.item
 
 import scala.runtime.RichInt
 import com.scrumwall.domain.Item
+import com.scrumwall.domain.Column
+import com.scrumwall.identifiers.ItemRemoveMode
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper
 import java.sql.ResultSet
 import java.util.HashMap
@@ -12,7 +14,7 @@ class ItemDaoImpl extends ItemDao {
   
   override def get(itemId: Int) : Item = {    
     var map = new HashMap[String, Object]
-    map.put( "id", new RichInt(itemId) )    
+    map.put( "id", new RichInt(itemId) )
     getNamedParameterJdbcTemplate.queryForObject( ItemDaoImpl.SQL_GET, map, ItemDaoImpl.mapper ).
       asInstanceOf[Item]
   }
@@ -42,6 +44,14 @@ class ItemDaoImpl extends ItemDao {
     var map = new HashMap[String, Object]
     map.put( "column", new RichInt(columnId) )
     getNamedParameterJdbcTemplate.query[Item]( ItemDaoImpl.SQL_GET_ITEMS, map, ItemDaoImpl.mapper )
+  }
+
+  override def moveFromColumn(column:Column, direction: ItemRemoveMode) = {
+    
+  }
+ 
+  override def removeFromColumn(columnId: Int) = {
+    
   }
   
   private def saveItem(item: Item) : Item = {

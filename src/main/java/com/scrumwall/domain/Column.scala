@@ -7,6 +7,7 @@ class Column(var id: RichInt, var name: String, var columnType: String) {
   
 	var width: RichDouble = _
 	var order: RichInt = _
+	var sprintId: RichInt = _
  
 	def this(id: Int, name: String) = this(id, name, Column.REGULAR) 
 	def this() = this(null, null, Column.REGULAR)
@@ -51,8 +52,16 @@ class Column(var id: RichInt, var name: String, var columnType: String) {
       this.order = new RichInt(order)
     }
     
+    def getSprintId: Int = {
+   	  this.sprintId.abs
+   	}
+   
+    def setSprintId(sprintId: Int) = {
+      this.sprintId = new RichInt(sprintId)
+    }
+    
     override def toString = {
-      "[" + this.id + ", " + this.columnType + ", " + this.name + ", " + this.width + "]"
+      "[" + this.id + ", " + this.sprintId + ", " + this.columnType + ", " + this.name + ", " + this.width + "]"
       
     }
     

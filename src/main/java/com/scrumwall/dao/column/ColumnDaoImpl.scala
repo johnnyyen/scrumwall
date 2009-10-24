@@ -1,6 +1,7 @@
 package com.scrumwall.dao.column
 
 import com.scrumwall.domain.Column
+import com.scrumwall.identifiers.ItemRemoveMode
 import scala.runtime.RichInt
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper
 import java.sql.ResultSet
@@ -9,29 +10,41 @@ import java.util.List
 
 class ColumnDaoImpl extends ColumnDao {
 
-  override def getColumns: List[Column] = {
-       
+  override def getColumns(sprintId: Int): List[Column] = {
+    val map = new HashMap[String, Object];
+    map.put("sprintId", new RichInt(sprintId))
+    
     getNamedParameterJdbcTemplate.query[Column]( 
-      ColumnDaoImpl.SQL_GET_COLUMNS, new HashMap[String, Object], ColumnDaoImpl.mapper)
+      ColumnDaoImpl.SQL_GET_COLUMNS, map, ColumnDaoImpl.mapper)
   }
   
   override def save(column: Column): Column = {
     if( column.id != null ){
       this update column
     }else{
-      this saveColumn column
+      this.saveColumn(column)
     }
+  }
+  
+  override def remove(id: Int) = {
+    val map = new HashMap[String, Object]
+    map.put("id", new RichInt(id))
+    getNamedParameterJdbcTemplate.update(ColumnDaoImpl.SQL_REMOVE, map)
   }
   
   private def saveColumn(column: Column): Column = {
     debug("Saving column: " + column)
-    var parameters = ColumnDaoImpl getParameterMap column
-	parameters.put( "columntype", "REGULAR" )
+    var map = ColumnDaoImpl getParameterMap column
+	map.put( "columntype", Column.REGULAR )
+	map.put( "sprintId", column.sprintId)
  
-	getNamedParameterJdbcTemplate.update( ColumnDaoImpl.SQL_SAVE, parameters )
-	val id = getLastInsertedId()
+	getNamedParameterJdbcTemplate.update( ColumnDaoImpl.SQL_SAVE, map )
+ 
+	val id = getLastInsertedId();
+ 
+    debug("The last inserted id is: " + id)
+ 
 	column.setId( id )
-	debug("===================================")
     column
   }
   
@@ -42,7 +55,6 @@ class ColumnDaoImpl extends ColumnDao {
     map.put("id", column.id)
     
     getNamedParameterJdbcTemplate.update( ColumnDaoImpl.SQL_UPDATE, map )
-    debug("traalalla")
     column
   }
   
@@ -54,10 +66,18 @@ object ColumnDaoImpl {
   val NAME = "name"
   val WIDTH = "width"
   val ORDER = "columnorder"
+  val SPRINT = "sprintId"
   
-  val SQL_GET_COLUMNS = "SELECT id, columntype, name, columnorder, width FROM col WHERE id >= 0 ORDER BY columnorder"
+  val SQL_GET_COLUMNS = 
+    """SELECT id, columntype, name, columnorder, width, sprintId 
+  	FROM col 
+  	WHERE id >= 0 AND sprintId = :sprintId  
+  	ORDER BY columnorder """
   val SQL_UPDATE = "UPDATE col set name=:name, width=:width, columnorder=:columnorder WHERE id=:id"
-  val SQL_SAVE = "INSERT INTO col (name,width,columnorder, columntype) values (:name, :width, :columnorder, :columntype)"
+  val SQL_SAVE = 
+    """INSERT INTO col (name,width,columnorder, columntype, sprintId) 
+  	VALUES (:name, :width, :columnorder, :columntype, :sprintId)"""
+  val SQL_REMOVE = "DELETE FROM col WHERE id = :id"
 
   def getParameterMap(column: Column) : HashMap[String, Object] = {
     var map = new HashMap[String, Object]
@@ -70,10 +90,11 @@ object ColumnDaoImpl {
   
   val mapper = new ParameterizedRowMapper[Column]() {
 	  override def mapRow(rs: ResultSet , rowNum: Int) : Column = {
-		var column = new Column( new RichInt(rs getInt ColumnDaoImpl.ID), rs getString ColumnDaoImpl.NAME, 
-                           rs getString ColumnDaoImpl.COLUMN_TYPE)
+		var column = new Column( new RichInt(rs getInt ID), rs getString NAME, 
+                           rs getString COLUMN_TYPE)
 		column.width = rs getDouble WIDTH
 		column.order = rs getInt ORDER
+		column.sprintId = rs getInt SPRINT
 		column
       }
     }

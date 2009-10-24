@@ -24,7 +24,7 @@
   
 
   <aop:config>
-    <aop:pointcut id="transactionsPointcut" expression="execution(* com.scrumwall.service.item.ItemService.*(..))"/>
+    <aop:pointcut id="transactionsPointcut" expression="execution(* com.scrumwall.service..*.*(..))"/>
     <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionsPointcut"/>
   </aop:config>
   
@@ -58,6 +58,7 @@
     <dwr:remote javascript="ColumnService">
       <dwr:include method="getColumns"/>
       <dwr:include method="save"/>
+      <dwr:include method="remove"/>
     </dwr:remote>
   </bean>
 

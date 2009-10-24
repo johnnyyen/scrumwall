@@ -1,7 +1,9 @@
 package com.scrumwall.dao.item
 
 import com.scrumwall.domain.Item
+import com.scrumwall.domain.Column
 import com.scrumwall.dao.BaseDao
+import com.scrumwall.identifiers.ItemRemoveMode
 import java.util.List
 
 trait ItemDao extends BaseDao {
@@ -12,19 +14,16 @@ trait ItemDao extends BaseDao {
 	*/
 	def save(item: Item) : Item
  
-	/**
-	* Returns all of the items for a column 
-	*/
 	def getItems(columnId: Int) : List[Item]
  
-	/**
-	* Fetches all items that belong to specified sprint
-	* 
-	*/
 	def getForSprint(sprintId: Int) : List[Item]
  
-	/**
-	* Removes the item from the database 
-	*/
 	def remove(id: Int)
+ 
+	/**
+	* @see ItemService.moveFromColumn()
+	*/
+	def moveFromColumn(column: Column, direction: ItemRemoveMode)
+ 
+	def removeFromColumn(columnId: Int)
 }

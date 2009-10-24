@@ -10,7 +10,7 @@ create("layout", {
 		var creator = $("#itemCreator");
 		creator.itemCount = 0;
 		
-		ColumnService.getColumns({async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
+		ColumnService.getColumns(this.getCurrentSprint(), {async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		
 		$(window).bind("resize", {}, this.onWindowResize, this);
 		$(window).bind("beforeunload", {},this.onPageUnload, this);
@@ -19,7 +19,7 @@ create("layout", {
 		this.columnContainer = $("#columnContainer");
 		var scope = this;
 		this.columnContainer.sortable({
-			items: '.column',
+			items: '.sortableColumn',
 			handle : '.colHeader',
 			containment: 'parent',
 		    scroll: false,
@@ -34,20 +34,17 @@ create("layout", {
 					columns[i].order = order;
 					order++;
 				}
+				scope._saveAllColumns();
 		    } 
 		  });
 		
 		this.containerWidth = this.columnContainer.width();
 		this.containerHeight = this.columnContainer.height();
 	},
-	loadItems:function(items){
-		
-		var item;
-		
+	loadItems:function(items){		
+		var item;		
 		for(var i = 0; i < items.length; i++){
-			item = New("item", items[i], this.columns);
-			var n=0;
-			
+			item = New("item", items[i], this.columns);		
 		}
 	},
 	createColumns:function(columns){
@@ -65,7 +62,7 @@ create("layout", {
 			this.columns[columns[i].id] = col;
 		}
 
-		ItemService.getForSprint(1, {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
+		ItemService.getForSprint(this.getCurrentSprint(), {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
 	},
 	createColumn:function(event){
 		
@@ -79,11 +76,17 @@ create("layout", {
 		
 		this._updateColumnOrders();
 		
-		for(var i in this.columns){
-			this.columns[i].save();
-		}
+		this._saveAllColumns();
+		
 		column.save();
 		this.columns[column.guid]=column;
+	},
+	_saveAllColumns:function() {
+		for(var i in this.columns){
+			if(i) {
+				this.columns[i].save();
+			}
+		}
 	},
 	_updateColumnOrders:function(){
 		var columns = $(this.columnContainer).children();
@@ -111,7 +114,7 @@ create("layout", {
 			defaultOwner =  "";
 		}
 		var config = {parentEl:event.target,
-			owner:defaultOwner};
+			owner:defaultOwner, sprintId:this.getCurrentSprint()};
 		itemCount++;
 		var item = New("item", config);
 		
@@ -159,15 +162,18 @@ create("layout", {
 			this.columns[i].columnResize(newWidth, newHeight);
 		}
 	},
-	deleteColumn: function(event){
-		//ColumnService.remove({scope: this, exceptionHandler:exceptionHandler});
-		var width = event.data.column.jq.width();
-		event.data.column.jq.remove();
+	deleteColumn: function(column, removeMode){		
+		var width = column.jq.width();
+		column.jq.remove();
 		this.onColumnResize(-1,(-1)*width);
 		
-		
+		delete this.columns[column.guid];
+		                    
+		this._saveAllColumns();
+	},
+	getCurrentSprint:function() {
+		return 0;
 	}
-	
 });
 
 

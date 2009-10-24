@@ -2,7 +2,7 @@ DROP TABLE item IF EXISTS ;
 CREATE CACHED TABLE item(
     id IDENTITY,
     content VARCHAR(4096),
-    estimation INT DEFAULT NULL,
+    estimation INTEGER DEFAULT NULL,
     sprintid INTEGER DEFAULT NULL,
     offsetx DECIMAL DEFAULT 0,
     offsety DECIMAL DEFAULT 0,
@@ -20,28 +20,47 @@ CREATE CACHED TABLE col(
     name VARCHAR(100) NOT NULL,
     columntype VARCHAR(20) DEFAULT NULL,
     columnorder INTEGER NOT NULL,
-    width DECIMAL DEFAULT NULL
+    width DECIMAL DEFAULT NULL,
+    sprintId INTEGER NOT NULL
 );
 
-INSERT INTO col(name, columntype, columnorder, width)
-    VALUES('Not Started', 'NOT_STARTED', 0, 33);
+DROP TABLE sprint IF EXISTS;
+CREATE CACHED TABLE sprint(
+    id IDENTITY,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
+);
 
-    INSERT INTO col(name, columntype, columnorder, width)
-    VALUES('In progress', 'IN_PROGRESS', 1, 34);
-    
-INSERT INTO col(name, columntype, columnorder, width)
-    VALUES('DONE', 'DONE', 2, 33);
+INSERT INTO sprint(start_date, end_date) 
+    VALUES(CURDATE(), '2011-11-11');
 
-INSERT INTO col(id, name, columntype, columnorder)
-    VALUES(-2, 'GOALS', 'GOALS', 0);
+INSERT INTO col(name, columntype, columnorder, width, sprintId)
+    VALUES('Not Started', 'NOT_STARTED', 0, 33, 0);
+
+INSERT INTO col(name, columntype, columnorder, width, sprintId)
+    VALUES('In progress', 'IN_PROGRESS', 1, 34, 0);
     
-INSERT INTO col(id, name, columntype, columnorder)
-    VALUES(-1, 'UCB', 'UCB', 0);
+INSERT INTO col(name, columntype, columnorder, width, sprintId)
+    VALUES('DONE', 'DONE', 2, 33, 0);
+
+INSERT INTO col(id, name, columntype, columnorder, sprintId)
+    VALUES(-2, 'GOALS', 'GOALS', 0, 0);
     
-INSERT INTO col(id, name, columntype, columnorder)
-    VALUES(-3, 'IMPEDIMENTS', 'IMPEDIMENTS', 0);
+INSERT INTO col(id, name, columntype, columnorder, sprintId)
+    VALUES(-1, 'UCB', 'UCB', 0, 0);
+    
+INSERT INTO col(id, name, columntype, columnorder, sprintId)
+    VALUES(-3, 'IMPEDIMENTS', 'IMPEDIMENTS', 0, 0);
     
 ALTER TABLE item 
     ADD CONSTRAINT ItemToColumn FOREIGN KEY (col)
     REFERENCES col(id)
     ON DELETE SET DEFAULT;
+    
+ALTER TABLE col
+    ADD CONSTRAINT COLUMN_TO_SPRINT FOREIGN KEY (sprintId)
+    REFERENCES sprint(id);
+        
+ALTER TABLE item
+    ADD CONSTRAINT ITEM_TO_SPRINT FOREIGN KEY (sprintid)
+    REFERENCES sprint(id);
