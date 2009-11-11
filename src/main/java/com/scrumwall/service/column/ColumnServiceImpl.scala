@@ -35,7 +35,7 @@ class ColumnServiceImpl extends ColumnService {
       case MOVE_LEFT => itemService.moveFromColumn(column, MOVE_LEFT)
       case MOVE_RIGHT => itemService.moveFromColumn(column, MOVE_RIGHT)
       case REMOVE => itemService.removeFromColumn(column.getId)
-      case NO_ITEMS => 
+      case NO_ITEMS => debug("No items to alter because of the removed column") 
       case _ => throw new IllegalArgumentException("I don't know how to handle removemode: " + mode)
     }
     

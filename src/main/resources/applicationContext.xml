@@ -3,12 +3,11 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       
        xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.directwebremoting.org/schema/spring-dwr
-           http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd
+           http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd
            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
@@ -39,7 +38,7 @@
     <dwr:convert type="bean" class="com.scrumwall.domain.Item" />
     <dwr:convert type="bean" class="com.scrumwall.domain.Column" />
   </dwr:configuration>
-
+  
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
   	<aop:scoped-proxy/>
   	<property name="itemDao" ref="itemDao"/>
@@ -48,6 +47,7 @@
       <dwr:include method="getForSprint"/>
       <dwr:include method="getItems"/>
       <dwr:include method="remove"/>
+      <dwr:filter class="org.directwebremoting.filter.AuditLogAjaxFilter"/>
     </dwr:remote>
   </bean>
 
@@ -55,10 +55,12 @@
   <bean id="columnService" class="com.scrumwall.service.column.ColumnServiceImpl">
     <aop:scoped-proxy/>
     <property name="columnDao" ref="columnDao"/>
+    <property name="itemService" ref="itemService"/>
     <dwr:remote javascript="ColumnService">
       <dwr:include method="getColumns"/>
       <dwr:include method="save"/>
       <dwr:include method="remove"/>
+      <dwr:filter class="org.directwebremoting.filter.AuditLogAjaxFilter"/> 
     </dwr:remote>
   </bean>
 

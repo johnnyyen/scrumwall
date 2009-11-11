@@ -152,6 +152,10 @@ body .ui-dialog .ui-dialog-title{
 	width:10%;
 }
 
+.ui-resizable-handle {
+	width: 15px !important;
+}
+
 .drawer{
     width:0;
     background-color:pink;
@@ -168,4 +172,13 @@ html, body  {
 
 #removeMode{
   display:none !important;
+}
+
+.columnNameText{
+  width: 100%;
+}
+
+#newColumnButton, .deleteColumnButton{
+  float: right;
+  margin-right: 5px;
 }

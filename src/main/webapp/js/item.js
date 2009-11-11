@@ -2,9 +2,14 @@
 create("item", {
 	DEFAULT_WIDTH: 120,
 	DEFAULT_HEIGHT: 100,
+	DEFAULT_TEXT: "Task desctiption goes here",
 	initialize:function(config, cols){
 		map(config, this);
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item." + config.id : "new." + itemCount;
+
+		if(this.coords) {
+			this.setRelativeCoords(this.coords);
+		}
 		
 		if(config.width){
 			this.width = config.width;
@@ -24,9 +29,10 @@ create("item", {
 			this.column = cols[config.column];
 			if(this.column){
 				this.column.addItem(this);
-				this.redraw();
 			}
 		}
+		
+		this.redraw();
 	},
 	_initDOM:function(){
 		this.jq = $(this);
@@ -40,7 +46,7 @@ create("item", {
 			contentTextJq.text(this.content);
 			contentJq.val(this.content);
 		}else{
-			var newItemText = "I am a new item. Double click me";
+			var newItemText = this.DEFAULT_TEXT;
 			contentTextJq.text(newItemText);
 			contentJq.val(newItemText);
 		}
@@ -64,6 +70,8 @@ create("item", {
 			append(ownerJq).append(estWrapperJq);
 		estWrapperJq.append(hoursLeftJq).append(estimationJq);
 
+		$(this.contentElement).bind("keypress", {}, this.onKeyPress, this);
+		
 		this.paint(this.jq.children(), this, this.color);
 		this.jq.css("background-color", this.color);
 		
@@ -73,12 +81,14 @@ create("item", {
 	_initEvents:function(){
 		$(this.expander).bind("click", {}, this.expand, this);
 		$(this.contentElement).bind("blur", this, this.save );
+		$(this.contentElement).bind("dblclick", this, function(event){event.stopPropagation()} );
 		this.jq.bind("dblclick", {}, this.expand, this);
 		this.jq.draggable();
 		$(this.estimationElement).bind("blur", this, this.save );
 		$(this.hoursLeftElement).bind("blur", this, this.save);
 		$(this.ownerElement).bind("change", this, this.save );
 		this.jq.resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
+		
 	},
 	onResizeStop:function(event, ui){
 		var item = ui.helper[0];
@@ -126,6 +136,11 @@ create("item", {
 		$(this.contentElement).attr("value", $(this.contentText).text());
 		$(this.contentText).addClass("hidden");
 		
+		$(this.contentElement).focus();
+		if($(this.contentElement).val() == this.DEFAULT_TEXT){
+			$(this.contentElement).select();
+		}
+		
 	},
 	collapse:function(event){
 		var scope = this;
@@ -143,6 +158,13 @@ create("item", {
 		$(this.contentText).removeClass("hidden");
 		$(this.contentText).text($(this.contentElement).attr("value"));
 		
+	},
+	onKeyPress: function(event){
+		if(event.keyCode == $.ui.keyCode.ESCAPE){
+			event.preventDefault();
+			this.collapse();
+			this.save();
+		}
 	},
 	saveable:function(scope){
 		if(!scope) scope = this;
@@ -178,7 +200,10 @@ create("item", {
 		
 	},
 	saveCallback:function(item){
+		delete this.column.items[this.guid];
 		this.guid = "item." + item.id;
+		this.column.addItem(this);
+		this.id = item.id;
 	},
 	remove:function(){
 		var id = this.saveable().id;
@@ -215,8 +240,7 @@ create("item", {
 		var relativeLeft = offsetLeft / columnWidth * 100;
 		return {top: relativeTop, left: relativeLeft}
 	},
-	redraw: function(){
-		
+	_newPosition: function() {
 		var pos = $(this.column).offset();
 		var x = 0;
 		var y = 0;
@@ -229,8 +253,17 @@ create("item", {
 		
 		pos.left = pos.left + Math.round(x);
 		pos.top = pos.top + Math.round(y);
-		
+		return pos;
+	}, 
+	redraw: function(){		
+		var pos = this._newPosition();		
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
+	},
+	animatedRedraw: function(){
+		var pos = this._newPosition();
+		this.jq.animate( { top: pos.top + "px"}, {queue:false, duration: 1250})
+		.animate( {left: pos.left + "px"}, {queue: false, duration: 1250});
 	}
+	
 	
 });

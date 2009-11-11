@@ -51,7 +51,9 @@ class ItemDaoImpl extends ItemDao {
   }
  
   override def removeFromColumn(columnId: Int) = {
-    
+    var map = new HashMap[String, Object]
+    map.put( "col", new RichInt(columnId) )
+    getNamedParameterJdbcTemplate.update( ItemDaoImpl.SQL_REMOVE_FROM_COLUMN, map )
   }
   
   private def saveItem(item: Item) : Item = {
@@ -82,14 +84,30 @@ object ItemDaoImpl {
   val WIDTH = "width"
   val HEIGHT = "height"
   
-  val SQL_GET = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color, hoursleft, height, width FROM item WHERE id = :id"  
-  val SQL_SAVE = "INSERT INTO item(content, estimation, offsetX, offsetY, owner, sprintId, col, color, hoursleft, height, width) VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col, :color, :hoursleft, :height, :width)"  
-  val SQL_UPDATE = "UPDATE item SET content = :content, estimation = :estimation, offsetY = :offsetY, offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col, color = :color, hoursleft = :hoursleft, height = :height, width = :width WHERE id = :id"  
+  val SQL_GET = """SELECT id, 
+  						content, estimation, offsetY, offsetX, owner, 
+  						sprintid, col, color, hoursleft, height, width 
+  					FROM item WHERE id = :id"""  
+  val SQL_SAVE = """INSERT INTO 
+  						item(content, estimation, offsetX, offsetY, owner, sprintId, col, 
+  						color, hoursleft, height, width) 
+  					VALUES(:content, :estimation, :offsetX, :offsetY, :owner, :sprintId, :col, 
+  						:color, :hoursleft, :height, :width)"""  
+  val SQL_UPDATE = """UPDATE item 
+  					SET content = :content, estimation = :estimation, offsetY = :offsetY, 
+  						offsetX = :offsetX, owner = :owner, sprintId = :sprintId, col = :col, 
+  						color = :color, hoursleft = :hoursleft, height = :height, width = :width 
+  					WHERE id = :id"""  
   val SQL_GET_SPRINT = """SELECT 
-  							id, content, estimation, sprintId, owner, col, offsetX, offsetY, color, hoursleft, height, width
+  							id, content, estimation, sprintId, owner, col, offsetX, offsetY, 
+  							color, hoursleft, height, width
   						FROM item WHERE sprintId = :sprintId AND col >= 0"""
   val SQL_REMOVE = "DELETE FROM item WHERE id = :id"
-  val SQL_GET_ITEMS = "SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, color, hoursleft, height, width FROM item WHERE col = :column"
+  val SQL_GET_ITEMS = """SELECT id, content, estimation, offsetY, offsetX, owner, sprintid, col, 
+  							color, hoursleft, height, width 
+  						FROM item 
+  						WHERE col = :column"""
+  val SQL_REMOVE_FROM_COLUMN = "DELETE FROM item WHERE col = :col"
   
   def getParameterMap(item: Item): HashMap[String, Object] = {
 	val parameterMap = new HashMap[String, Object]

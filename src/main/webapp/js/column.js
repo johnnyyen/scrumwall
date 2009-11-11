@@ -22,15 +22,17 @@ createExtending("column", "container", {
 		if(!this.name){
 			this.name = "Double click me";
 		}
+		//FIXME: rename columnWidth to reflect that it contains width in pixels
+		/*
 		if(config.width){
 			//FIXME: where did the "-3" come from???
-			this.columnWidth = parseInt(config.width * this.parent.width() / 100)-3;
+			this.columnWidth = parseInt(config.width * this.parent.width() / 100)//-3;
 		}else if(config.colWidth){
 			this.columnWidth = config.colWidth;
 		}else{
 			this.columnWidth = this.DEFAULT_WIDTH;
 		}
-		
+		*/
 		if(!this.columnType) {
 			this.columnType = this.REGULAR;
 		}
@@ -44,18 +46,18 @@ createExtending("column", "container", {
 	_initDOM:function(){
 		this.header = $.create("div",{"class":"colHeader"});
 		this.body = $.create("div",{"class":"colBody"});
-
+		this.headerInput = $.create("input", {"type": "text", "class": "columnNameInput"});
+		this.headerText = $.create("div", {"class": "columnNameText"});
+		$(this.headerInput).hide();
+		
 		if(this.columnType == this.DONE) {
 			this.jq.addClass("doneColumn")
 		}
 		
-		this.jq.width(this.columnWidth);
+		//this.jq.width(this.columnWidth);
 		if(this.guid != undefined){
 			this.jq.attr("id", "col." + this.guid);
 		}
-		
-		$(this.header).text(this.name);
-		$(this.parent).append(this.jq);
 		this.jq.append($(this.header)).append($(this.body));
 
 		if(this.columnType == this.DONE) {
@@ -65,26 +67,58 @@ createExtending("column", "container", {
 		}
 		
 		if(this.columnType == this.REGULAR) {
-			this.deleteColumnButton = $.create("a", {"id": "deleteColumnButton", "href": "#"});
+			this.deleteColumnButton = $.create("a", {"class": "deleteColumnButton", "href": "#"});
 			$(this.deleteColumnButton).text("X").bind("click", {}, this.deleteColumn, this);
 			$(this.header).append(this.deleteColumnButton);
 		}
+		
+		$(this.headerText).text(this.name);
+		$(this.header).append($(this.headerInput));
+		$(this.header).append($(this.headerText));
+		$(this.parent).append(this.jq);
 		
 		if(this.columnType != this.DONE && this.columnType != this.NOT_STARTED) {
 			this.jq.addClass("sortableColumn");
 		}
 		
+		$(this.headerText).bind("dblclick", {}, this._editName, this);
+		$(this.headerInput).bind("blur", {}, this._nameEdited, this);
+		$(this.headerInput).bind("keypress", {}, this._nameEdited, this);
 		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
-		this.jq.resizable({stop: this._onResizeStop, containment: 'parent', handles:"e"});
-	},	
-	_onResizeStop:function(){
+		var instance = this;
+		this.jq.resizable({stop: function(){instance.layout.onResizeStop()}, containment: 'parent', handles:"e"});
+	},
+	_editName: function() {
+		
+		$(this.headerText).hide();
+		$(this.headerInput).show();		
+		$(this.headerInput).val($(this.headerText).text());
+		$(this.headerInput).select();
+	},
+	_nameEdited: function(event) {
+		if(event.type == "keypress" && 
+				!($.ui.keyCode.ESCAPE == event.keyCode 
+						|| $.ui.keyCode.ENTER == event.keyCode 
+						|| $.ui.keyCode.NUMPAD_ENTER == event.keyCode)) {
+			return;
+		}
+		if ($.ui.keyCode.ESCAPE == event.keyCode){
+			//escape cancels editing
+		}else if($.trim($(this.headerInput).val()) == "") {
+			//FIXME: show tooltip with error message
+		}else{
+			$(this.headerText).text($(this.headerInput).val());
+			this.name = $(this.headerText).text(); 
+			this.save();
+		}
+		$(this.headerInput).hide();
+		$(this.headerText).show();
+	},
+	resize:function(){
 		var delta = this.jq.width() - this.columnWidth;
 		this.columnResize(this.jq.width());
 		this.layout.onColumnResize(this.order, delta);
 		this.columnWidth = this.jq.width();
-	},
-	resize:function(){
-		this._onResizeStop()
 	},
 	columnResize:function(newWidth, newHeight){
 		this.columnWidth = this.jq.width();
@@ -102,8 +136,7 @@ createExtending("column", "container", {
 		}
 	},
 	_saveable:function(){
-		var widthPercent = this.jq.width() / this.parent.width() * 100;
-		var column = {width: widthPercent,
+		var column = {width: this.width,
 				name: this.name,
 				order: this.order,
 				columnType: this.columnType,
@@ -117,8 +150,6 @@ createExtending("column", "container", {
 	save: function(){
 		ColumnService.save(this._saveable(), 
 				{async: false, scope: this, callback: this._saveCallback, exceptionHandler:exceptionHandler});
-		
-		
 	},
 	_saveCallback:function(column){
 		this.guid = column.id;
@@ -128,7 +159,7 @@ createExtending("column", "container", {
 		
 	},
 	deleteColumn:function(){
-		if(this.items.length > 0){
+		if(this.items.__count__ > 0){
 			this._showRemoveModeDialog();
 		}else{
 			this._deleteColumn(this.REMOVE_MODES.NO_ITEMS);
@@ -136,6 +167,12 @@ createExtending("column", "container", {
 	},
 	_deleteColumn:function(removeMode) {
 		ColumnService.remove(this._saveable(), removeMode, {scope: this, exceptionHandler:exceptionHandler});
+		if(removeMode == this.REMOVE_MODES.REMOVE){
+			for(var i in this.items){
+				this.items[i].remove();
+			}
+		}
+		
 		this.layout.deleteColumn(this, removeMode)
 	},
 	_showRemoveModeDialog:function(){
@@ -144,9 +181,10 @@ createExtending("column", "container", {
 		var layout = this.layout;
 		var column = this;
 		//FIXME: remove mode identifiers are hardcoded
-		var buttons = {"Move left": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_LEFT);}, 
+		var buttons = {"Move right": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_RIGHT);}, 
 				"Delete": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.REMOVE);},
-				"Move right": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_RIGHT);}};
+				"Move left": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_LEFT);}
+				};
 		$(dialog).dialog({"title":title,"buttons": buttons, resizable:false, modal:true, height:150,width:380});
 		
 	}

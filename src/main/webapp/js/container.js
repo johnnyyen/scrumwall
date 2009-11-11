@@ -36,6 +36,9 @@ scrumwall.create("container", {
 	},
 	resize:function(newWidth){
 		$(this).width(newWidth);
+		this.redraw();
+	},
+	redraw: function() {
 		for(var i in this.items){
 			this.items[i].redraw();
 		}
@@ -48,17 +51,20 @@ scrumwall.create("container", {
 			return;
 		}
 		
-		if($(item).hasClass("sector")){
-			var coords = $(ui.helper).offset();
+		//FIXME: move this to item
+		if($(item).hasClass("sector")) {
 			var ownerName = $('#ownerInput').val();
 			if(ownerName == "Your name" || this.id == "col0") { //FIXME: need to do this in a better way
 				ownerName = "";
 			}
-			item = New("item", {color: $(ui.helper).css("background-color"), owner: ownerName});
-			item.column = this;
-			item.setRelativeCoords(coords);
-			item.redraw();
+			item = New("item", {color: $(ui.helper).css("background-color"), 
+								owner: ownerName, 
+								sprintId:this.layout.getCurrentSprint(),
+								column: this,
+								coords: $(ui.helper).offset()});
+			
 			$(ui.helper).remove();
+			item.expand();
 		}
 		this.addItem(item);
 		item.save();
