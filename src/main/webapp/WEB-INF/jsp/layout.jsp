@@ -30,7 +30,7 @@
 		</ul>
 	</div>
 	<div id="menu">
-		<input type="text" value="Your name" class="ownerInput" id="ownerInput"/><br/>
+		<input type="text" value="" class="ownerInput" id="ownerInput"/><br/>
 		<div class="sprintdate">
 			05.05.2009 - 27.05.2009
 		</div>
@@ -73,9 +73,10 @@
 	<script type="text/javascript" src="js/drawer.js"></script>
 	<script type='text/javascript' src='/scrumwall/dwr/interface/ItemService.js'></script>
 	<script type='text/javascript' src='/scrumwall/dwr/interface/ColumnService.js'></script>
-  	<script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
-  	<script type="text/javascript">
+  <script type='text/javascript' src='/scrumwall/dwr/engine.js'></script>
+  <script type="text/javascript">
 		$("#menu").ready(function(){
+			delete Array.prototype.indexOf;
 			new scrumwall.layout();
 		});
 	</script>

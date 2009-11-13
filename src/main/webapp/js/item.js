@@ -2,7 +2,7 @@
 create("item", {
 	DEFAULT_WIDTH: 120,
 	DEFAULT_HEIGHT: 100,
-	DEFAULT_TEXT: "Task desctiption goes here",
+	DEFAULT_TEXT: "Task description goes here",
 	initialize:function(config, cols){
 		map(config, this);
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item." + config.id : "new." + itemCount;
@@ -11,10 +11,7 @@ create("item", {
 			this.setRelativeCoords(this.coords);
 		}
 		
-		if(config.width){
-			this.width = config.width;
-			this.height = config.height;
-		}else{
+		if(!config.width){
 			this.width = this.DEFAULT_WIDTH;
 			this.height = this.DEFAULT_HEIGHT;
 		}
@@ -29,6 +26,9 @@ create("item", {
 			this.column = cols[config.column];
 			if(this.column){
 				this.column.addItem(this);
+			} else {
+				//FIXME: What to do when the column that this item is supposed to be in, is missing.
+				alert("item tried to be in column " + config.column + " which does not exist");
 			}
 		}
 		
@@ -42,13 +42,13 @@ create("item", {
 		this.contentText = $.create("div",{"class":"itemText"});
 		var contentTextJq = $(this.contentText);
 		
+		
 		if(this.guid.indexOf("new.") < 0){
 			contentTextJq.text(this.content);
 			contentJq.val(this.content);
 		}else{
-			var newItemText = this.DEFAULT_TEXT;
-			contentTextJq.text(newItemText);
-			contentJq.val(newItemText);
+			contentTextJq.text(this.DEFAULT_TEXT);
+			contentJq.val(this.DEFAULT_TEXT);
 		}
 		
 		this.estimationElement = $.create("input",{"maxlength":"2","type":"text","class":"estimation"});
@@ -59,18 +59,20 @@ create("item", {
 		var hoursLeftJq = $(this.hoursLeftElement);
 		hoursLeftJq.val(this.hoursLeft);
 		
-		var estWrapper = $.create("div",{"class":"estWrapper"});
-		var estWrapperJq = $(estWrapper);
+		var estimationWrapper = $.create("div",{"class":"estimationWrapper"});
+		var estimationWrapperJq = $(estimationWrapper);
 		this.ownerElement = $.create("input",{"type":"text","class":"owner"});
-		var ownerJq = $(this.ownerElement).attr("value", this.owner);
+		this.setOwner(this.owner);
 		
 		$("body").append(this.jq);
 		this.expander = $.create("div",{"class":"expandIcon"});
-		this.jq.append(contentTextJq).append(contentJq).append(this.expander).
-			append(ownerJq).append(estWrapperJq);
-		estWrapperJq.append(hoursLeftJq).append(estimationJq);
-
-		$(this.contentElement).bind("keypress", {}, this.onKeyPress, this);
+		this.jq.append(contentTextJq)
+			.append(contentJq)
+			.append(this.expander)
+			.append($(this.ownerElement))
+			.append(estimationWrapperJq);
+		estimationWrapperJq.append(hoursLeftJq)
+			.append(estimationJq);
 		
 		this.paint(this.jq.children(), this, this.color);
 		this.jq.css("background-color", this.color);
@@ -79,16 +81,33 @@ create("item", {
 		
 	},
 	_initEvents:function(){
-		$(this.expander).bind("click", {}, this.expand, this);
-		$(this.contentElement).bind("blur", this, this.save );
-		$(this.contentElement).bind("dblclick", this, function(event){event.stopPropagation()} );
+		
 		this.jq.bind("dblclick", {}, this.expand, this);
-		this.jq.draggable();
-		$(this.estimationElement).bind("blur", this, this.save );
-		$(this.hoursLeftElement).bind("blur", this, this.save);
-		$(this.ownerElement).bind("change", this, this.save );
+		this.jq.draggable({revert: "invalid"});
 		this.jq.resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
 		
+		$(this.contentElement).bind("blur", {}, this.save, this );
+		$(this.contentElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		$(this.contentElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
+		$(this.estimationElement).bind("change", {}, this.save, this );
+		$(this.estimationElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		$(this.hoursLeftElement).bind("change", {}, this.save, this);
+		$(this.hoursLeftElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		$(this.ownerElement).bind("change", {}, this.ownerChanged, this );
+		$(this.ownerElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		//TODO: remove the expander
+		$(this.expander).bind("click", {}, this.expand, this);		
+	},
+	ownerChanged: function(){
+		this.setOwner($(this.ownerElement).val());
+		this.save();
+	},
+	setOwner: function(ownerName) {
+		if(this.column.columnType == this.column.DRAWER || 
+				$.trim($(this.ownerElement).val()) == "") {
+			$(this.ownerElement).val(ownerName);
+			this.owner = ownerName;
+		}
 	},
 	onResizeStop:function(event, ui){
 		var item = ui.helper[0];
@@ -107,6 +126,8 @@ create("item", {
 		var scope = this;
 		
 		$(this.expander).unbind("click");
+		
+		//FIXME: Currently the step event is called lots of times.
 		if(this.width < 300 && this.height < 300){
 			$(this).animate( { width:"300px"}, {queue:false, duration:250})
 				.animate( {height: "300px"}, {queue: false, duration:250,
@@ -130,17 +151,37 @@ create("item", {
 			}
 		);
 		}else{
-			$(this.expander).bind("click", {}, this.collapse, scope);
+			$(this.expander).bind("click", {}, this.collapse, this);
 		}
-		$(this.contentElement).removeClass("hidden");
-		$(this.contentElement).attr("value", $(this.contentText).text());
-		$(this.contentText).addClass("hidden");
+		$(this.contentElement).show();
+		$(this.contentElement).val($(this.contentText).text());
+		$(this.contentText).hide();
 		
 		$(this.contentElement).focus();
 		if($(this.contentElement).val() == this.DEFAULT_TEXT){
 			$(this.contentElement).select();
 		}
 		
+		this._storeCurrentState();
+		
+		$(this.estimationElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
+		$(this.hoursLeftElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
+		$(this.ownerElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
+
+	},
+	_storeCurrentState: function(){
+		this.previousContent = $(this.contentElement).val();
+		this.previousOwner = $(this.ownerElement).val();
+		this.previousHours = $(this.hoursLeftElement).val();
+		this.previousEstimation = $(this.estimationElement).val();
+	},
+	_restorePreviousState: function(){
+		$(this.contentElement).val(this.previousContent);
+		$(this.contentElement).focus(); // focus it cause it blurs all other elements. It will not write to
+										// a input that has focus.
+		$(this.ownerElement).val(this.previousOwner);
+		$(this.hoursLeftElement).val(this.previousHours);
+		$(this.estimationElement).val(this.previousEstimation);
 	},
 	collapse:function(event){
 		var scope = this;
@@ -154,50 +195,58 @@ create("item", {
 			}
 		);
 		
-		$(this.contentElement).addClass("hidden");
-		$(this.contentText).removeClass("hidden");
+		$(this.contentElement).hide();
+		$(this.contentText).show();
 		$(this.contentText).text($(this.contentElement).attr("value"));
 		
+		$(this.estimationElement).unbind("keypress");
+		$(this.hoursLeftElement).unbind("keypress");
+		$(this.ownerElement).unbind("keypress");
+
 	},
-	onKeyPress: function(event){
-		if(event.keyCode == $.ui.keyCode.ESCAPE){
+	collapseAndSaveOrCancel: function(event){
+
+		var key = event.which || event.keyCode;
+		if( key == $.ui.keyCode.ESCAPE){
+			event.preventDefault();
+			this._restorePreviousState();
+			//do not move these outside the if because only the escape and enter needs to be handled 
+			this.collapse();
+			this.save();
+
+		}
+		else if (event.ctrlKey && 
+				(key == $.ui.keyCode.ENTER 
+				|| key == $.ui.keyCode.NUMPAD_ENTER)){
 			event.preventDefault();
 			this.collapse();
 			this.save();
 		}
 	},
-	saveable:function(scope){
-		if(!scope) scope = this;
-		scope.setRelativeCoords();
+	_saveable:function(){
+		this.setRelativeCoords();
 		
-		var item = {column: scope.column.guid,
-			content: $(scope.contentElement).val(),
-			estimation: scope.estimationElement.value == "" ? null : scope.estimationElement.value,
-			offsetX: scope.offsetX,
-			offsetY: scope.offsetY,
-			owner: scope.ownerElement.value,
-			sprintId: scope.sprintId,
-			color: scope.color,
-			hoursLeft: scope.hoursLeftElement.value == "" ? null : scope.hoursLeftElement.value,
-			width: scope.width,
-			height: scope.height
+		var item = {column: this.column.guid,
+			content: $(this.contentElement).val(),
+			estimation: this.estimationElement.value == "" ? null : this.estimationElement.value,
+			offsetX: this.offsetX,
+			offsetY: this.offsetY,
+			owner: this.ownerElement.value,
+			sprintId: this.sprintId,
+			color: this.color,
+			hoursLeft: this.hoursLeftElement.value == "" ? null : this.hoursLeftElement.value,
+			width: this.width,
+			height: this.height
 		};
-		var id = scope.guid;
 		
-		if(id && id.indexOf("item.") >= 0){
-			item.id = id.replace("item.", "");
+		if(this.guid.indexOf("item.") >= 0){
+			item.id = this.guid.replace("item.", "");
 		}
 		return item;
 	},
-	save:function(event){
-		var scope = this;
-		if(event) {
-			scope = event.data;
-		}
-		ItemService.save(scope.saveable(scope),
-				{"scope": scope, callback:scope.saveCallback,exceptionHandler:exceptionHandler});
-		
-		
+	save:function(){
+		ItemService.save(this._saveable(),
+				{"scope": this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
 	},
 	saveCallback:function(item){
 		delete this.column.items[this.guid];
@@ -206,8 +255,8 @@ create("item", {
 		this.id = item.id;
 	},
 	remove:function(){
-		var id = this.saveable().id;
-		if(id && id > -1){
+		var id = this._saveable().id;
+		if(id && id > -1) {
 			ItemService.remove(id,{exceptionHandler:exceptionHandler});
 		}
 		$(this).remove();
@@ -222,7 +271,6 @@ create("item", {
 		this.offsetY = coords.top;
 	},
 	getRelativeCoords:function(coords){
-		
 		var columnOffsets = $(this.column).offset();
 		var columnLeft = columnOffsets.left;
 		var columnTop = columnOffsets.top;
@@ -238,7 +286,7 @@ create("item", {
 		
 		var relativeTop = offsetTop / columnHeight * 100;
 		var relativeLeft = offsetLeft / columnWidth * 100;
-		return {top: relativeTop, left: relativeLeft}
+		return {top: relativeTop, left: relativeLeft};
 	},
 	_newPosition: function() {
 		var pos = $(this.column).offset();
@@ -258,12 +306,5 @@ create("item", {
 	redraw: function(){		
 		var pos = this._newPosition();		
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
-	},
-	animatedRedraw: function(){
-		var pos = this._newPosition();
-		this.jq.animate( { top: pos.top + "px"}, {queue:false, duration: 1250})
-		.animate( {left: pos.left + "px"}, {queue: false, duration: 1250});
 	}
-	
-	
 });

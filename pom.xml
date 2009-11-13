@@ -10,7 +10,7 @@
 	
 	<properties>
 		<version.spring>3.0.0.M2</version.spring>
-		<version.scala>2.7.5</version.scala>
+		<version.scala>2.7.7</version.scala>
 		<version.asm>3.1</version.asm>
 		<version.log4j>1.2.9</version.log4j>
 		<version.scalatest>0.9.5</version.scalatest>
@@ -185,13 +185,31 @@
     	<groupId>org.directwebremoting</groupId>
     	<artifactId>dwr</artifactId>
     	<version>3.0.rc1</version>
-    </dependency> 
+    </dependency>
+		<dependency>
+		  <groupId>org.openqa.selenium.client-drivers</groupId>
+		  <artifactId>selenium-java-client-driver</artifactId>
+		  <version>0.9.2</version>
+		  <scope>test</scope>
+    </dependency>
+
 	</dependencies>
 	<repositories>
         <repository>
             <id>maven2</id>
             <url>http://repo2.maven.org/maven2/</url>
         </repository>
+        <repository>
+					  <id>openqa</id>
+					  <name>OpenQA Repository</name>
+					  <url>http://nexus.openqa.org/content/repositories/releases/</url>
+					  <snapshots>
+					    <enabled>false</enabled>
+					  </snapshots>
+					  <releases>
+					    <enabled>true</enabled>
+					  </releases>
+				</repository>
         <repository>
             <id>springsource-milestone</id>
             <url>http://repository.springsource.com/maven/bundles/milestone</url>

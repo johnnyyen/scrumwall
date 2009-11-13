@@ -1,23 +1,23 @@
 create("layout", {
 	itemCount:0,
+	DEFAULT_COLUMN_WIDTH: 150,
+	ALL_COLUMNS: -1,
+	MAGIC_PIXEL: 1, //This is literally a magic pixel. Seems that the browser or jQuery keeps lying about sizes and in 
+					//some cases you cannot fit 300px worth of divs inside a 300px wide div.
 	init: function(){
-		$("#newItem").click(function(ev){alert("button clicked");});
 		$("#tabbar").tabs();
-		this.menu = new scrumwall.menu();
-		this.columnContainer = $("#columnContainer");
+		this.menu = new scrumwall.menu(this);
 		
-		//$("#itemCreator").bind("click",{owner:$(this.menu.owner)},this.createItem);
-		$(".sector").draggable({helper: 'clone'});
-		var creator = $("#itemCreator");
-		creator.itemCount = 0;
+		this.columnContainer = $("#columnContainer");
+		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
 		
 		ColumnService.getColumns(this.getCurrentSprint(), {async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
+		var scope = this;
 		
 		$(window).bind("resize", {}, this.onWindowResize, this);
-		$(window).bind("beforeunload", {},this.onPageUnload, this);
+		window.onbeforeunload = function(){return scope.onPageUnload(scope);};
 		$(this).bind("columnResize",{}, this.onColumnResize, this);
-		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
-		var scope = this;
+		
 		this.columnContainer.sortable({
 			items: '.sortableColumn',
 			handle : '.colHeader',
@@ -25,85 +25,68 @@ create("layout", {
 		    scroll: false,
 		    revert: true,
 		    tolerance: "intersect",
-		    update : function (event, ui) { 
-		    	//FIXME: move from inline function to a separate one
-				var columns = $(scope.columnContainer).children();
-				var order = 0;
-				
-				for(var i = 0; i < columns.length; i++){
-					columns[i].order = order;
-					order++;
-				}
-				scope.saveAllColumns();
-		    } 
+		    update: function(event, ui){ scope._updateColumnOrders(); scope.saveAllColumns(); }
 		  });
 		
-		this.containerWidth = this.columnContainer.width();
-	},
-	loadItems:function(items){		
-		var item;		
-		for(var i = 0; i < items.length; i++){
-			item = New("item", items[i], this.columns);		
-		}
-	},
-	createColumns:function(columns){
-		var parentEl =  $("#columnContainer");
-		
-		var width = $(parentEl).width();
-
+		this.previousContainerWidth = this.columnContainer.width();
+	}, 
+	createColumns:function(columnConfigs){
 		this.columns = new Array();
-		for(var i=0; i < columns.length; i++){
-			columns[i].parent = parentEl;
-			columns[i].menu = this.menu;
-			columns[i].layout = this;
-			var col = New("column", columns[i]);
-			this.columns[columns[i].id] = col;
+		for(var i=0; i < columnConfigs.length; i++){
+			columnConfigs[i].parent = this.columnContainer;
+			columnConfigs[i].menu = this.menu;
+			columnConfigs[i].layout = this;
+			
+			var column = New("column", columnConfigs[i]);
+			this.columns[columnConfigs[i].id] = column;
 		}
 		this.setColumnWidths();
 
 		ItemService.getForSprint(this.getCurrentSprint(), {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
 	},
-	setColumnWidths: function(){
-		var remainder = 0;
-		var pixels = 0;
-		var totalPixels = this.columnContainer.width();
-		var counter = 1;
-		for(var i in this.columns ){
-			if(counter == this.columns.__count__) {
-				this.columns[i].columnWidth = Math.floor(totalPixels)-1;
-				pixels = Math.floor(totalPixels)-1
-			}else{
-				var size = this.columns[i].width*this.columnContainer.width()/100 + remainder;
-				pixels = Math.floor(size);
-				totalPixels -= pixels;
-				remainder = size - pixels;
-				this.columns[i].columnWidth = pixels;
-			}
-			this.columns[i].jq.width( pixels )
-			counter++;
+	loadItems:function(items){
+		var item;		
+		for(var i = 0; i < items.length; i++){
+			item = New("item", items[i], this.columns);		
 		}
 	},
-	createColumn: function(event){
-		var defaultWidth = 150;
-		this.resizeOnColumnAdd(defaultWidth);
+	createColumn: function(){
 		
-		var config = {layout: this, parent: this.columnContainer};
-		config.width = defaultWidth / this.columnContainer.width() * 100;
-		var column = New("column",config);		
+		var config = {layout: this, 
+					  parent: this.columnContainer,
+					  width: this.DEFAULT_COLUMN_WIDTH / this.columnContainer.width() * 100};
+		var column = New("column",config);
 		$('.doneColumn').before($(column));
-		column.jq.width(defaultWidth);
-		this.redraw();
+		column.jq.width(this.DEFAULT_COLUMN_WIDTH);
 		
-		this._updateColumnOrders();
+		//moves all the items to the correct place
 		
+		
+		//this is added into the columns before save because otherwise onResizeStop cannot calculate the correct widths
 		this.columns["new"]=column;
-		
-		this.onResizeStop();
-		
+		this._updateColumnOrders();
+		this.onColumnResize(this.ALL_COLUMNS, this.DEFAULT_COLUMN_WIDTH);
+		this.redraw();
+		this.calculatePercentages();
+		this.saveAllColumns();
 		delete this.columns["new"];
+		
 		this.columns[column.guid] = column;
 	},
-	onResizeStop: function(){
+	deleteColumn: function(column, removeMode){		
+		var width = column.jq.width();
+		
+		this.moveItems(column, removeMode);
+		
+		column.jq.remove();
+		delete this.columns[column.guid];
+		this.onColumnResize(this.ALL_COLUMNS, width);
+		
+		this.calculatePercentages();
+		          
+		this.saveAllColumns();
+	},
+	calculatePercentages: function(){
 		var remainder = 0;
 		var percentage = 0;
 		var totalPercentage = 100;
@@ -120,14 +103,34 @@ create("layout", {
 			}
 			counter++;
 		}
-		
-		this.saveAllColumns();
+	},
+	/*
+	 * This method calculates the size of the columns in pixels, based on percentage values received from the database.
+	 * We take the size of the columnContainer, multiply it by the percentage and set these pixels as the width.
+	 */
+	setColumnWidths: function(){
+		var remainder = 0;
+		var pixels = 0;
+		var totalPixels = this.columnContainer.width();
+		var counter = 1;
+		for(var i in this.columns ){
+			if(counter == this.columns.__count__) {
+				this.columns[i].columnWidth = Math.floor(totalPixels) - this.MAGIC_PIXEL;
+				pixels = Math.floor(totalPixels) - this.MAGIC_PIXEL;
+			}else{
+				var size = this.columns[i].width*this.columnContainer.width()/100 + remainder;
+				pixels = Math.floor(size);
+				totalPixels -= pixels;
+				remainder = size - pixels;
+				this.columns[i].columnWidth = pixels;
+			}
+			this.columns[i].jq.width( pixels );
+			counter++;
+		}
 	},
 	saveAllColumns: function() {
 		for(var i in this.columns){
-			if(i) {
-				this.columns[i].save();
-			}
+			this.columns[i].save();
 		}
 	},
 	_updateColumnOrders:function(){
@@ -139,45 +142,33 @@ create("layout", {
 			order++;
 		}
 	},
-	onWindowResize:function(event){
-		
+	onWindowResize:function(){		
 		var width = this.columnContainer.width();
-		var widthDelta = this.containerWidth - width;
-		this.containerWidth = width;
-		this.onColumnResize(-1,widthDelta);
+		var widthDelta = this.previousContainerWidth - width;
+		this.previousContainerWidth = width;
+		this.onColumnResize(this.ALL_COLUMNS,widthDelta);
 	},
+	//also see item.remove()
 	onItemDelete:function(event, ui){
 		ui.draggable[0].remove();
 	},
-	onPageUnload: function(event){
+	onPageUnload: function(scope){
 		//FIXME: always saves all items when unloading page
-		for(var i in this.columns){
-			this.columns[i].saveItems();
-		}
-		for(var i in this.menu.drawers){
-			this.menu.drawers[i].saveItems();
-		}
-	},
-	columnsOnRightCount:function(myOrder){
-		var count = 0;
-		for(var i in this.columns){
-			if(this.columns[i].order > myOrder){
-				count++;
-			}
-		}
+		scope.saveAllColumns();
+		scope.menu.saveAllDrawers();
 		
-		return count;
+		//FIXME: put a normal message here
+		return "Don't leave please";
 	},
 	onColumnResize: function(order, widthDelta){
-		console.log(widthDelta)
-		widthDelta *= (-1)
+		widthDelta *= (-1);
 		if(Math.abs(widthDelta) > 10){
-			this.onColumnLargeResize(order);
+			this._onColumnLargeResize(order);
 		}else{
-			this.onColumnSmallResize(order);
+			this._onColumnSmallResize(order);
 		}
 	},
-	onColumnSmallResize: function(order){
+	_onColumnSmallResize: function(order){
 		var weight = 0;
 		var random = Math.random();
 		
@@ -189,7 +180,7 @@ create("layout", {
 			}
 			totalColumnSize += this.columns[i].jq.width();
 		}
-		var widthDelta = this.columnContainer.width()-1 - totalColumnSize;
+		var widthDelta = this.columnContainer.width() - this.MAGIC_PIXEL - totalColumnSize;
 		
 		for(var i in this.columns){
 			if(this.columns[i].order > order){
@@ -202,9 +193,9 @@ create("layout", {
 			this.columns[i].jq.height(this.columnContainer.height());
 		}
 	},
-	onColumnLargeResize: function(order){
+	_onColumnLargeResize: function(order){
 		var newHeight = this.columnContainer.height();
-		var totalWidth = this.columnContainer.width()-1;
+		var totalWidth = this.columnContainer.width() - this.MAGIC_PIXEL;
 		var extraWidth = 0;
 		
 		var columnsCount = 0;
@@ -219,7 +210,7 @@ create("layout", {
 			totalColumnSize += this.columns[i].jq.width();
 		}
 		
-		var widthDelta = this.columnContainer.width()-1 - totalColumnSize;
+		var widthDelta = this.columnContainer.width() - this.MAGIC_PIXEL - totalColumnSize;
 		
 		var counter = 1;
 		var remainder = totalWidth;
@@ -243,68 +234,11 @@ create("layout", {
 			this.columns[i].columnResize(newWidth, newHeight);
 		}
 	},
-	resizeOnColumnAdd: function(widthDelta){
-		var totalWidth = this.columnContainer.width();
-		var columnsCount = this.columns.__count__;
-		
-		var remainder = widthDelta;
-		var counter = 1;
-		for(var i in this.columns){
-			var newWidth = 0;
-			if(columnsCount == counter) {
-				newWidth = Math.floor(this.columns[i].jq.width() - remainder);
-			} else {
-				newWidth = Math.floor(this.columns[i].jq.width() - 
-							( (this.columns[i].jq.width()/totalWidth) * widthDelta));
-				counter++;
-			}
-			
-			remainder -= (this.columns[i].jq.width() - newWidth);
-			
-			this.columns[i].columnResize(newWidth);
-		}
-	},  //FIXME: merge the upper and lower functions together
-	resizeOnColumnRemove: function(widthDelta){
-		var remainder = widthDelta;
-		widthDelta = (-1)*widthDelta;
-		var totalWidth = this.columnContainer.width();
-		var columnsCount = this.columns.__count__;
-		
-		var counter = 1;
-		for(var i in this.columns){
-			var newWidth = 0;
-			
-			if(columnsCount == counter) {
-				newWidth = Math.floor(this.columns[i].jq.width() + remainder);
-			} else {
-				newWidth = Math.floor(this.columns[i].jq.width() - 
-							( (this.columns[i].jq.width()/totalWidth) * widthDelta));
-				counter++;
-			}
-			
-			remainder += (this.columns[i].jq.width() - newWidth);
-			
-			this.columns[i].columnResize(newWidth);
-		}
-	},
-	deleteColumn: function(column, removeMode){		
-		var width = column.jq.width();
-		
-		this.moveItems(column, removeMode);
-		
-		column.jq.remove();
-		delete this.columns[column.guid];
-		this.resizeOnColumnRemove(width);
-		
-		this.onResizeStop();
-		                    
-		this.saveAllColumns();
-	},
 	moveItems: function(column, removeMode) {
 		if(removeMode == column.REMOVE_MODES.MOVE_LEFT){
-			this._move( column, column.order - 1 )
+			this._move( column, column.order - 1 );
 		} else if(removeMode == column.REMOVE_MODES.MOVE_RIGHT) {
-			this._move(column, column.order + 1 )
+			this._move(column, column.order + 1 );
 		}
 	},
 	_move: function(column, nextOrder) {
@@ -312,8 +246,6 @@ create("layout", {
 			if(this.columns[i].order == nextOrder){
 				for(var j in column.items){
 					this.columns[i].addItem(column.items[j]);
-					column.items[j].animatedRedraw();
-					column.items[j].save();
 				}
 			}
 		}
@@ -322,9 +254,18 @@ create("layout", {
 		for(var i in this.columns) {
 			this.columns[i].redraw();
 		}
-	}, 
+	},
 	getCurrentSprint:function() {
-		return 0;
+		return 0; //FIXME: should be real when sprints are implemented
+	},
+	getNotStartedColumn: function(){
+		for(var i in this.columns){
+			if(this.columns[i].columnType == this.columns[i].NOT_STARTED){
+				return this.columns[i];
+			}
+		}
+		
+		return null;
 	}
 });
 

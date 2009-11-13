@@ -1,7 +1,7 @@
 createExtending("drawer", "container", {
 	items:null,
 	expanded:false,
-	DRAWER:"DRAWER",
+	
 	initialize:function(config){
 		map(config, this);
 		this.guid = this.id;
@@ -24,8 +24,13 @@ createExtending("drawer", "container", {
 
 		var button = this.button;
 		
-		var notStarted = $("div[id=col.0]");
-		var offset = $(notStarted).offset().left + $(notStarted).width();
+		var notStarted = this.menu.layout.getNotStartedColumn();
+		var offset = 0;
+		if(this.drawerType == this.menu.DRAWERTYPES.UCB){
+			offset = notStarted.jq.offset().left + notStarted.jq.width();
+		}else {
+			offset = notStarted.jq.offset().left;
+		}
 		var width = $(window).width() - offset;
 		$("body").append(this); 	
 		this.jq.animate( { "width":parseInt(width)+"px", queue: false }, 250,  
@@ -51,6 +56,13 @@ createExtending("drawer", "container", {
 	},
 	stopEventPropagation:function(){
 		stopEventPropagation();
+	},
+	loadItems:function(itemConfigs){
+		
+		for(var i in itemConfigs){
+			var item = New("item", itemConfigs[i], this.menu.drawers);
+			this.addItem(item);
+		}
 	}
 	
-})
+});

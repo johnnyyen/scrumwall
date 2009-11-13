@@ -263,6 +263,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	_setContainment: function() {
 
 		var o = this.options;
+		if(o.containment == 'selector') o.containment = $(o.selector);
 		if(o.containment == 'parent') o.containment = this.helper[0].parentNode;
 		if(o.containment == 'document' || o.containment == 'window') this.containment = [
 			0 - this.offset.relative.left - this.offset.parent.left,
@@ -271,7 +272,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
 		];
 
-		if(!(/^(document|window|parent)$/).test(o.containment) && o.containment.constructor != Array) {
+		if(!(/^(selector|document|window|parent)$/).test(o.containment) && o.containment.constructor != Array) {
 			var ce = $(o.containment)[0]; if(!ce) return;
 			var co = $(o.containment).offset();
 			var over = ($(ce).css("overflow") != 'hidden');
