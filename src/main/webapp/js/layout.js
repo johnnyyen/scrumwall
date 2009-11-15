@@ -172,6 +172,7 @@ create("layout", {
 		}
 	},
 	_onColumnSmallResize: function(order){
+		var newHeight = this.columnContainer.height();
 		var weight = 0;
 		var random = Math.random();
 		
@@ -182,7 +183,10 @@ create("layout", {
 				totalWidth -= this.columns[i].jq.width();
 			}
 			totalColumnSize += this.columns[i].jq.width();
+			
+			this.columns[i].jq.height(newHeight);
 		}
+		
 		var widthDelta = this.columnContainer.width() - this.MAGIC_PIXEL - totalColumnSize;
 		
 		for(var i in this.columns){
@@ -193,7 +197,6 @@ create("layout", {
 					break;
 				}
 			}
-			this.columns[i].jq.height(this.columnContainer.height());
 		}
 	},
 	_onColumnLargeResize: function(order){
@@ -233,7 +236,6 @@ create("layout", {
 				counter++;
 				remainder -= newWidth;
 			} 
-			
 			this.columns[i].columnResize(newWidth, newHeight);
 		}
 	},
