@@ -4,7 +4,7 @@ import com.thoughtworks.selenium.*;
 
 public class TestTest extends SeleneseTestCase {
 	public void setUp() throws Exception {
-//		setUp("http://localhost:8080/", "*chrome");
+		setUp("http://localhost:8080/", "*chrome");
 	}
 	public void testUntitled() throws Exception {
 //		selenium.open("/scrumwall/Layout.form#");
