@@ -149,6 +149,7 @@ create("layout", {
 		var widthDelta = this.previousContainerWidth - width;
 		this.previousContainerWidth = width;
 		this.onColumnResize(this.ALL_COLUMNS,widthDelta);
+		this.redraw();
 	},
 	//also see item.remove()
 	onItemDelete:function(event, ui){

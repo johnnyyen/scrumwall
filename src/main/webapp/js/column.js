@@ -127,9 +127,7 @@ createExtending("column", "container", {
 			this.jq.height(newHeight);
 		}
 		if(newWidth || newHeight){
-			for(var i in this.items){
-				this.items[i].redraw();
-			}
+			this.redraw();
 		}
 	},
 	_saveable:function(){
