@@ -182,3 +182,8 @@ html, body  {
   float: right;
   margin-right: 5px;
 }
+#statusIndicator{
+  width:10%;
+  background-color: green;
+  float:left;
+}

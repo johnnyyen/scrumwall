@@ -69,7 +69,10 @@ createExtending("column", "container", {
 		
 		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
 		var scope = this;
-		this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); scope.layout.saveAllColumns();}, containment: 'parent', handles:"e"});
+		
+		if(this.columnType != this.DONE) {
+			this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); scope.layout.saveAllColumns();}, containment: 'parent', handles:"e"});
+		}
 	},
 	_editName: function() {
 		$(this.headerText).hide();

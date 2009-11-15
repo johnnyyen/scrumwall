@@ -9,7 +9,7 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-1.3.2/jquery-ui.css"/>
 </head>
 <body>
-	
+	<div id="statusIndicator">Status indicator</div>
 	<div id="tabbar">
 		<ul>
 			<li>
