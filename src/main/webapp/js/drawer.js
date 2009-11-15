@@ -14,8 +14,11 @@ createExtending("drawer", "container", {
 		}
 		
 		this.jq.css("background-color", this.color);
-		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
+		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
 		this.jq.bind("closeDrawers", {}, this._onCollapse, this);
+		
+		this.zIndex = 10000;
+		this.jq.css("z-index",this.zIndex);
 	},
 	_onExpand:function(event){
 		var scope = this;
@@ -49,10 +52,10 @@ createExtending("drawer", "container", {
 		this.removeItems();
 		
 		$(this).animate({ width:"0px", queue:false}, 250, function(){
-			$(button).bind("click",{},scope._onExpand, scope);
-		}
+				$(button).bind("click",{},scope._onExpand, scope);
+			}
 		);
-		scope.expanded = false;
+		this.expanded = false;
 	},
 	stopEventPropagation:function(){
 		stopEventPropagation();
@@ -63,6 +66,8 @@ createExtending("drawer", "container", {
 			var item = New("item", itemConfigs[i], this.menu.drawers);
 			this.addItem(item);
 		}
+	},
+	drawerExpanded: function(){
+		return this.expanded;
 	}
-	
 });

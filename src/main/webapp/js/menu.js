@@ -17,7 +17,6 @@ create("menu",{
 		
 		$(".sector").draggable({helper: 'clone'});
 		var creator = $("#itemCreator");
-		creator.itemCount = 0;
 	},
 	_initDrawers: function() {
 		this.drawers = new Array();
@@ -54,5 +53,13 @@ create("menu",{
 				$(this.drawers[i].button).click();
 			}
 		}
+	},
+	isDrawerExpanded: function(){
+		for(var i in this.drawers){
+			if(this.drawers[i].drawerExpanded()){
+				return true;
+			}
+		}
+		return false;
 	}
 });

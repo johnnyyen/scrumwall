@@ -1,9 +1,11 @@
 create("layout", {
 	itemCount:0,
+	itemZIndex:10,
 	DEFAULT_COLUMN_WIDTH: 150,
 	ALL_COLUMNS: -1,
 	MAGIC_PIXEL: 1, //This is literally a magic pixel. Seems that the browser or jQuery keeps lying about sizes and in 
 					//some cases you cannot fit 300px worth of divs inside a 300px wide div.
+	
 	init: function(){
 		$("#tabbar").tabs();
 		this.menu = new scrumwall.menu(this);

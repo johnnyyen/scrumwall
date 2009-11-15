@@ -23,10 +23,16 @@ createExtending("column", "container", {
 		}
 		
 		this.sprintId = this.layout.getCurrentSprint();
-				
+		
+		if(this.columnType == this.NOT_STARTED){
+			this.zIndex = 10000;
+		}else{
+			this.zIndex = 10;
+		}
 		this._initDOM();
 	},
 	_initDOM:function(){
+		
 		this.header = $.create("div",{"class":"colHeader"});
 		this.body = $.create("div",{"class":"colBody"});
 		this.headerInput = $.create("input", {"type": "text", "class": "columnNameInput"});
@@ -56,6 +62,8 @@ createExtending("column", "container", {
 			this.jq.addClass("sortableColumn");
 		}
 		
+		this.jq.css("z-index",this.zIndex);
+		
 		this.jq.append($(this.header)).append($(this.body));
 		$(this.headerText).text(this.name);
 		$(this.header).append($(this.headerInput));
@@ -67,7 +75,8 @@ createExtending("column", "container", {
 		$(this.headerInput).bind("blur", {}, this._nameEdited, this);
 		$(this.headerInput).bind("keypress", {}, this._nameEdited, this);
 		
-		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop});
+		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, 
+				tolerance:"intersect",out:this.onDragStop});
 		var scope = this;
 		
 		if(this.columnType != this.DONE) {
@@ -75,6 +84,9 @@ createExtending("column", "container", {
 		}
 	},
 	_editName: function() {
+		//FIXME: workaround for bug in jQuery that doesn't call blur for elements when clicking a sortables handle.
+		$('.columnNameInput').blur();
+		
 		$(this.headerText).hide();
 		$(this.headerInput).show();		
 		$(this.headerInput).val($(this.headerText).text());
@@ -170,5 +182,8 @@ createExtending("column", "container", {
 				};
 		$(dialog).dialog({"title":title,"buttons": buttons, resizable:false, modal:true, height:150,width:380});
 		
+	},
+	drawerExpanded: function(){
+		return this.layout.menu.isDrawerExpanded();
 	}
 });

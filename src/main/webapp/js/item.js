@@ -55,7 +55,7 @@ create("item", {
 		var estimationJq = $(this.estimationElement); 
 		estimationJq.val(this.estimation);
 		
-		this.hoursLeftElement = $.create("input",{"maxlength":"2", "type":"text", "class": "estimation"});
+		this.hoursLeftElement = $.create("input",{"maxlength":"2", "type":"text", "class": "hoursLeft"});
 		var hoursLeftJq = $(this.hoursLeftElement);
 		hoursLeftJq.val(this.hoursLeft);
 		
@@ -91,12 +91,20 @@ create("item", {
 		$(this.contentElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
 		$(this.estimationElement).bind("change", {}, this.save, this );
 		$(this.estimationElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		var scope = this;
+		$(this.estimationElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.estimationElement);})
 		$(this.hoursLeftElement).bind("change", {}, this.save, this);
 		$(this.hoursLeftElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		$(this.hoursLeftElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.hoursLeftElement);})
 		$(this.ownerElement).bind("change", {}, this.ownerChanged, this );
 		$(this.ownerElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
 		//TODO: remove the expander
-		$(this.expander).bind("click", {}, this.expand, this);		
+		$(this.expander).bind("click", {}, this.expand, this);
+		$(this).bind("click",{},this.highlight, this);
+	},
+	highlight: function(){
+		this.column.zIndex++;
+		this.jq.css("z-index",this.column.zIndex);
 	},
 	ownerChanged: function(){
 		this.setOwner($(this.ownerElement).val());
@@ -105,6 +113,7 @@ create("item", {
 	setOwner: function(ownerName) {
 		if(this.column.columnType == this.column.DRAWER || 
 				$.trim($(this.ownerElement).val()) == "") {
+			$(this.ownerElement).blur();
 			$(this.ownerElement).val(ownerName);
 			this.owner = ownerName;
 		}
@@ -245,8 +254,12 @@ create("item", {
 		return item;
 	},
 	save:function(){
-		ItemService.save(this._saveable(),
+		if(this.validateNumberAndNotify(this.estimationElement) 
+				&& this.validateNumberAndNotify(this.hoursLeftElement)){
+			
+			ItemService.save(this._saveable(),
 				{"scope": this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
+		}
 	},
 	saveCallback:function(item){
 		delete this.column.items[this.guid];
@@ -306,5 +319,14 @@ create("item", {
 	redraw: function(){		
 		var pos = this._newPosition();		
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
+	},
+	validateNumberAndNotify: function(element){
+		//allows full numbers, at most two digits
+		if(!/^\d{0,2}$/.test($(element).val())){
+			//FIXME: create tooltip
+			console.log($(element).attr('class') + " is invalid");
+			return false;
+		}
+		return true;
 	}
 });

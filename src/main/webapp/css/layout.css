@@ -75,7 +75,8 @@
 	width:24px;
 }
 	
-.estimation{
+.estimation,
+.hoursLeft{
 	width:1.8em;
 	float:right;
 	clear:both;
@@ -163,7 +164,7 @@ body .ui-dialog .ui-dialog-title{
     position:absolute;
     right:0;
     top:0;
-    z-index:100;
+    z-index:10000;
 }
 
 html, body  {

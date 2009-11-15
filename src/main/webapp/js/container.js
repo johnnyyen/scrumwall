@@ -6,6 +6,7 @@ scrumwall.create("container", {
 	DRAWER:"DRAWER",
 	
 	items: new Array(),
+	zIndex:0,
 	removeItems:function(){
 		for(var i in this.items) {
 			$(this.items[i]).remove();
@@ -21,12 +22,8 @@ scrumwall.create("container", {
 		this.items[item.guid] = item;
 		item.setColumn(this);
 
-		if(this.columnType && (
-				this.columnType == this.NOT_STARTED || this.columnType == this.DRAWER)) {
-			$(item).css("z-index", "1000000");
-		} else {
-			$(item).css("z-index", "10");
-		}
+		$(item).css("z-index", ++this.zIndex);
+		
 	},
 	resize:function(newWidth){
 		$(this).width(newWidth);
@@ -62,11 +59,14 @@ scrumwall.create("container", {
 			
 			$(ui.helper).remove();
 			item.expand();
-		} else {
-			item.setOwner(ownerName);
 		}
 		
 		this.addItem(item);
+		
+		if(!$(item).hasClass("sector")) {
+			item.setOwner(ownerName);
+		}
+		
 		item.save();
 		this.stopEventPropagation();
 	},
@@ -81,5 +81,11 @@ scrumwall.create("container", {
 		for(var i in this.items){
 			this.items[i].save();
 		}
-	}	
+	},
+	itemOverContainer: function(event, ui){
+		if(this.layout.menu.isDrawerExpanded() && this.columnType != this.DRAWER) return;
+		
+		var item = ui.draggable[0];
+		$(item).css("z-index",this.zIndex+1);
+	}
 } );
