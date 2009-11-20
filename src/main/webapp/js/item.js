@@ -3,6 +3,9 @@ create("item", {
 	DEFAULT_WIDTH: 120,
 	DEFAULT_HEIGHT: 100,
 	DEFAULT_TEXT: "Task description goes here",
+	
+	expanded: false,
+	
 	initialize:function(config, cols){
 		map(config, this);
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item." + config.id : "new." + itemCount;
@@ -92,10 +95,10 @@ create("item", {
 		$(this.estimationElement).bind("change", {}, this.save, this );
 		$(this.estimationElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
 		var scope = this;
-		$(this.estimationElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.estimationElement);})
+		$(this.estimationElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.estimationElement);});
 		$(this.hoursLeftElement).bind("change", {}, this.save, this);
 		$(this.hoursLeftElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
-		$(this.hoursLeftElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.hoursLeftElement);})
+		$(this.hoursLeftElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.hoursLeftElement);});
 		$(this.ownerElement).bind("change", {}, this.ownerChanged, this );
 		$(this.ownerElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
 		//TODO: remove the expander
@@ -120,8 +123,11 @@ create("item", {
 	},
 	onResizeStop:function(event, ui){
 		var item = ui.helper[0];
-		item.width = ui.size.width;
-		item.height = ui.size.height;
+		
+		if(!this.expanded){
+			item.width = ui.size.width;
+			item.height = ui.size.height;
+		}
 		item.save();
 	},
 	paint:function(children, scope, color){
@@ -176,7 +182,8 @@ create("item", {
 		$(this.estimationElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
 		$(this.hoursLeftElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
 		$(this.ownerElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
-
+		
+		this.expanded = true;
 	},
 	_storeCurrentState: function(){
 		this.previousContent = $(this.contentElement).val();
@@ -212,6 +219,7 @@ create("item", {
 		$(this.hoursLeftElement).unbind("keypress");
 		$(this.ownerElement).unbind("keypress");
 
+		this.expanded = false;
 	},
 	collapseAndSaveOrCancel: function(event){
 
