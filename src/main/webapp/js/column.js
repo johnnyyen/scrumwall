@@ -10,10 +10,13 @@ createExtending("column", "container", {
 	},
 	initialize:function(config){
 		map(config,this);
+		
 		this.jq = $(this);
 		this.guid = config.id;
 		this.items = new Array();
 
+		this.initializeParent();
+		
 		if(!this.name){
 			this.name = "Double-click here";
 		}

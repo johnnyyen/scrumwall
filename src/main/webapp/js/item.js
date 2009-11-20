@@ -3,6 +3,7 @@ create("item", {
 	DEFAULT_WIDTH: 120,
 	DEFAULT_HEIGHT: 100,
 	DEFAULT_TEXT: "Task description goes here",
+	DEFAULT_COLOR: "yellow",
 	
 	expanded: false,
 	
@@ -12,6 +13,10 @@ create("item", {
 
 		if(this.coords) {
 			this.setRelativeCoords(this.coords);
+		}
+		
+		if(!this.color) {
+			this.color = this.DEFAULT_COLOR;
 		}
 		
 		if(!config.width){

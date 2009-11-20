@@ -9,6 +9,8 @@ createExtending("drawer", "container", {
 		this.items = new Array();
 		this.jq = $(this);
 		
+		this.initializeParent();
+		
 		if(this.button){
 			$(this.button).bind("click", {}, this._onExpand, this);
 		}
