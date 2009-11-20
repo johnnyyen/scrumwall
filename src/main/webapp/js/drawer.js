@@ -10,30 +10,30 @@ createExtending("drawer", "container", {
 		this.jq = $(this);
 		
 		if(this.button){
-			$(this.button).bind("click", {menu: this.menu}, this._onExpand, this);
+			$(this.button).bind("click", {}, this._onExpand, this);
 		}
 		
 		this.jq.css("background-color", this.color);
 		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
 		this.jq.bind("closeDrawers", {}, this._onCollapse, this);
 		
-		this.zIndex = 10000;
+		if(this.drawerType == this.layout.DRAWERTYPES.UCB){
+			this.zIndex = 10000;
+		}else{
+			this.zIndex = 20000;
+		}
+		
 		this.jq.css("z-index",this.zIndex);
 	},
 	_onExpand:function(event){
 		var scope = this;
 		$(this.button).unbind("click");
-		this.menu.collapseDrawers(this);		
+		this.layout.collapseDrawers(this);		
 
 		var button = this.button;
 		
-		var notStarted = this.menu.layout.getNotStartedColumn();
-		var offset = 0;
-		if(this.drawerType == this.menu.DRAWERTYPES.UCB){
-			offset = notStarted.jq.offset().left + notStarted.jq.width();
-		}else {
-			offset = notStarted.jq.offset().left;
-		}
+		
+		var offset = this._getWidthOffset();
 		var width = $(window).width() - offset;
 		$("body").append(this); 	
 		this.jq.animate( { "width":parseInt(width)+"px", queue: false }, 250,  
@@ -63,11 +63,30 @@ createExtending("drawer", "container", {
 	loadItems:function(itemConfigs){
 		
 		for(var i in itemConfigs){
-			var item = New("item", itemConfigs[i], this.menu.drawers);
+			var item = New("item", itemConfigs[i], this.layout.drawers);
 			this.addItem(item);
 		}
 	},
 	drawerExpanded: function(){
 		return this.expanded;
+	},
+	_getWidthOffset: function(){
+		var notStarted = this.layout.getNotStartedColumn();
+		
+		if(this.drawerType == this.layout.DRAWERTYPES.UCB){
+			return notStarted.jq.offset().left + notStarted.jq.width();
+		}else {
+			return notStarted.jq.offset().left;
+		}
+	},
+	redraw: function() {
+		if(this.expanded){
+			var offset = this._getWidthOffset();
+			this.jq.width($(window).width() - offset);
+			
+			for(var i in this.items){
+				this.items[i].redraw();
+			}
+		}
 	}
 });

@@ -182,6 +182,6 @@ createExtending("column", "container", {
 		
 	},
 	drawerExpanded: function(){
-		return this.layout.menu.isDrawerExpanded();
+		return this.layout.isDrawerExpanded();
 	}
 });

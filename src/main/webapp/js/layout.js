@@ -5,10 +5,16 @@ create("layout", {
 	ALL_COLUMNS: -1,
 	MAGIC_PIXEL: 1, //This is literally a magic pixel. Seems that the browser or jQuery keeps lying about sizes and in 
 					//some cases you cannot fit 300px worth of divs inside a 300px wide div.
+	DRAWERTYPES: {
+		UCB: "UCB",
+		GOALS: "GOALS",
+		IMPEDIMENTS: "IMPEDIMENTS"
+	},
 	
 	init: function(){
 		$("#tabbar").tabs();
 		this.menu = new scrumwall.menu(this);
+		this._initDrawers();
 		
 		this.columnContainer = $("#columnContainer");
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
@@ -158,7 +164,7 @@ create("layout", {
 	onPageUnload: function(scope){
 		//FIXME: always saves all items when unloading page
 		scope.saveAllColumns();
-		scope.menu.saveAllDrawers();
+		scope.saveAllDrawers();
 		
 		//FIXME: put a normal message here
 		return "Don't leave please";
@@ -259,6 +265,10 @@ create("layout", {
 		for(var i in this.columns) {
 			this.columns[i].redraw();
 		}
+		for(var i in this.drawers) {
+			this.drawers[i].redraw();
+		}
+		
 	},
 	getCurrentSprint:function() {
 		return 0; //FIXME: should be real when sprints are implemented
@@ -271,6 +281,40 @@ create("layout", {
 		}
 		
 		return null;
+	},
+	_initDrawers: function() {
+		this.drawers = new Array();
+		
+		
+		this.drawers[-1] = (New("drawer", {layout: this, drawerType: this.DRAWERTYPES.UCB,
+				button: this.menu.ucb, id: -1, color: "green"}));
+		
+		
+		this.drawers[-2] = (New("drawer", {layout: this, drawerType: this.DRAWERTYPES.GOALS,
+				button: this.menu.goals, id: -2, color: "pink"}));
+		
+		this.drawers[-3] = (New("drawer", {layout: this, drawerType: this.DRAWERTYPES.IMPEDIMENTS,
+				button: this.menu.impediments, id: -3, color: "yellow"}) );
+	},
+	saveAllDrawers: function() {
+		for(var i in this.drawers){
+			this.drawers[i].saveItems();
+		}
+	},
+	collapseDrawers:function(openDrawer){
+		for(var i in this.drawers){
+			if(this.drawers[i].expanded){
+				$(this.drawers[i].button).click();
+			}
+		}
+	},
+	isDrawerExpanded: function(){
+		for(var i in this.drawers){
+			if(this.drawers[i].drawerExpanded()){
+				return true;
+			}
+		}
+		return false;
 	}
 });
 
