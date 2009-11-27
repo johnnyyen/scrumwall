@@ -76,6 +76,7 @@ createExtending("column", "container", {
 		
 		$(this.headerText).bind("dblclick", {}, this._editName, this);
 		$(this.headerInput).bind("blur", {}, this._nameEdited, this);
+		$(this.headerInput).bind("dblclick", {}, function() {this.stopEventPropagation();}, this);
 		$(this.headerInput).bind("keypress", {}, this._nameEdited, this);
 		
 		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, 

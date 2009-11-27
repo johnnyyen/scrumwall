@@ -2,11 +2,12 @@ var scrumwall = DUI.Class.create(true);
 
 //guid for items 
 var itemCount = 0;
-var eventPropagationStopped = false;
+var EPS = false;
 
-function isEventPropagationStopped() {
-	if(eventPropagationStopped) {
-		eventPropagationStopped = false;
+//stops the event propagation if its been stopped by someone calling the stopEventPropagation method
+function isEPS() {
+	if(EPS) {
+		EPS = false;
 		return true;
 	}
 	return false;
@@ -19,7 +20,7 @@ function map(source, destination) {
 }
 
 function stopEventPropagation() {
-	eventPropagationStopped = true;
+	EPS = true;
 }
 
 function exceptionHandler(msg){

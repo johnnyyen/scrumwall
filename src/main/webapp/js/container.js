@@ -39,7 +39,7 @@ scrumwall.create("container", {
 		}
 	},
 	createItem: function(event){
-		if(isEventPropagationStopped()) return;
+		if(isEPS()) return;
 		
 		var ownerName = this._getOwnerName();
 		
@@ -57,7 +57,7 @@ scrumwall.create("container", {
 		this.stopEventPropagation();
 	},
 	onItemDrop:function(event, ui){
-		if(isEventPropagationStopped()) return;
+		if(isEPS()) return;
 		var item = ui.draggable[0];
 		
 		if(!$(item).hasClass("item") && !$(item).hasClass("sector")){
