@@ -94,6 +94,7 @@ createExtending("column", "container", {
 		$(this.headerInput).show();		
 		$(this.headerInput).val($(this.headerText).text());
 		$(this.headerInput).select();
+		this.stopEventPropagation();
 	},
 	_nameEdited: function(event) {
 		var key = event.which || event.keyCode;
@@ -154,7 +155,7 @@ createExtending("column", "container", {
 		this.id = "col."+column.id;
 	},
 	stopEventPropagation:function(){
-		//to override the stopEventPropagation in drawer
+		stopEventPropagation();
 	},
 	deleteColumn:function(){
 		if(this.items.__count__ > 0){
