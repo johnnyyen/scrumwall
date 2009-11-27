@@ -74,14 +74,14 @@ scrumwall.create("container", {
 								coords: $(ui.helper).offset()});
 			
 			$(ui.helper).remove();
+			item.setOwner(ownerName);
 			item.expand();
-		}
-				
-		if(!$(item).hasClass("sector")) {
+		} else {
 			item.setOwner(ownerName);
 		}
 		
 		this.addItem(item);
+		
 		
 		item.save();
 		this.stopEventPropagation();

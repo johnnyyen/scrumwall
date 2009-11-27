@@ -18,11 +18,20 @@ create("menu",{
 		
 	},
 	clearOwner:function(){
-		$(this.owner).select();
+		var owner = $(this.owner);
+		if(owner.val() == this.NAME_TEXT) {
+			owner.val("");
+		}
+		owner.select();
 	},
 	onOwnerBlur:function(){
-		if($.trim($(this.owner).val()) != this.NAME_TEXT){
+		var name = $.trim($(this.owner).val());
+		if(name == ""){
+			$(this.owner).val(this.NAME_TEXT);
+		}else if(name != this.NAME_TEXT){
 			$(this.owner).addClass("changed");
+		} else {
+			$(this.owner).removeClass("changed");
 		}
 		
 	}
