@@ -183,7 +183,7 @@ createExtending("column", "container", {
 				"Delete": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.REMOVE);},
 				"Move left": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_LEFT);}
 				};
-		$(dialog).dialog({"title":title,"buttons": buttons, resizable:false, modal:true, height:150,width:380});
+		$(dialog).dialog({"title":title,"buttons": buttons, resizable:false, draggable:false, modal:true, height:150,width:380});
 		
 	},
 	drawerExpanded: function(){
