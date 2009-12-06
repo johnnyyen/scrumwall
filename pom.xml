@@ -60,7 +60,32 @@
 					<useFile>false</useFile>  
 				</configuration>  
 			</plugin>
-			
+			<plugin>
+                <artifactId> maven-war-plugin </artifactId>
+                <version> 2.1-beta-1 </version>
+            </plugin>
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>javarebel-maven-plugin</artifactId>
+                <configuration>
+                    <classpath>
+                        <resources>
+                            <resource>
+                              <dirset>${project.build.outputDirectory}</dirset>
+                            </resource>
+                        </resources>
+                    </classpath>
+                </configuration>
+                <executions>
+                <execution>
+                  <id>generate-rebel-xml</id>
+                  <phase>process-resources</phase>
+                  <goals>
+                    <goal>generate</goal>
+                  </goals>
+                </execution>
+                </executions>
+            </plugin>
 		</plugins>
 		<resources>
 			<resource>
