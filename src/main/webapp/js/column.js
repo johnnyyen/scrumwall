@@ -35,7 +35,7 @@ createExtending("column", "container", {
 		this._initDOM();
 	},
 	_initDOM:function(){
-		
+
 		this.header = $.create("div",{"class":"colHeader"});
 		this.body = $.create("div",{"class":"colBody"});
 		this.headerInput = $.create("input", {"type": "text", "class": "columnNameInput"});
@@ -74,12 +74,12 @@ createExtending("column", "container", {
 		$(this.parent).append(this.jq);
 		$(this.headerInput).hide();
 		
-		$(this.headerText).bind("dblclick", {}, this._editName, this);
+		$(this.header).bind("dblclick", {}, this._editName, this);
 		$(this.headerInput).bind("blur", {}, this._nameEdited, this);
-		$(this.headerInput).bind("dblclick", {}, function() {this.stopEventPropagation();}, this);
+		$(this.headerInput).bind("dblclick", {}, function(event) {event.stopPropagation();}, this);
 		$(this.headerInput).bind("keypress", {}, this._nameEdited, this);
 		
-		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, 
+		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop,
 				tolerance:"intersect",out:this.onDragStop});
 		var scope = this;
 		
@@ -87,15 +87,13 @@ createExtending("column", "container", {
 			this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); scope.layout.saveAllColumns();}, containment: 'parent', handles:"e"});
 		}
 	},
-	_editName: function() {
-		//FIXME: workaround for bug in jQuery that doesn't call blur for elements when clicking a sortables handle.
-		$('.columnNameInput').blur();
-		
+	_editName: function(event) {
+
 		$(this.headerText).hide();
 		$(this.headerInput).show();		
 		$(this.headerInput).val($(this.headerText).text());
 		$(this.headerInput).select();
-		this.stopEventPropagation();
+        event.stopPropagation();
 	},
 	_nameEdited: function(event) {
 		var key = event.which || event.keyCode;
@@ -155,9 +153,6 @@ createExtending("column", "container", {
 		this.guid = column.id;
 		this.id = "col."+column.id;
 	},
-	stopEventPropagation:function(){
-		stopEventPropagation();
-	},
 	deleteColumn:function(){
 		if(this.items.__count__ > 0){
 			this._showRemoveModeDialog();
@@ -188,5 +183,18 @@ createExtending("column", "container", {
 	},
 	drawerExpanded: function(){
 		return this.layout.isDrawerExpanded();
-	}
+	},
+    isNotStarted: function(){
+        return this.columnType == this.NOT_STARTED;
+    },
+    disable: function(){
+        this.lastAccept = this.jq.droppable("option","accept");
+        this.jq.droppable("option", "accept", function(){return false;});
+    },
+    enable: function(){
+        if(this.lastAccept){
+            this.jq.droppable("option", "accept", this.lastAccept);
+            this.lastAccept = null;
+        }
+    }
 });

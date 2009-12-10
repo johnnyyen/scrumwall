@@ -14,7 +14,7 @@ createExtending("drawer", "container", {
 		if(this.button){
 			$(this.button).bind("click", {}, this._onExpand, this);
 		}
-		
+
 		this.jq.css("background-color", this.color);
 		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
 		this.jq.bind("closeDrawers", {}, this._onCollapse, this);
@@ -30,7 +30,8 @@ createExtending("drawer", "container", {
 	_onExpand:function(event){
 		var scope = this;
 		$(this.button).unbind("click");
-		this.layout.collapseDrawers(this);		
+		this.layout.collapseDrawers(this);
+        this.layout.disableColumns(this.columnType);
 
 		var button = this.button;
 		
@@ -48,6 +49,9 @@ createExtending("drawer", "container", {
 		this.expanded = true;
 	},
 	_onCollapse:function(event){
+
+        this.layout.enableColumns();
+
 		$(this.button).unbind("click");
 		var scope = this;
 		var button = this.button;
@@ -58,9 +62,6 @@ createExtending("drawer", "container", {
 			}
 		);
 		this.expanded = false;
-	},
-	stopEventPropagation:function(){
-		stopEventPropagation();
 	},
 	loadItems:function(itemConfigs){
 		

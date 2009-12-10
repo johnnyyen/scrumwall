@@ -39,8 +39,7 @@ scrumwall.create("container", {
 		}
 	},
 	createItem: function(event){
-		if(isEPS()) return;
-		
+
 		var ownerName = this._getOwnerName();
 		
 		var item = New("item", {owner: ownerName, 
@@ -54,10 +53,8 @@ scrumwall.create("container", {
 		this.addItem(item);
 		
 		item.save();
-		this.stopEventPropagation();
 	},
 	onItemDrop:function(event, ui){
-		if(isEPS()) return;
 		var item = ui.draggable[0];
 		
 		if(!$(item).hasClass("item") && !$(item).hasClass("sector")){
@@ -84,7 +81,6 @@ scrumwall.create("container", {
 		
 		
 		item.save();
-		this.stopEventPropagation();
 	},
 	onDragStop:function(event, ui){
 		var item = ui.draggable[0];

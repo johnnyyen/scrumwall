@@ -109,17 +109,40 @@ $.widget("ui.droppable", {
 		});
 		if(childrenIntersection) return false;
 
+
 		if(this.options.accept.call(this.element[0],(draggable.currentItem || draggable.element))) {
-			if(this.options.activeClass) this.element.removeClass(this.options.activeClass);
-			if(this.options.hoverClass) this.element.removeClass(this.options.hoverClass);
-			this._trigger('drop', event, this.ui(draggable));
-			return this.element;
+            if(this.options.acceptFallthrough || this.isOnTop(draggable)){
+                if(this.options.activeClass) this.element.removeClass(this.options.activeClass);
+                if(this.options.hoverClass) this.element.removeClass(this.options.hoverClass);
+                this._trigger('drop', event, this.ui(draggable));
+
+                return this.element;
+            }
 		}
 
 		return false;
 
 	},
+    isOnTop: function(draggable){
+        var maxZIndex = parseInt($(this.element).css("z-index"));
+        
+        $(":data(droppable)").not(".ui-draggable-dragging").each(function() {
+            var inst = $.data(this, 'droppable');
+            if($.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance)){
+                var zIndex = $(this).css("z-index");
+                if(zIndex == "auto"){
+                    zIndex = 0;
+                }
+                zIndex = parseInt(zIndex);
+                if(zIndex > maxZIndex) {
+                    maxZIndex = zIndex
+                }
+            }
+        });
 
+
+        return maxZIndex == $(this.element).css("z-index");
+    },
 	ui: function(c) {
 		return {
 			draggable: (c.currentItem || c.element),
@@ -142,7 +165,8 @@ $.extend($.ui.droppable, {
 		greedy: false,
 		hoverClass: false,
 		scope: 'default',
-		tolerance: 'intersect'
+		tolerance: 'intersect',
+        acceptFallthrough: false
 	}
 });
 

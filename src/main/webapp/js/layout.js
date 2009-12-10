@@ -315,7 +315,19 @@ create("layout", {
 			}
 		}
 		return false;
-	}
+	},
+    disableColumns:function(disableNotStarted){
+        for(var i in this.columns){
+            if((disableNotStarted && this.columns[i].isNotStarted()) || !this.columns[i].isNotStarted()){
+                this.columns[i].disable();
+            }
+        }
+    },
+    enableColumns:function(){
+        for(var i in this.columns){
+            this.columns[i].enable();
+        }
+    }
 });
 
 
