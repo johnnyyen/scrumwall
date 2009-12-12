@@ -7,7 +7,7 @@
 	<version>1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Scrumwall</name>
-	
+
 	<properties>
 		<version.spring>3.0.0.M2</version.spring>
 		<version.scala>2.7.7</version.scala>
@@ -23,7 +23,7 @@
 		<developerConnection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</developerConnection>
 		<url>http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</url>
 	</scm>
-	
+
 	<licenses>
         <license>
             <name>Gnu General Public License Version 3.0</name>
@@ -33,6 +33,30 @@
     </licenses>
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>selenium-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>start-server</goal>
+                        </goals>
+
+                        <configuration>
+                            <background>true</background>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>stop-server</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.scala-tools</groupId>
 				<artifactId>maven-scala-plugin</artifactId>
@@ -46,19 +70,19 @@
 				</executions>
 				<configuration>
           			<javaRebelPath>${user.home}/install/javarebel/javarebel.jar</javaRebelPath>
-        		</configuration>				
+        		</configuration>
 			</plugin>
-			<plugin>  
-				<artifactId>maven-surefire-plugin</artifactId>  
-				<configuration>  
-					<systemProperties>  
-						<property> 
-							<name>log4j.configuration</name>  
-							<value>test-log4j.xml</value>  
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemProperties>
+						<property>
+							<name>log4j.configuration</name>
+							<value>test-log4j.xml</value>
 						</property>
 					</systemProperties>
-					<useFile>false</useFile>  
-				</configuration>  
+					<useFile>false</useFile>
+				</configuration>
 			</plugin>
 			<plugin>
                 <artifactId> maven-war-plugin </artifactId>
@@ -108,7 +132,7 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>${version.log4j}</version>
-    </dependency> 
+    </dependency>
     	<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
@@ -255,7 +279,7 @@
             <id>scala-tools.org</id>
             <name>Scala Tools Maven2 Repository</name>
             <url>http://scala-tools.org/repo-releases</url>
-        </repository> 
+        </repository>
         <repository>
             <id>jboss.com</id>
             <name>Jboss repo</name>
@@ -274,7 +298,7 @@
 			<url>http://scala-tools.org/repo-releases</url>
 	    </pluginRepository>
 	</pluginRepositories>
-    
+
 	<profiles>
 		<profile>
 			<id>dev</id>
