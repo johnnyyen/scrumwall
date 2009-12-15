@@ -8,6 +8,7 @@ createExtending("drawer", "container", {
 		this.columnType = this.DRAWER;
 		this.items = new Array();
 		this.jq = $(this);
+        this.body = this;
 		
 		this.initializeParent();
 		
@@ -31,7 +32,6 @@ createExtending("drawer", "container", {
 		var scope = this;
 		$(this.button).unbind("click");
 		this.layout.collapseDrawers(this);
-        this.layout.disableColumns(this.columnType);
 
 		var button = this.button;
 		
@@ -64,7 +64,7 @@ createExtending("drawer", "container", {
 	loadItems:function(itemConfigs){
 		
 		for(var i in itemConfigs){
-			var item = New("item", itemConfigs[i], this.layout.drawers);
+			var item = New("item", itemConfigs[i], this);
 			this.addItem(item);
 		}
 	},

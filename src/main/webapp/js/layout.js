@@ -17,7 +17,7 @@ create("layout", {
 		this._initDrawers();
 		
 		this.columnContainer = $("#columnContainer");
-		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
+		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch", acceptFallthrough: false});
 		
 		ColumnService.getColumns(this.getCurrentSprint(), {async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		var scope = this;
@@ -49,15 +49,7 @@ create("layout", {
 			this.columns[columnConfigs[i].id] = column;
 		}
 		this.setColumnWidths();
-
-//		ItemService.getForSprint(this.getCurrentSprint(), {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
-	},
-	loadItems:function(items){
-		var item;		
-		for(var i = 0; i < items.length; i++){
-			item = New("item", items[i], this.columns);		
-		}
-	},
+	},  
 	createColumn: function(){
 		
 		var config = {layout: this, 

@@ -124,8 +124,15 @@ $.widget("ui.droppable", {
 
 	},
     isOnTop: function(draggable){
-        var maxZIndex = parseInt($(this.element).css("z-index"));
-        
+        var maxZIndex = $(this.element).css("z-index");
+
+        if(maxZIndex == "auto"){
+            maxZIndex = 0;
+        }else{
+            maxZIndex = parseInt(maxZIndex);
+        }
+        var initialZIndex = maxZIndex;
+
         $(":data(droppable)").not(".ui-draggable-dragging").each(function() {
             var inst = $.data(this, 'droppable');
             if($.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance)){
@@ -141,7 +148,7 @@ $.widget("ui.droppable", {
         });
 
 
-        return maxZIndex == $(this.element).css("z-index");
+        return maxZIndex == initialZIndex;
     },
 	ui: function(c) {
 		return {

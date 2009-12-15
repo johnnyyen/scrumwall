@@ -33,6 +33,8 @@ createExtending("column", "container", {
 			this.zIndex = 10;
 		}
 		this._initDOM();
+
+        this.loadItems();
 	},
 	_initDOM:function(){
 
@@ -183,5 +185,16 @@ createExtending("column", "container", {
 	},
 	drawerExpanded: function(){
 		return this.layout.isDrawerExpanded();
-	}
+	},
+    loadItems: function(){
+        if(this.id){
+            ItemService.getItems(this.guid, {scope: this, callback:this.loadItemsCallback, exceptionHandler:exceptionHandler});
+        }
+    },
+    loadItemsCallback: function(items){
+		var item;
+		for(var i = 0; i < items.length; i++){
+			item = New("item", items[i], this);
+		}
+    }
 });

@@ -10,7 +10,7 @@ scrumwall.create("container", {
 	
 	initializeParent: function(){
 		this.jq.bind("dblclick", {}, this.createItem, this);
-        this.loadItems();
+
 	},
 	removeItems:function(){
 		for(var i in this.items) {
@@ -114,16 +114,5 @@ scrumwall.create("container", {
 		}
 		
 		return ownerName;
-	},
-    loadItems: function(){
-        if(this.id){
-            ItemService.getItems(this.id, {scope: this, callback:this.loadItemsCallback, exceptionHandler:exceptionHandler});
-        }
-    },
-    loadItemsCallback: function(items){
-		var item;
-		for(var i = 0; i < items.length; i++){
-			item = New("item", items[i], this);
-		}
-    }
+	}
 } );
