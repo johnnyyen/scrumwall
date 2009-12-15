@@ -123,7 +123,7 @@ create("item", {
 	onResizeStop:function(event, ui){
 		var item = ui.helper[0];
 		
-		if(this.expanded){
+		if(!this.expanded){
 			item.width = ui.size.width;
 			item.height = ui.size.height;
 		}
