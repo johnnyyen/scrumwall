@@ -50,8 +50,6 @@ createExtending("drawer", "container", {
 	},
 	_onCollapse:function(event){
 
-        this.layout.enableColumns();
-
 		$(this.button).unbind("click");
 		var scope = this;
 		var button = this.button;

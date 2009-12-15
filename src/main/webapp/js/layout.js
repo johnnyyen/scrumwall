@@ -50,7 +50,7 @@ create("layout", {
 		}
 		this.setColumnWidths();
 
-		ItemService.getForSprint(this.getCurrentSprint(), {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
+//		ItemService.getForSprint(this.getCurrentSprint(), {scope: this, callback:this.loadItems, exceptionHandler:exceptionHandler});		
 	},
 	loadItems:function(items){
 		var item;		
@@ -163,11 +163,11 @@ create("layout", {
 	},
 	onPageUnload: function(scope){
 		//FIXME: always saves all items when unloading page
-		scope.saveAllColumns();
-		scope.saveAllDrawers();
+//		scope.saveAllColumns();
+//		scope.saveAllDrawers();
 		
 		//FIXME: put a normal message here
-		return "Don't leave please";
+//		return "Don't leave please";
 	},
 	onColumnResize: function(order, widthDelta){
 		widthDelta *= (-1);
@@ -315,19 +315,7 @@ create("layout", {
 			}
 		}
 		return false;
-	},
-    disableColumns:function(disableNotStarted){
-        for(var i in this.columns){
-            if((disableNotStarted && this.columns[i].isNotStarted()) || !this.columns[i].isNotStarted()){
-                this.columns[i].disable();
-            }
-        }
-    },
-    enableColumns:function(){
-        for(var i in this.columns){
-            this.columns[i].enable();
-        }
-    }
+	}
 });
 
 

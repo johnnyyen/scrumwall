@@ -183,18 +183,5 @@ createExtending("column", "container", {
 	},
 	drawerExpanded: function(){
 		return this.layout.isDrawerExpanded();
-	},
-    isNotStarted: function(){
-        return this.columnType == this.NOT_STARTED;
-    },
-    disable: function(){
-        this.lastAccept = this.jq.droppable("option","accept");
-        this.jq.droppable("option", "accept", function(){return false;});
-    },
-    enable: function(){
-        if(this.lastAccept){
-            this.jq.droppable("option", "accept", this.lastAccept);
-            this.lastAccept = null;
-        }
-    }
+	}
 });

@@ -10,6 +10,7 @@ scrumwall.create("container", {
 	
 	initializeParent: function(){
 		this.jq.bind("dblclick", {}, this.createItem, this);
+        this.loadItems();
 	},
 	removeItems:function(){
 		for(var i in this.items) {
@@ -43,10 +44,11 @@ scrumwall.create("container", {
 		var ownerName = this._getOwnerName();
 		
 		var item = New("item", {owner: ownerName, 
-			sprintId:this.layout.getCurrentSprint(),
-			column: this,
-			coords: {left: event.pageX, top: event.pageY}}
-		);
+                sprintId:this.layout.getCurrentSprint(),
+                column: this,
+                coords: {left: event.pageX, top: event.pageY}
+            },
+            this);
 		
 		item.expand();
 		
@@ -64,11 +66,13 @@ scrumwall.create("container", {
 		var ownerName = this._getOwnerName();
 		
 		if($(item).hasClass("sector")) {
-			item = New("item", {color: $(ui.helper).css("background-color"), 
+			item = New("item", {color: $(ui.helper).css("background-color"),
 								owner: ownerName, 
 								sprintId:this.layout.getCurrentSprint(),
 								column: this,
-								coords: $(ui.helper).offset()});
+								coords: $(ui.helper).offset()
+                                },
+                            this);
 			
 			$(ui.helper).remove();
 			item.setOwner(ownerName);
@@ -110,5 +114,16 @@ scrumwall.create("container", {
 		}
 		
 		return ownerName;
-	}
+	},
+    loadItems: function(){
+        if(this.id){
+            ItemService.getItems(this.id, {scope: this, callback:this.loadItemsCallback, exceptionHandler:exceptionHandler});
+        }
+    },
+    loadItemsCallback: function(items){
+		var item;
+		for(var i = 0; i < items.length; i++){
+			item = New("item", items[i], this);
+		}
+    }
 } );

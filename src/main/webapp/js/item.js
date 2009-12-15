@@ -7,7 +7,7 @@ create("item", {
 	
 	expanded: false,
 	
-	initialize:function(config, cols){
+	initialize:function(config, col){
 		map(config, this);
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item." + config.id : "new." + itemCount;
 
@@ -24,22 +24,16 @@ create("item", {
 			this.height = this.DEFAULT_HEIGHT;
 		}
 		
-		
+		//set the initial position of item and draw it. has to be after dom is
+		//created and events are bound 
+		if(col){
+			this.column = col;
+            this.column.addItem(this);
+		}
+        
 		this._initDOM();
 		this._initEvents();
-		
-		//set the initial position of item and draw it. has to be after dom is 
-		//created and events are bound 
-		if(cols && cols.length > config.column){
-			this.column = cols[config.column];
-			if(this.column){
-				this.column.addItem(this);
-			} else {
-				//FIXME: What to do when the column that this item is supposed to be in, is missing.
-				alert("item tried to be in column " + config.column + " which does not exist");
-			}
-		}
-		
+
 		this.redraw();
 	},
 	_initDOM:function(){
@@ -72,7 +66,7 @@ create("item", {
 		this.ownerElement = $.create("input",{"type":"text","class":"owner"});
 		this.setOwner(this.owner);
 		
-		$("body").append(this.jq);
+		$(this.column.body).append(this.jq);
 		this.expander = $.create("div",{"class":"expandIcon"});
 		this.jq.append(contentTextJq)
 			.append(contentJq)
@@ -325,8 +319,8 @@ create("item", {
 			y = this.offsetY * $(this.column).height() / 100;;
 		}
 		
-		pos.left = pos.left + Math.round(x);
-		pos.top = pos.top + Math.round(y);
+		pos.left = Math.round(x);
+		pos.top = Math.round(y);
 		return pos;
 	}, 
 	redraw: function(){		
