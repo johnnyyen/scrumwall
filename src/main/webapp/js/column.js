@@ -48,7 +48,7 @@ createExtending("column", "container", {
 		}
 		
 		if(this.guid != undefined){
-			this.jq.attr("id", "col." + this.guid);
+			this.jq.attr("id", "col_" + this.guid);
 		}
 
 		if(this.columnType == this.DONE) {
@@ -153,7 +153,7 @@ createExtending("column", "container", {
 	},
 	_saveCallback:function(column){
 		this.guid = column.id;
-		this.id = "col."+column.id;
+		this.id = "col_"+column.id;
 	},
 	deleteColumn:function(){
 		if(this.items.__count__ > 0){
