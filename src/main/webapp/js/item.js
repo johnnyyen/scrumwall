@@ -9,7 +9,7 @@ create("item", {
 	
 	initialize:function(config, col){
 		map(config, this);
-		this.guid =  config.id !== "undefined" && config.id > -1 ? "item." + config.id : "new." + itemCount;
+		this.guid =  config.id !== "undefined" && config.id > -1 ? "item_" + config.id : "new_" + itemCount;
 
 		if(this.coords) {
 			this.setRelativeCoords(this.coords);
@@ -38,6 +38,8 @@ create("item", {
 	},
 	_initDOM:function(){
 		this.jq = $(this);
+		
+		this.jq.attr("id",this.guid);
 		this.contentElement = $.create("textarea",{"class":"itemContent hidden"});
 		var contentJq = $(this.contentElement);
 		
@@ -255,8 +257,8 @@ create("item", {
 			height: this.height
 		};
 		
-		if(this.guid.indexOf("item.") >= 0){
-			item.id = this.guid.replace("item.", "");
+		if(this.guid.indexOf("item_") >= 0){
+			item.id = this.guid.replace("item_", "");
 		}
 		return item;
 	},
@@ -270,11 +272,12 @@ create("item", {
 	},
 	saveCallback:function(item){
 		delete this.column.items[this.guid];
-		this.guid = "item." + item.id;
+		this.guid = "item_" + item.id;
 		this.column.addItem(this);
 		this.id = item.id;
+		this.jq.attr("id",this.guid);
 	},
-	remove:function(){
+remove:function(){
 		var id = this._saveable().id;
 		if(id && id > -1) {
 			ItemService.remove(id,{exceptionHandler:exceptionHandler});
