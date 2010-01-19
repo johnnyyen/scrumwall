@@ -12,7 +12,8 @@ create("layout", {
 	},
 	
 	init: function(){
-		$("#tabbar").tabs();
+		var t = $("#tabbar");
+		t.tabs();
 		this.menu = new scrumwall.menu(this);
 		this._initDrawers();
 		
@@ -22,9 +23,9 @@ create("layout", {
 		ColumnService.getColumns(this.getCurrentSprint(), {async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		var scope = this;
 		
-		$(window).bind("resize", {}, this.onWindowResize, this);
+		$(window).bind("resize", $.proxy(this.onWindowResize, this));
 		window.onbeforeunload = function(){return scope.onPageUnload(scope);};
-		$(this).bind("columnResize",{}, this.onColumnResize, this);
+		$(this).bind("columnResize", $.proxy(this.onColumnResize, this));
 		
 		this.columnContainer.sortable({
 			items: '.sortableColumn',

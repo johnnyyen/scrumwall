@@ -57,11 +57,15 @@ create("item", {
 		
 		this.estimationElement = $.create("input",{"maxlength":"2","type":"text","class":"estimation"});
 		var estimationJq = $(this.estimationElement); 
-		estimationJq.val(this.estimation);
+		if(this.estimation){
+			estimationJq.val(this.estimation);
+		}
 		
 		this.hoursLeftElement = $.create("input",{"maxlength":"2", "type":"text", "class": "hoursLeft"});
 		var hoursLeftJq = $(this.hoursLeftElement);
-		hoursLeftJq.val(this.hoursLeft);
+		if(this.hoursLeft){
+			hoursLeftJq.val(this.hoursLeft);
+		}
 		
 		var estimationWrapper = $.create("div",{"class":"estimationWrapper"});
 		var estimationWrapperJq = $(estimationWrapper);
@@ -86,24 +90,24 @@ create("item", {
 	},
 	_initEvents:function(){
 		
-		this.jq.bind("dblclick", {}, this.expand, this);
+		this.jq.bind("dblclick",  $.proxy(this.expand, this));
 		this.jq.draggable({revert: "invalid"});
 		this.jq.resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
 		
-		$(this.contentElement).bind("blur", {}, this.save, this );
-		$(this.contentElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
-		$(this.contentElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
-		$(this.estimationElement).bind("change", {}, this.save, this );
-		$(this.estimationElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		$(this.contentElement).bind("blur", $.proxy(this.save, this ));
+		$(this.contentElement).bind("dblclick", function(event){event.stopPropagation();} );
+		$(this.contentElement).bind("keypress", $.proxy(this.collapseAndSaveOrCancel, this));
+		$(this.estimationElement).bind("change", $.proxy(this.save, this ));
+		$(this.estimationElement).bind("dblclick", function(event){event.stopPropagation();} );
 		var scope = this;
-		$(this.estimationElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.estimationElement);});
-		$(this.hoursLeftElement).bind("change", {}, this.save, this);
-		$(this.hoursLeftElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
-		$(this.hoursLeftElement).bind("keyup", {}, function(event) {scope.validateNumberAndNotify(scope.hoursLeftElement);});
-		$(this.ownerElement).bind("change", {}, this.ownerChanged, this );
-		$(this.ownerElement).bind("dblclick", {}, function(event){event.stopPropagation();} );
+		$(this.estimationElement).bind("keyup", function(event) {scope.validateNumberAndNotify(scope.estimationElement);});
+		$(this.hoursLeftElement).bind("change", $.proxy(this.save, this));
+		$(this.hoursLeftElement).bind("dblclick", function(event){event.stopPropagation();} );
+		$(this.hoursLeftElement).bind("keyup", function(event) {scope.validateNumberAndNotify(scope.hoursLeftElement);});
+		$(this.ownerElement).bind("change",  $.proxy(this.ownerChanged, this ));
+		$(this.ownerElement).bind("dblclick",  function(event){event.stopPropagation();} );
 		//TODO: remove the expander
-		$(this.expander).bind("click", {}, this.expand, this);
+		$(this.expander).bind("click",  $.proxy(this.expand, this));
 		$(this).bind("click",{},this.highlight, this);
 	},
 	highlight: function(){
@@ -148,26 +152,26 @@ create("item", {
 			$(this).animate( { width:"300px"}, {queue:false, duration:250})
 				.animate( {height: "300px"}, {queue: false, duration:250,
 					step:function(){
-						$(scope.expander).bind("click", {}, scope.collapse, scope);
+						$(scope.expander).bind("click",  $.proxy(scope.collapse, scope));
 					}
 				}
 			);
 		}else if(this.width < 300){
 			$(this).animate( { width:"300px"}, {queue: false, duration:250,
 				step:function(){
-					$(scope.expander).bind("click", {}, scope.collapse, scope);
+					$(scope.expander).bind("click",  $.proxy(scope.collapse, scope));
 				}
 			}
 		);
 		}else if(this.height < 300){
 			$(this).animate( { height:"300px"}, {queue: false, duration:250,
 				step:function(){
-					$(scope.expander).bind("click", {}, scope.collapse, scope);
+					$(scope.expander).bind("click",  $.proxy(scope.collapse, scope));
 				}
 			}
 		);
 		}else{
-			$(this.expander).bind("click", {}, this.collapse, this);
+			$(this.expander).bind("click",  $.proxy(this.collapse, this));
 		}
 		$(this.contentElement).show();
 		$(this.contentElement).val($(this.contentText).text());
@@ -180,9 +184,9 @@ create("item", {
 		
 		this._storeCurrentState();
 		
-		$(this.estimationElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
-		$(this.hoursLeftElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
-		$(this.ownerElement).bind("keypress", {}, this.collapseAndSaveOrCancel, this);
+		$(this.estimationElement).bind("keypress",  $.proxy(this.collapseAndSaveOrCancel, this));
+		$(this.hoursLeftElement).bind("keypress",  $.proxy(this.collapseAndSaveOrCancel, this));
+		$(this.ownerElement).bind("keypress",  $.proxy(this.collapseAndSaveOrCancel, this));
 		
 		this.expanded = true;
 	},
@@ -207,7 +211,7 @@ create("item", {
 		$(this).animate( { width: this.width + "px"}, {queue:false, duration: 250})
 			.animate( {height: this.height + "px"}, {queue: false, duration: 250,
 				step:function(){
-					$(scope.expander).bind("click", {}, scope.expand, scope);
+					$(scope.expander).bind("click",  $.proxy(scope.expand, scope));
 				}
 			}
 		);
@@ -327,14 +331,14 @@ remove:function(){
 		return pos;
 	}, 
 	redraw: function(){		
-		var pos = this._newPosition();		
+		var pos = this._newPosition();
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
 	},
 	validateNumberAndNotify: function(element){
 		//allows full numbers, at most two digits
 		if(!/^\d{0,2}$/.test($(element).val())){
 			//FIXME: create tooltip
-			console.log($(element).attr('class') + " is invalid");
+			//console.log($(element).attr('class') + " is invalid");
 			return false;
 		}
 		return true;

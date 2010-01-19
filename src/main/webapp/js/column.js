@@ -53,13 +53,13 @@ createExtending("column", "container", {
 
 		if(this.columnType == this.DONE) {
 			this.newColumnButton = $.create("a", {"id": "newColumnButton", "href": "#"});
-			$(this.newColumnButton).text("+").bind("click",{},this.layout.createColumn, this.layout);
+			$(this.newColumnButton).text("+").bind("click", $.proxy(this.layout.createColumn, this.layout));
 			$(this.header).append(this.newColumnButton);
 		}
 		
 		if(this.columnType == this.REGULAR) {
 			this.deleteColumnButton = $.create("a", {"class": "deleteColumnButton", "href": "#"});
-			$(this.deleteColumnButton).text("X").bind("click", {}, this.deleteColumn, this);
+			$(this.deleteColumnButton).text("X").bind("click", $.proxy(this.deleteColumn, this));
 			$(this.header).append(this.deleteColumnButton);
 		}
 		
@@ -76,10 +76,10 @@ createExtending("column", "container", {
 		$(this.parent).append(this.jq);
 		$(this.headerInput).hide();
 		
-		$(this.header).bind("dblclick", {}, this._editName, this);
-		$(this.headerInput).bind("blur", {}, this._nameEdited, this);
-		$(this.headerInput).bind("dblclick", {}, function(event) {event.stopPropagation();}, this);
-		$(this.headerInput).bind("keypress", {}, this._nameEdited, this);
+		$(this.header).bind("dblclick", $.proxy(this._editName, this));
+		$(this.headerInput).bind("blur", $.proxy(this._nameEdited, this));
+		$(this.headerInput).bind("dblclick", function(event) {event.stopPropagation();});
+		$(this.headerInput).bind("keypress", $.proxy(this._nameEdited, this));
 		
 		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop,
 				tolerance:"intersect",out:this.onDragStop});

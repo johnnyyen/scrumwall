@@ -13,12 +13,12 @@ createExtending("drawer", "container", {
 		this.initializeParent();
 		
 		if(this.button){
-			$(this.button).bind("click", {}, this._onExpand, this);
+			$(this.button).bind("click", $.proxy(this._onExpand, this));
 		}
 
 		this.jq.css("background-color", this.color);
 		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, tolerance:"intersect",out:this.onDragStop, greedy: true});
-		this.jq.bind("closeDrawers", {}, this._onCollapse, this);
+		this.jq.bind("closeDrawers",  $.proxy(this._onCollapse, this));
 		
 		if(this.drawerType == this.layout.DRAWERTYPES.UCB){
 			this.zIndex = 10000;
@@ -43,7 +43,7 @@ createExtending("drawer", "container", {
 			function(){
 				ItemService.getItems(scope.guid, 
 						{"scope": scope, callback:scope.loadItems, exceptionHandler:exceptionHandler});
-				$(button).bind("click", {}, scope._onCollapse, scope);
+				$(button).bind("click",  $.proxy(scope._onCollapse, scope));
 			}
 		);
 		this.expanded = true;
@@ -56,7 +56,7 @@ createExtending("drawer", "container", {
 		this.removeItems();
 		
 		$(this).animate({ width:"0px", queue:false}, 250, function(){
-				$(button).bind("click",{},scope._onExpand, scope);
+				$(button).bind("click", $.proxy(scope._onExpand, scope));
 			}
 		);
 		this.expanded = false;

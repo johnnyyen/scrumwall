@@ -9,7 +9,7 @@ scrumwall.create("container", {
 	zIndex:0,
 	
 	initializeParent: function(){
-		this.jq.bind("dblclick", {}, this.createItem, this);
+		this.jq.bind("dblclick", $.proxy(this.createItem, this));
 
 	},
 	removeItems:function(){

@@ -6,8 +6,8 @@ create("menu",{
 		this.layout = layout;
 		this.owner = $("#ownerInput");
 		this.owner.val(this.NAME_TEXT);
-		this.owner.bind("focus",{}, this.clearOwner, this);
-		this.owner.bind("blur", {}, this.onOwnerBlur, this);
+		this.owner.bind("focus", $.proxy(this.clearOwner, this));
+		this.owner.bind("blur", $.proxy(this.onOwnerBlur, this));
 		
 		$(".sector").draggable({helper: 'clone'});
 		var creator = $("#itemCreator");
