@@ -6,20 +6,22 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<title>Basic layout</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/layout.css"></link>
-	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery.ui-1.7.2/jquery-ui.css"></link>
+	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui/jquery-ui-1.8rc1.css"></link>
 	
-	<script type="text/javascript" src="js/jquery-1.4/jquery.js"></script>
-  <script type="text/javascript" src="js/jquery-1.4/jquery.create.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/ui.core.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/ui.draggable.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/ui.droppable.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/ui.tabs.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/ui.dialog.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/ui.resizable.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/ui.sortable.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/effects.core.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/effects.scale.js"></script>
-  <script type="text/javascript" src="js/jquery.ui-1.7.2/effects.slide.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery-1.4.1.js"></script>
+  <script type="text/javascript" src="js/jquery/jquery.create.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.core.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.widget.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.mouse.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.draggable.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.droppable.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.tabs.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.dialog.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.resizable.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.ui.sortable.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.effects.core.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.effects.scale.js"></script>
+  <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.effects.slide.js"></script>
   <script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
   <script type="text/javascript" src="js/common/global.js"></script>
   <script type="text/javascript" src="js/container.js"></script>
@@ -67,7 +69,7 @@
 		<input type="button" value="UCB" id="ucbButton"/><br/>
 		<input type="button" value="Goals" id="goalsButton"/><br/>
 		<input type="button" value="Impediments" id="impedimentsButton"/><br/>
-		<input type="button" value="Options"/><br/><br/>
+		<div><div class="velocity">10.5</div><div class="totalHoursLeft">34</div></div>
 		<div class="burndown">burndown chart goes here</div><br/>
 		<div id="itemCreator">
 			<div class="sector red"></div>
