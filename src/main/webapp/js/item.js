@@ -75,7 +75,7 @@ create("item", {
 		$(this.column.body).append(this.jq);
 		this.expander = $.create("div",{"class":"expandIcon"});
 		this.jq.append(contentTextJq)
-			.append(contentJq)
+			.append($($.create("div", {"class": "itemContentWrapper"})).append(contentJq))
 			.append(this.expander)
 			.append($(this.ownerElement))
 			.append(estimationWrapperJq);
@@ -175,8 +175,8 @@ create("item", {
 		}
 		$(this.contentElement).show();
 		$(this.contentElement).val($(this.contentText).text());
-		$(this.contentText).hide();
-		
+        $(this.contentText).hide();
+
 		$(this.contentElement).focus();
 		if($(this.contentElement).val() == this.DEFAULT_TEXT){
 			$(this.contentElement).select();

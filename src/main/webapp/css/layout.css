@@ -64,8 +64,16 @@
 .hidden{
 	display:none;
 }
+
+.itemContentWrapper {
+    height: 90%;
+}
+
 .itemContent{
-	width:100%;
+    clear: both;
+    width:100%;
+    height: 100%;
+    resize: none;
 }
 
 .expandIcon{
@@ -102,9 +110,6 @@
 
 .ownerInput{
 	width:100%;
-}
-.itemContent{
-	height:90%;
 }
 .itemText{
 	height:75%;
