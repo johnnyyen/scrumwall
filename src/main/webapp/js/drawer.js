@@ -20,12 +20,8 @@ createExtending("drawer", "container", {
 		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, tolerance:"intersect",
             out:this.onDragStop, acceptFallthrough: true});
 		this.jq.bind("closeDrawers",  $.proxy(this._onCollapse, this));
-		
-		if(this.drawerType == this.layout.DRAWERTYPES.UCB){
-			this.zIndex = 10000;
-		}else{
-			this.zIndex = 20000;
-		}
+
+		this.zIndex = 10000;
 		
 		this.jq.css("z-index",this.zIndex);
 	},

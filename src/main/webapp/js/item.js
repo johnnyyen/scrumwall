@@ -66,7 +66,7 @@ create("item", {
 		if(this.hoursLeft){
 			hoursLeftJq.val(this.hoursLeft);
 		}
-		
+		 
 		var estimationWrapper = $.create("div",{"class":"estimationWrapper"});
 		var estimationWrapperJq = $(estimationWrapper);
 		this.ownerElement = $.create("input",{"type":"text","class":"owner"});
@@ -96,7 +96,7 @@ create("item", {
 		
 		$(this.contentElement).bind("blur", $.proxy(this.save, this ));
 		$(this.contentElement).bind("dblclick", function(event){event.stopPropagation();} );
-		$(this.contentElement).bind("keypress", $.proxy(this.collapseAndSaveOrCancel, this));
+		$(this.contentElement).bind("keyup", $.proxy(this.collapseAndSaveOrCancel, this));
 		$(this.estimationElement).bind("change", $.proxy(this.save, this ));
 		$(this.estimationElement).bind("dblclick", function(event){event.stopPropagation();} );
 		var scope = this;
@@ -184,11 +184,12 @@ create("item", {
 		
 		this._storeCurrentState();
 		
-		$(this.estimationElement).bind("keypress",  $.proxy(this.collapseAndSaveOrCancel, this));
-		$(this.hoursLeftElement).bind("keypress",  $.proxy(this.collapseAndSaveOrCancel, this));
-		$(this.ownerElement).bind("keypress",  $.proxy(this.collapseAndSaveOrCancel, this));
+		$(this.estimationElement).bind("keyup",  $.proxy(this.collapseAndSaveOrCancel, this));
+		$(this.hoursLeftElement).bind("keyup",  $.proxy(this.collapseAndSaveOrCancel, this));
+		$(this.ownerElement).bind("keyup",  $.proxy(this.collapseAndSaveOrCancel, this));
 		
 		this.expanded = true;
+        event.stopPropagation();
 	},
 	_storeCurrentState: function(){
 		this.previousContent = $(this.contentElement).val();
