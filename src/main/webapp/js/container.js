@@ -28,7 +28,6 @@ scrumwall.create("container", {
 		item.setColumn(this);
 
 		$(item).css("z-index", ++this.zIndex);
-		
 	},
 	resize:function(newWidth){
 		$(this).width(newWidth);
@@ -82,9 +81,13 @@ scrumwall.create("container", {
 		}
 		
 		this.addItem(item);
-		
+
+        item.setRelativeCoords();
+        item.redraw();
+        $(item).appendTo(this.body);        
 		
 		item.save();
+        return true;
 	},
 	onDragStop:function(event, ui){
 		var item = ui.draggable[0];

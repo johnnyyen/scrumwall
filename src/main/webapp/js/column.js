@@ -27,11 +27,11 @@ createExtending("column", "container", {
 		
 		this.sprintId = this.layout.getCurrentSprint();
 		
-		if(this.columnType == this.NOT_STARTED){
-			this.zIndex = 10000;
-		}else{
-			this.zIndex = 10;
-		}
+//		if(this.columnType == this.NOT_STARTED){
+//			this.zIndex = 10000;
+//		}else{
+			this.zIndex = 100;
+//		}
 		this._initDOM();
 
         this.loadItems();

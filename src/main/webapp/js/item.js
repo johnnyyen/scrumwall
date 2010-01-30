@@ -281,7 +281,7 @@ create("item", {
 		this.id = item.id;
 		this.jq.attr("id",this.guid);
 	},
-remove:function(){
+    remove:function(){
 		var id = this._saveable().id;
 		if(id && id > -1) {
 			ItemService.remove(id,{exceptionHandler:exceptionHandler});
