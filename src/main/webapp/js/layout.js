@@ -249,8 +249,14 @@ create("layout", {
 		for(var i in this.columns){
 			if(this.columns[i].order == nextOrder){
 				for(var j in column.items){
-					this.columns[i].addItem(column.items[j]);
+                    var item = column.items[j];
+					this.columns[i].addItem(item);
+                    //FIXME redraw should not be called here
+                    item.redraw();
+                    $(item).appendTo(this.columns[i].body);
+                    item.save(); 
 				}
+                break;
 			}
 		}
 	},
