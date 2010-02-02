@@ -156,7 +156,7 @@ createExtending("column", "container", {
 		this.id = "col_"+column.id;
 	},
 	deleteColumn:function(){
-		if(this.items.__count__ > 0){
+		if(count(this.items) > 0){
 			this._showRemoveModeDialog();
 		}else{
 			this._deleteColumn(this.REMOVE_MODES.NO_ITEMS);

@@ -189,7 +189,9 @@ create("item", {
 		$(this.ownerElement).bind("keyup",  $.proxy(this.collapseAndSaveOrCancel, this));
 		
 		this.expanded = true;
-        event.stopPropagation();
+        if(event) {
+            event.stopPropagation();
+        }
 	},
 	_storeCurrentState: function(){
 		this.previousContent = $(this.contentElement).val();
@@ -285,7 +287,7 @@ create("item", {
     remove:function(){
 		var id = this._saveable().id;
 		if(id && id > -1) {
-			ItemService.remove(id,{exceptionHandler:exceptionHandler});
+			ItemService.remove(id,{exceptionHandler:exceptionHandler, 'async': false});
 		}
 		$(this).remove();
 		

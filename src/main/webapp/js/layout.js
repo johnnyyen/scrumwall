@@ -93,7 +93,7 @@ create("layout", {
 		var totalPercentage = 100;
 		var counter = 1;
 		for(var i in this.columns ){
-			if(counter == this.columns.__count__) {
+			if(counter == count(this.columns)) {
 				this.columns[i].width = Math.floor(totalPercentage * 100) / 100;
 			}else{
 				var size = this.columns[i].jq.width()/this.columnContainer.width()*100 + remainder;
@@ -115,7 +115,7 @@ create("layout", {
 		var totalPixels = this.columnContainer.width();
 		var counter = 1;
 		for(var i in this.columns ){
-			if(counter == this.columns.__count__) {
+			if(counter == count(this.columns)) {
 				this.columns[i].columnWidth = Math.floor(totalPixels) - this.MAGIC_PIXEL;
 				pixels = Math.floor(totalPixels) - this.MAGIC_PIXEL;
 			}else{

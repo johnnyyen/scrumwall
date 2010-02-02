@@ -46,3 +46,14 @@ function createExtending(object, parent, map) {
 		scrumwall[object].prototype[i] = map[i];
 	}
 }
+
+function count(object){
+    var count=0,
+        property;
+    for (property in object){
+        if (object.hasOwnProperty(property)){
+            count++;
+        }
+    }
+    return count;
+}
