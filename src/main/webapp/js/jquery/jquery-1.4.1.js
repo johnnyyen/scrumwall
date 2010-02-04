@@ -5759,7 +5759,15 @@ function genFx( type, num ) {
 
 	return obj;
 }
-if ( "getBoundingClientRect" in document.documentElement ) {
+
+function IESafeOffsetParent(elem){
+    try{
+       return elem.offsetParent;
+    }catch(e){
+      return document.body;
+    }
+}
+if ( "getBoundingClientRect" in document.documentElement && false) {
 	jQuery.fn.offset = function( options ) {
 		var elem = this[0];
 
@@ -5805,7 +5813,13 @@ if ( "getBoundingClientRect" in document.documentElement ) {
 
 		jQuery.offset.initialize();
 
-		var offsetParent = elem.offsetParent, prevOffsetParent = elem,
+        var offsetParent;
+        try{
+            offsetParent = elem.offsetParent;
+        }catch(e){
+            return false;
+        }
+		var prevOffsetParent = elem,
 			doc = elem.ownerDocument, computedStyle, docElem = doc.documentElement,
 			body = doc.body, defaultView = doc.defaultView,
 			prevComputedStyle = defaultView ? defaultView.getComputedStyle( elem, null ) : elem.currentStyle,
