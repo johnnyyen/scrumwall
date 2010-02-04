@@ -63,7 +63,8 @@ scrumwall.create("container", {
 		}
 		
 		var ownerName = this._getOwnerName();
-		
+
+        var itemCreated = false;
 		if($(item).hasClass("sector")) {
 			item = New("item", {color: $(ui.helper).css("background-color"),
 								owner: ownerName, 
@@ -74,11 +75,11 @@ scrumwall.create("container", {
                             this);
 			
 			$(ui.helper).remove();
-			item.setOwner(ownerName);
-			item.expand();
-		} else {
-			item.setOwner(ownerName);
+
+            itemCreated = true;
 		}
+
+        item.setOwner(ownerName);
 		
 		this.addItem(item);
 
@@ -87,6 +88,9 @@ scrumwall.create("container", {
         $(item).appendTo(this.body);        
 		
 		item.save();
+
+        if(itemCreated) item.expand(); 
+
         return true;
 	},
 	onDragStop:function(event, ui){
