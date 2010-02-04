@@ -86,7 +86,10 @@ createExtending("column", "container", {
 		var scope = this;
 		
 		if(this.columnType != this.DONE) {
-			this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); scope.layout.saveAllColumns();}, containment: 'parent', handles:"e"});
+			this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); scope.layout.saveAllColumns();},
+                containment: 'parent', handles:"e",
+                resize: $.proxy(this.resize, this)
+            });
 		}
 	},
 	_editName: function(event) {
