@@ -61,8 +61,7 @@ createExtending("drawer", "container", {
 	loadItems:function(itemConfigs){
 		
 		for(var i in itemConfigs){
-			var item = New("item", itemConfigs[i], this);
-			this.addItem(item);
+			this.addItem(New("item", itemConfigs[i], this));
 		}
 	},
 	drawerExpanded: function(){

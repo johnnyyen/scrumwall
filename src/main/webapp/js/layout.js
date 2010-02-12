@@ -152,7 +152,9 @@ create("layout", {
 	},
 	//also see item.remove()
 	onItemDelete:function(event, ui){
-		ui.draggable[0].remove();
+        if(ui.draggable[0].remove) {
+		    ui.draggable[0].remove();
+        }
 	},
 	onPageUnload: function(scope){
 		//FIXME: always saves all items when unloading page

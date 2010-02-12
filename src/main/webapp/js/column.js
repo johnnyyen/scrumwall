@@ -202,9 +202,8 @@ createExtending("column", "container", {
         }
     },
     loadItemsCallback: function(items){
-		var item;
 		for(var i = 0; i < items.length; i++){
-			item = New("item", items[i], this);
+			this.addItem( New("item", items[i], this));
 		}
     }
 });

@@ -24,11 +24,9 @@ create("item", {
 			this.height = this.DEFAULT_HEIGHT;
 		}
 		
-		//set the initial position of item and draw it. has to be after dom is
-		//created and events are bound 
 		if(col){
 			this.column = col;
-            this.column.addItem(this);
+//            this.column.addItem(this);
 		}
         
 		this._initDOM();
@@ -280,7 +278,7 @@ create("item", {
 	saveCallback:function(item){
 		delete this.column.items[this.guid];
 		this.guid = "item_" + item.id;
-		this.column.addItem(this);
+//		this.column.addItem(this);
 		this.id = item.id;
 		this.jq.attr("id",this.guid);
 	},
@@ -297,6 +295,9 @@ create("item", {
 	},
 	setRelativeCoords:function(coords){
 		coords = this.getRelativeCoords(coords);
+
+        console.log("in column: " + this.column.guid + " at relative coords: " + coords.left );
+
 		this.offsetX = coords.left;
 		this.offsetY = coords.top;
 	},
@@ -318,7 +319,7 @@ create("item", {
 		var relativeLeft = offsetLeft / columnWidth * 100;
 		return {top: relativeTop, left: relativeLeft};
 	},
-	_newPosition: function() {
+	_convertPercentToPixels: function() {
 		var pos = $(this.column).offset();
 		var x = 0;
 		var y = 0;
@@ -332,9 +333,9 @@ create("item", {
 		pos.left = Math.round(x);
 		pos.top = Math.round(y);
 		return pos;
-	}, 
+	},
 	redraw: function(){		
-		var pos = this._newPosition();
+		var pos = this._convertPercentToPixels();
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
 	},
 	validateNumberAndNotify: function(element){

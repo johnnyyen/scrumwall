@@ -110,7 +110,23 @@ scrumwall.create("container", {
 		
 		var item = ui.draggable[0];
 		$(item).css("z-index",this.zIndex+1);
-	},
+        if(item.setRelativeCoords) {
+            var offset = item.getRelativeCoords();
+//            if(item.column.order < this.order){
+//                offset.left += $(item.column).width();
+//            }else{
+//                offset.left -= $(item.column).width();
+//            }
+            
+            $(item).appendTo(this.body ? $(this.body): $(this));
+
+            item.setColumn(this);
+
+            item.setRelativeCoords(offset);
+            //$(item).css("left",0);
+            item.redraw();
+        }
+    },
 	_getOwnerName: function(){
 		var ownerInput = this.layout.menu.owner;
 		var ownerName = ownerInput.val();
