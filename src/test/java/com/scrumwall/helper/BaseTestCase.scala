@@ -21,7 +21,9 @@ abstract class BaseTestCase extends AbstractTransactionalDataSourceSpringContext
       return false
     }
 
-    for(elem1 <- firstList; elem2 <- secondList) {
+    for(i <- 0 until firstList.length) {
+      val elem1 = firstList(i)
+      val elem2 = secondList(i)
       if((elem1 getAttribute "id") != (elem2 getAttribute "id")) {
         Console println ((elem1 getAttribute "id") + " does not equal " + (elem2 getAttribute "id"))
         return false

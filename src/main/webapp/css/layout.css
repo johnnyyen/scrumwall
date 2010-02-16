@@ -189,7 +189,7 @@ html, body  {
 
 #newColumnButton, .deleteColumnButton{
   float: right;
-  margin-right: 5px;
+  margin-right: 15px;
 }
 #statusIndicator{
   width:10%;

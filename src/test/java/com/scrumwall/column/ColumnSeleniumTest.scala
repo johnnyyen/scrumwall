@@ -1,87 +1,42 @@
-package com.scrumwall.column;
+package com.scrumwall.item
 
-import com.scrumwall.dao.column.ColumnDao
-import com.scrumwall.helper.BaseTestCase
-import com.thoughtworks.selenium.DefaultSelenium
-import java.util.HashMap
-import org.junit.{After, Before, Test, Assert}
-import runtime.RichInt
+import com.scrumwall.dao.item.ItemDao
+import org.junit.{After, Before, Test}
+import org.junit.Assert._
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-/**
- * Author: silver
- * Date: 19.12.2009
- * Time: 19:45:13
- */
-
-class ColumnSeleniumTest extends BaseTestCase{
+import org.springframework.beans.factory.annotation.Autowired
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.{WebElement, By}
+import com.scrumwall.helper.{BaseUtil, ItemUtil, BaseTestCase, ColumnUtil}
 
 
-    var columnDao: ColumnDao = _
+class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with BaseUtil  {
+  var itemDao: ItemDao = _
 
     @Autowired
-    def setColumnDao(columnDao: ColumnDao) = { this.columnDao = columnDao }
+    def setColumnDao(itemDao: ItemDao) = { this.itemDao = itemDao }
     
-    var selenium: DefaultSelenium = _
-
     @Before
-    def prepare = {
-        selenium = new DefaultSelenium("localhost",4444, "*firefox", "http://localhost:8080/")
-        selenium.start()
-        selenium.getEval("window.resizeTo(1280,1024); window.moveTo(0,0)")
-        //bypassing "method should be void"
-        assert(true)
-
+    def prepare: Unit = {
+      driver = new FirefoxDriver()
     }
 
     @After
     def shutDown = {
-        selenium stop
+       driver.close()
     }
 
-    @Test
-    def createColumn = {
+  @Test
+  def createNewColumn = {
+    driver.get("http://localhost:8080/scrumwall/Layout.form")
+    val columns = getColumns()
 
-        selenium open "/scrumwall/Layout.form"
-        selenium waitForPageToLoad "500"
+    val newColumn = createColumn()
+    assertNotNull("The column probably wasn't created", newColumn getAttribute "id")
+    deleteColumn( newColumn )
+    val columnsAfterDelete = getColumns()
 
-        val columnCount = selenium.getXpathCount("//div[@id='columnContainer']/div").intValue();
-        val map = new HashMap[String, Object]
-        val oldMaxId = columnDao.getNamedParameterJdbcTemplate().queryForInt("select max(id) from col", map)
+    assertTrue("Column was not deleted or something", compareLists(columns, columnsAfterDelete))
+  }
 
-        selenium click "newColumnButton"
-
-        //give the browser some time to create the column, resize other columns etc
-        try{
-            selenium wait 500
-        }catch{
-            case ex: Exception=>
-        }
-
-        val newColumnCount = selenium.getXpathCount("//div[@id='columnContainer']/div").intValue();
-        Assert.assertEquals("New column was not created", columnCount+1, newColumnCount);
-        
-        val maxId = columnDao.getNamedParameterJdbcTemplate().queryForInt("select max(id) from col", map)
-        Assert.assertTrue("New column was not saved", oldMaxId != maxId)
-        debug("max id is " + maxId);
-
-        val header = "jUnitColumn"
-        selenium.doubleClick("css=#col_" + maxId + " .columnNameText")
-        selenium.`type`("css=#col_" + maxId + " .columnNameInput", header)
-        selenium.fireEvent("css=#col_" + maxId + " .columnNameInput","blur")
-        //give the browser some time to create the column, resize other columns etc
-        try{
-            selenium wait 500
-        }catch{
-            case ex: Exception=>
-        }
-        Assert.assertEquals("New column header text not changed", header, selenium.getText("css=#col_" + maxId + " .columnNameText"))
-
-        map.put("id", new RichInt(maxId))
-        val savedHeader = columnDao.getNamedParameterJdbcTemplate().queryForObject("select name from col where id=:id", map, classOf[String])
-        Assert.assertEquals("New column header text not saved", header, savedHeader)
-
-        //"this.browserbot.getUserWindow().";
-    }
 }

@@ -22,7 +22,7 @@ trait ColumnUtil extends BaseUtil {
 
   def createColumn(): WebElement = {
     val beforeNewColumn = getColumns
-    driver findElementById "newColumnButton" click()
+    driver findElement (By id "newColumnButton") click()
     getNewColumn(beforeNewColumn, getColumns)
   }
 
