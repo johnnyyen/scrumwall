@@ -1,7 +1,6 @@
 package com.scrumwall.helper
 
 import org.openqa.selenium.{WebElement, By}
-import com.scrumwall.helper.JavaListToScalaList._
 
 trait ColumnUtil extends BaseUtil {
 
