@@ -278,7 +278,7 @@ create("item", {
 	saveCallback:function(item){
 		delete this.column.items[this.guid];
 		this.guid = "item_" + item.id;
-//		this.column.addItem(this);
+		this.column.addItem(this);
 		this.id = item.id;
 		this.jq.attr("id",this.guid);
 	},

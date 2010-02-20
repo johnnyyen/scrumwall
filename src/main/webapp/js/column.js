@@ -45,7 +45,11 @@ createExtending("column", "container", {
 		
 		if(this.columnType == this.DONE) {
 			this.jq.addClass("doneColumn");
-		}
+		} else if(this.columnType == this.IN_PROGRESS) {
+            this.jq.addClass("inProgressColumn");
+        } else if(this.columnType == this.NOT_STARTED) {
+            this.jq.addClass("notStartedColumn");
+        }
 		
 		if(this.guid != undefined){
 			this.jq.attr("id", "col_" + this.guid);
@@ -179,9 +183,15 @@ createExtending("column", "container", {
 		var dialog = $.create("div", {"id": "removeMode"});
 		var title = "What to do with items in the column?";
 		var column = this;
-		var buttons = {"Move right": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_RIGHT);}, 
-				"Delete": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.REMOVE);},
-				"Move left": function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_LEFT);}
+		var buttons = {"Move right": {
+                    click: function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_RIGHT);},
+                    "class": "moveRightButton"},
+				"Delete": {
+                    click: function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.REMOVE);},
+                    "class": "deleteItemsButton"},
+				"Move left": {
+                    click: function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_LEFT);},
+                    "class": "moveLeftButton"}
 				};
 		$(dialog).dialog({"title":title,"buttons": buttons, closeOnEscape:true,
             resizable:false, draggable:false, modal:true, height:150,width:380,

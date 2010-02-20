@@ -28,16 +28,34 @@ trait ColumnUtil extends BaseUtil {
     newColumn
   }
 
-  def deleteColumn(column: WebElement) = {
+  def deleteColumn(column: WebElement): Unit = {
+    deleteColumn(column, true)
+  }
+  def deleteColumn(column: WebElement, doAsserts: Boolean) = {
     val columnId = column getAttribute "id"
     column findElement (By className "deleteColumnButton") click()
-    assertTrue("The previously created column should not exist anymore", existsColumnWithId(columnId, getColumns()))
+    if(doAsserts){
+      assertTrue("The previously created column should not exist anymore", existsColumnWithId(columnId, getColumns()))
+    }
   }
 
-  private def existsColumnWithId(columnId: String, columns: List[WebElement]): Boolean = {
+  def existsColumnWithId(columnId: String, columns: List[WebElement]): Boolean = {
     columns.foreach((column: WebElement) => {
       if(columnId == (column getAttribute "id")) false})
     true
   }
 
+  def isColumnBefore(firstColumn: WebElement, secondColumn: WebElement): Boolean = {
+    var firstVisited = false
+    val columns = getColumns()
+    columns.foreach((column: WebElement) => {
+      if((column getAttribute "id") == (firstColumn getAttribute "id")) {
+        firstVisited = true
+      }
+      if(((column getAttribute "id") == (secondColumn getAttribute "id")) && !firstVisited) {
+        return false
+      }
+    })
+    return true
+  }
 }

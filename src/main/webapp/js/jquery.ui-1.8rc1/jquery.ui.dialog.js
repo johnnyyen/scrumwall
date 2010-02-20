@@ -309,11 +309,13 @@ $.widget("ui.dialog", {
 		(typeof buttons == 'object' && buttons !== null &&
 			$.each(buttons, function() { return !(hasButtons = true); }));
 		if (hasButtons) {
-			$.each(buttons, function(name, fn) {
+			$.each(buttons, function(name, config) {
 				var button = $('<button type="button"></button>')
 					.text(name)
-					.click(function() { fn.apply(self.element[0], arguments); })
+					.click(function() { console.log(arguments[0]);config['click'].apply(self.element[0], arguments); })
+                    .addClass(config['class'])
 					.appendTo(uiDialogButtonPane);
+                
 				($.fn.button && button.button());
 			});
 			uiDialogButtonPane.appendTo(self.uiDialog);

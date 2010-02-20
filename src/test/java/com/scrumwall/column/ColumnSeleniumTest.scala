@@ -7,7 +7,7 @@ import org.junit.Assert._
 import org.springframework.beans.factory.annotation.Autowired
 import org.openqa.selenium.firefox.FirefoxDriver
 import com.scrumwall.helper.{BaseUtil, ItemUtil, BaseTestCase, ColumnUtil}
-import org.openqa.selenium.{RenderedWebElement, WebElement, By}
+import org.openqa.selenium.{NoSuchElementException, RenderedWebElement, WebElement, By}
 
 class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with BaseUtil  {
   var itemDao: ItemDao = _
@@ -29,7 +29,7 @@ class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with
     }
 
   @Test
-  def createNewColumn = {
+  def createAndDeleteColumn = {
 
     val newColumn = createColumn()
 
@@ -42,6 +42,40 @@ class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with
     assertEquals("Column has the previously set name", COLUMN_NAME, columnName)
 
     deleteColumn( newColumn )
+  }
+
+  @Test
+  def changeColumnOrder = {
+    val newColumn = createColumn()
+    val inProgressColumn = driver.findElement(By className "inProgressColumn")
+
+    newColumn findElement (By className "colHeader") dragAndDropBy (-1 * inProgressColumn.getSize().getWidth.toInt, 0)
+    Thread sleep 500 //Dom not ready otherwise
+    assertTrue("The new column is before the in progress column", isColumnBefore(newColumn, inProgressColumn))
+
+    deleteColumn(newColumn)
+  }
+
+  @Test
+  def deleteColumnDeleteItems = {
+    val newColumn = createColumn ()
+
+    val item = createItem(newColumn, "green")
+
+    deleteColumn(newColumn, false)
+
+    driver findElement (By className "deleteItemsButton") click()
+
+    try {
+      driver findElement (By id (item getAttribute "id"))
+      fail("Item is still somewhere in the dom.")
+    } catch {
+  case e: Exception => true
+    }
+
+
+    assertTrue("The previously created column should not exist anymore",
+      existsColumnWithId(newColumn getAttribute "id", getColumns()))
   }
 
 }

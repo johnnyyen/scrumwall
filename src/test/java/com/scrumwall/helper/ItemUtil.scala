@@ -1,17 +1,14 @@
 package com.scrumwall.helper
 
-/**
- * Created by IntelliJ IDEA.
- * User: heiti
- * Date: Feb 9, 2010
- * Time: 7:24:42 PM
- * To change this template use File | Settings | File Templates.
- */
+import org.openqa.selenium.{WebElement, By}
 
 trait ItemUtil extends BaseUtil {
 
-  def getLastItemFromColumn(columnId: String): String = {
-    "yee"
+  def createItem(column: WebElement, color: String): WebElement = {
+    val itemCreator = driver.findElement(By className color)
+    itemCreator.dragAndDropOn(column findElement (By className "colBody"))
+    Thread sleep 3000
+    column findElement (By className "item")
   }
 
 }
