@@ -1,4 +1,4 @@
-package com.scrumwall.item
+package com.scrumwall.column
 
 import com.scrumwall.dao.item.ItemDao
 import org.junit.{After, Before, Test}
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.{WebElement, By}
 import com.scrumwall.helper.{BaseUtil, ItemUtil, BaseTestCase, ColumnUtil}
-
 
 class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with BaseUtil  {
   var itemDao: ItemDao = _
