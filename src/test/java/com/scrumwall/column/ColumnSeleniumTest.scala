@@ -6,11 +6,13 @@ import org.junit.Assert._
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.{WebElement, By}
 import com.scrumwall.helper.{BaseUtil, ItemUtil, BaseTestCase, ColumnUtil}
+import org.openqa.selenium.{RenderedWebElement, WebElement, By}
 
 class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with BaseUtil  {
   var itemDao: ItemDao = _
+
+  val COLUMN_NAME = "TestColumnName"
 
     @Autowired
     def setColumnDao(itemDao: ItemDao) = { this.itemDao = itemDao }
@@ -18,6 +20,7 @@ class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with
     @Before
     def prepare: Unit = {
       driver = new FirefoxDriver()
+      driver.get("http://localhost:8080/scrumwall/Layout.form")
     }
 
     @After
@@ -27,15 +30,18 @@ class ColumnSeleniumTest extends BaseTestCase with ColumnUtil with ItemUtil with
 
   @Test
   def createNewColumn = {
-    driver.get("http://localhost:8080/scrumwall/Layout.form")
-    val columns = getColumns()
 
     val newColumn = createColumn()
-    assertNotNull("The column probably wasn't created", newColumn getAttribute "id")
-    deleteColumn( newColumn )
-    val columnsAfterDelete = getColumns()
 
-    assertTrue("Column was not deleted or something", compareLists(columns, columnsAfterDelete))
+    val nameInput = newColumn findElement (By className "columnNameInput")
+    assertTrue("The column name input box is hidden", nameInput isDisplayed)
+    nameInput sendKeys COLUMN_NAME + "\n"
+    assertFalse("The column name input box is hidden", nameInput isDisplayed)
+
+    val columnName = newColumn findElement (By className "columnNameText") getText()
+    assertEquals("Column has the previously set name", COLUMN_NAME, columnName)
+
+    deleteColumn( newColumn )
   }
 
 }

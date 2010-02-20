@@ -59,10 +59,7 @@ create("layout", {
 		var column = New("column",config);
 		$('.doneColumn').before($(column));
 		column.jq.width(this.DEFAULT_COLUMN_WIDTH);
-		
-		//moves all the items to the correct place
-		
-		
+
 		//this is added into the columns before save because otherwise onResizeStop cannot calculate the correct widths
 		this.columns["new"]=column;
 		this._updateColumnOrders();
@@ -71,7 +68,8 @@ create("layout", {
 		this.calculatePercentages();
 		this.saveAllColumns();
 		delete this.columns["new"];
-		
+		$(column.header).dblclick();
+
 		this.columns[column.guid] = column;
 	},
 	deleteColumn: function(column, removeMode){		

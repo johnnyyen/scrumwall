@@ -1,6 +1,7 @@
 package com.scrumwall.helper
 
 import org.openqa.selenium.{WebElement, By}
+import org.junit.Assert._
 
 trait ColumnUtil extends BaseUtil {
 
@@ -22,11 +23,21 @@ trait ColumnUtil extends BaseUtil {
   def createColumn(): WebElement = {
     val beforeNewColumn = getColumns
     driver findElement (By id "newColumnButton") click()
-    getNewColumn(beforeNewColumn, getColumns)
+    val newColumn = getNewColumn(beforeNewColumn, getColumns)
+    assertNotNull("New column exists with an id", newColumn getAttribute "id")
+    newColumn
   }
 
   def deleteColumn(column: WebElement) = {
+    val columnId = column getAttribute "id"
     column findElement (By className "deleteColumnButton") click()
+    assertTrue("The previously created column should not exist anymore", existsColumnWithId(columnId, getColumns()))
+  }
+
+  private def existsColumnWithId(columnId: String, columns: List[WebElement]): Boolean = {
+    columns.foreach((column: WebElement) => {
+      if(columnId == (column getAttribute "id")) false})
+    true
   }
 
 }

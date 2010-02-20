@@ -1,7 +1,7 @@
 	
 createExtending("column", "container", {
 	width:0,
-	
+	DEFAULT_TEXT: "Double-click to change name",
 	REMOVE_MODES:{
 		MOVE_LEFT: 1,
 		MOVE_RIGHT: 2,
@@ -17,14 +17,14 @@ createExtending("column", "container", {
 
 		this.initializeParent();
 		
-		if(!this.name){
-			this.name = "Double-click here";
-		}
-
 		if(!this.columnType) {
 			this.columnType = this.REGULAR;
 		}
-		
+
+        if(!this.name) {
+            this.name = ""
+        }
+
 		this.sprintId = this.layout.getCurrentSprint();
 		
 //		if(this.columnType == this.NOT_STARTED){
@@ -80,7 +80,7 @@ createExtending("column", "container", {
 		$(this.headerInput).bind("blur", $.proxy(this._nameEdited, this));
 		$(this.headerInput).bind("dblclick", function(event) {event.stopPropagation();});
 		$(this.headerInput).bind("keypress", $.proxy(this._nameEdited, this));
-		
+
 		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop,
 				tolerance:"intersect",out:this.onDragStop});
 		var scope = this;
@@ -93,10 +93,11 @@ createExtending("column", "container", {
 		}
 	},
 	_editName: function(event) {
-
 		$(this.headerText).hide();
-		$(this.headerInput).show();		
-		$(this.headerInput).val($(this.headerText).text());
+		$(this.headerInput).show();
+        if($(this.headerText).text() != this.DEFAULT_TEXT) {
+            $(this.headerInput).val($(this.headerText).text());
+        }
 		$(this.headerInput).select();
         event.stopPropagation();
 	},
@@ -104,13 +105,12 @@ createExtending("column", "container", {
 		var key = event.which || event.keyCode;
 		if(event.type == "keypress" && 
 				!($.ui.keyCode.ESCAPE == key 
-						|| $.ui.keyCode.ENTER == key 
-						|| $.ui.keyCode.NUMPAD_ENTER == key)) {
+						|| $.ui.keyCode.ENTER == key)) {
 			return;
 		} else if ($.ui.keyCode.ESCAPE == key) {
 			//escape cancels editing
 		}else if($.trim($(this.headerInput).val()) == "") {
-			//FIXME: show tooltip with error message
+			$(this.headerText).text(this.DEFAULT_TEXT);
 		}else{
 			$(this.headerText).text($(this.headerInput).val());
 			this.name = $(this.headerText).text(); 
