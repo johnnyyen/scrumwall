@@ -7,7 +7,7 @@ create("item", {
 	
 	expanded: false,
 	
-	initialize:function(config, col){
+	initialize:function(config){
 		map(config, this);
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item_" + config.id : "new_" + itemCount;
 
@@ -24,10 +24,7 @@ create("item", {
 			this.height = this.DEFAULT_HEIGHT;
 		}
 		
-		if(col){
-			this.column = col;
-//            this.column.addItem(this);
-		}
+		this.setColumn(this.column);
         
 		this._initDOM();
 		this._initEvents();
@@ -69,8 +66,9 @@ create("item", {
 		var estimationWrapperJq = $(estimationWrapper);
 		this.ownerElement = $.create("input",{"type":"text","class":"owner"});
 		this.setOwner(this.owner);
-		
-		$(this.column.body).append(this.jq);
+
+		$("body").append(this.jq);
+
 		this.expander = $.create("div",{"class":"expandIcon"});
 		this.jq.append(contentTextJq)
 			.append($($.create("div", {"class": "itemContentWrapper"})).append(contentJq))
@@ -291,12 +289,12 @@ create("item", {
 		
 	},
 	setColumn:function(column){
-		this.column = column;
+        $(this).removeClass("ownerColumn_" + $(this.column).attr('id'));
+        this.column = column;
+        $(this).addClass("ownerColunmn_" + $(this.column).attr('id'));
 	},
 	setRelativeCoords:function(coords){
 		coords = this.getRelativeCoords(coords);
-
-        console.log("in column: " + this.column.guid + " at relative coords: " + coords.left );
 
 		this.offsetX = coords.left;
 		this.offsetY = coords.top;
@@ -330,8 +328,8 @@ create("item", {
 			y = this.offsetY * $(this.column).height() / 100;;
 		}
 		
-		pos.left = Math.round(x);
-		pos.top = Math.round(y);
+		pos.left += Math.round(x);
+		pos.top += Math.round(y);
 		return pos;
 	},
 	redraw: function(){		

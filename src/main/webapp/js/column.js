@@ -85,7 +85,7 @@ createExtending("column", "container", {
 		$(this.headerInput).bind("dblclick", function(event) {event.stopPropagation();});
 		$(this.headerInput).bind("keypress", $.proxy(this._nameEdited, this));
 
-		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop,
+		this.jq.droppable({drop:this.onItemDrop,
 				tolerance:"intersect",out:this.onDragStop});
 		var scope = this;
 		

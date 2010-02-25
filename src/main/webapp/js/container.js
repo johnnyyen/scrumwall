@@ -57,39 +57,37 @@ scrumwall.create("container", {
 	},
 	onItemDrop:function(event, ui){
 		var item = ui.draggable[0];
-		
+
 		if(!$(item).hasClass("item") && !$(item).hasClass("sector")){
 			return;
 		}
-		
+
 		var ownerName = this._getOwnerName();
 
         var itemCreated = false;
 		if($(item).hasClass("sector")) {
 			item = New("item", {color: $(ui.helper).css("background-color"),
-								owner: ownerName, 
+								owner: ownerName,
 								sprintId:this.layout.getCurrentSprint(),
 								column: this,
 								coords: $(ui.helper).offset()
-                                },
-                            this);
-			
+                                }, this);
+
 			$(ui.helper).remove();
 
             itemCreated = true;
 		}
 
         item.setOwner(ownerName);
-		
+
 		this.addItem(item);
 
         item.setRelativeCoords();
         item.redraw();
-        $(item).appendTo(this.body);        
-		
+
 		item.save();
 
-        if(itemCreated) item.expand(); 
+        if(itemCreated) item.expand();
 
         return true;
 	},
@@ -107,25 +105,29 @@ scrumwall.create("container", {
 	},
 	itemOverContainer: function(event, ui){
 		if(this.layout.isDrawerExpanded() && this.columnType != this.DRAWER) return;
-		
-		var item = ui.draggable[0];
-		$(item).css("z-index",this.zIndex+1);
-        if(item.setRelativeCoords) {
-            var offset = item.getRelativeCoords();
-//            if(item.column.order < this.order){
-//                offset.left += $(item.column).width();
-//            }else{
-//                offset.left -= $(item.column).width();
-//            }
-            
-            $(item).appendTo(this.body ? $(this.body): $(this));
-
-            item.setColumn(this);
-
-            item.setRelativeCoords(offset);
-            //$(item).css("left",0);
-            item.redraw();
-        }
+//
+//		var item = ui.draggable[0];
+//		$(item).css("z-index",this.zIndex+1);
+//        if(item.setRelativeCoords) {
+//
+//            var offset = item.jq.width();
+//
+//            offset -= item.column.jq.width();
+//
+//            console.log("col: " + this.jq.attr('id') + " left: " + offset);
+//
+//            console.log($(this.body))
+//            $(item).appendTo(this.body ? $(this.body): $(this));
+//            $(this.body ? $(this.body): $(this)).append(item);
+//
+//
+//            item.setColumn(this);
+//
+//            item.setRelativeCoords(offset);
+//            item.jq.css("left", 0 +"px")
+//            $(item).css("left",0);
+//            item.redraw();
+//        }
     },
 	_getOwnerName: function(){
 		var ownerInput = this.layout.menu.owner;
