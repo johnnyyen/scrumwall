@@ -7,7 +7,7 @@ create("item", {
 	
 	expanded: false,
 	
-	initialize:function(config){
+	initialize:function(config, col){
 		map(config, this);
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item_" + config.id : "new_" + itemCount;
 
@@ -23,8 +23,11 @@ create("item", {
 			this.width = this.DEFAULT_WIDTH;
 			this.height = this.DEFAULT_HEIGHT;
 		}
-		
-		this.setColumn(this.column);
+
+        if(col){
+		    this.setColumn(col);
+        }
+
         
 		this._initDOM();
 		this._initEvents();
@@ -291,7 +294,7 @@ create("item", {
 	setColumn:function(column){
         $(this).removeClass("ownerColumn_" + $(this.column).attr('id'));
         this.column = column;
-        $(this).addClass("ownerColunmn_" + $(this.column).attr('id'));
+        $(this).addClass("ownerColumn_" + $(this.column).attr('id'));
 	},
 	setRelativeCoords:function(coords){
 		coords = this.getRelativeCoords(coords);

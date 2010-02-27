@@ -17,8 +17,9 @@ createExtending("drawer", "container", {
 		}
 
 		this.jq.css("background-color", this.color);
-		this.jq.droppable({over: this.itemOverContainer, drop:this.onItemDrop, tolerance:"intersect",
-            out:this.onDragStop, acceptFallthrough: true});
+		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",
+            out:this.onDragStop});
+        this.jq.droppable({over: this.itemOverContainer, tolerance:"touch"});
 		this.jq.bind("closeDrawers",  $.proxy(this._onCollapse, this));
 
 		this.zIndex = 10000;

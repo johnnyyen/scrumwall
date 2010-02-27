@@ -18,8 +18,7 @@ create("layout", {
 		this._initDrawers();
 		
 		this.columnContainer = $("#columnContainer");
-		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch", acceptFallthrough: false});
-		
+
 		ColumnService.getColumns(this.getCurrentSprint(), {async:false, scope: this, callback: this.createColumns, exceptionHandler:exceptionHandler});
 		var scope = this;
 		
@@ -250,11 +249,11 @@ create("layout", {
 			if(this.columns[i].order == nextOrder){
 				for(var j in column.items){
                     var item = column.items[j];
-					this.columns[i].addItem(item);
+					item.setColumn(this.columns[i]);
+                    this.columns[i].addItem(item);
                     //FIXME redraw should not be called here
                     item.redraw();
-                    $(item).appendTo(this.columns[i].body);
-                    item.save(); 
+                    item.save();
 				}
                 break;
 			}
