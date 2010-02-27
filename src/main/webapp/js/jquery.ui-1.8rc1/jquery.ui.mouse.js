@@ -89,7 +89,10 @@ $.widget("ui.mouse", {
 		// preventDefault() is used to prevent the selection of text here -
 		// however, in Safari, this causes select boxes not to be selectable
 		// anymore, so this fix is needed
-		($.browser.safari || event.preventDefault());
+
+        //OWNFIX: this should be fixed in upcoming 1.8 release. http://dev.jqueryui.com/ticket/4261
+        //Otherwise clicking on a draggable handle doesn't call blur on needed objects.
+		//($.browser.safari || event.preventDefault());
 
 		event.originalEvent.mouseHandled = true;
 		return true;

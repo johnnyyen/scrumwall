@@ -102,6 +102,7 @@ createExtending("column", "container", {
         if($(this.headerText).text() != this.DEFAULT_TEXT) {
             $(this.headerInput).val($(this.headerText).text());
         }
+        $(this.headerInput).focus();
 		$(this.headerInput).select();
         event.stopPropagation();
 	},

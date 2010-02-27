@@ -78,11 +78,11 @@ scrumwall.create("container", {
             itemCreated = true;
 		}
 
+		this.addItem(item);
         item.setOwner(ownerName);
 
-		this.addItem(item);
-
         item.setRelativeCoords();
+
         item.redraw();
 
 		item.save();
