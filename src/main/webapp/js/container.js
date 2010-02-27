@@ -105,9 +105,9 @@ scrumwall.create("container", {
 	},
 	itemOverContainer: function(event, ui){
 		if(this.layout.isDrawerExpanded() && this.columnType != this.DRAWER) return;
-//
-//		var item = ui.draggable[0];
-//		$(item).css("z-index",this.zIndex+1);
+
+		var item = ui.draggable[0];
+		$(item).css("z-index",this.zIndex+1);
 //        if(item.setRelativeCoords) {
 //
 //            var offset = item.jq.width();
