@@ -75,6 +75,7 @@
     height: 100%;
     resize: none;
     overflow: auto;
+    background-color:transparent;
 }
 
 .expandIcon{
@@ -90,7 +91,7 @@
 	width:1.8em;
 	float:right;
 	clear:both;
-	
+	background-color:transparent;
 }
 .estimationWrapper{
 	position:absolute;
@@ -107,6 +108,7 @@
 	position:absolute;
 	bottom:0;
 	left:0;
+	background-color:transparent;
 }
 
 .ownerInput{
