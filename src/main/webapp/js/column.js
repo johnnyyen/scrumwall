@@ -27,11 +27,8 @@ createExtending("column", "container", {
 
 		this.sprintId = this.layout.getCurrentSprint();
 		
-//		if(this.columnType == this.NOT_STARTED){
-//			this.zIndex = 10000;
-//		}else{
-			this.zIndex = 100;
-//		}
+		this.zIndex = 100;
+
 		this._initDOM();
 
         this.loadItems();
@@ -85,7 +82,7 @@ createExtending("column", "container", {
 		$(this.headerInput).bind("dblclick", function(event) {event.stopPropagation();});
 		$(this.headerInput).bind("keypress", $.proxy(this._nameEdited, this));
 
-		this.jq.droppable({drop:this.onItemDrop,
+		this.jq.droppable({drop:this.onItemDrop, over: this.itemOverContainer,
 				tolerance:"intersect",out:this.onDragStop});
 		var scope = this;
 		
@@ -196,7 +193,8 @@ createExtending("column", "container", {
 				};
 		$(dialog).dialog({"title":title,"buttons": buttons, closeOnEscape:true,
             resizable:false, draggable:false, modal:true, height:150,width:380,
-            position: 'center'
+            position: 'center',
+            dialogClass: "dialog"
         });
 		$(dialog).bind("dialogclose", 
 			function(){

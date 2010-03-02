@@ -10,6 +10,7 @@ create("layout", {
 		GOALS: "GOALS",
 		IMPEDIMENTS: "IMPEDIMENTS"
 	},
+	HIGHLIGHT_COLOR: "yellow",
 	
 	init: function(){
 		var t = $("#tabbar");
@@ -315,6 +316,15 @@ create("layout", {
 			}
 		}
 		return false;
+	},
+	//this is needed to keep track of hte current highlighted item
+	highlightItem: function(item){
+		if(this.highlightedItem){
+			this.highlightedItem.unHighlight();
+		}
+		
+		this.highlightedItem = item;		
+		item.highlighted = true;
 	}
 });
 

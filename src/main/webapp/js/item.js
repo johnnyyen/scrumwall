@@ -4,7 +4,7 @@ create("item", {
 	DEFAULT_HEIGHT: 100,
 	DEFAULT_TEXT: "Task description goes here",
 	DEFAULT_COLOR: "yellow",
-	
+	HIGHLIGHT_COLOR: "yellow",
 	expanded: false,
 	
 	initialize:function(config, col){
@@ -33,15 +33,22 @@ create("item", {
 		this._initEvents();
 
 		this.redraw();
+		
+		if(this.newItem){
+			this.expand();
+			this.save();
+		}
 	},
 	_initDOM:function(){
 		this.jq = $(this);
 		
 		this.jq.attr("id",this.guid);
+		this.jq.attr("tabindex", "-1");
+		
 		this.contentElement = $.create("textarea",{"class":"itemContent hidden"});
 		var contentJq = $(this.contentElement);
 		
-		this.contentText = $.create("div",{"class":"itemText"});
+		this.contentText = $.create("div",{"class":"itemText", "tabindex":"-1"});
 		var contentTextJq = $(this.contentText);
 		
 		
@@ -74,23 +81,21 @@ create("item", {
 
 		this.expander = $.create("div",{"class":"expandIcon"});
 		this.jq.append(contentTextJq)
-			.append($($.create("div", {"class": "itemContentWrapper"})).append(contentJq))
+			.append($($.create("div", {"class": "itemContentWrapper", "tabindex":"-1"})).append(contentJq))
 			.append(this.expander)
 			.append($(this.ownerElement))
 			.append(estimationWrapperJq);
 		estimationWrapperJq.append(hoursLeftJq)
 			.append(estimationJq);
 		
-		this.paint(this.jq.children(), this, this.color);
 		this.jq.css("background-color", this.color);
-		
 		this.jq.width(this.width).height(this.height);
 		
 	},
 	_initEvents:function(){
 		
 		this.jq.bind("dblclick",  $.proxy(this.expand, this));
-		this.jq.draggable({revert: "invalid"});
+		this.jq.draggable({revert: "invalid", start: $.proxy(this.highlight, this)});
 		this.jq.resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
 		
 		$(this.contentElement).bind("blur", $.proxy(this.save, this ));
@@ -103,15 +108,37 @@ create("item", {
 		$(this.hoursLeftElement).bind("change", $.proxy(this.save, this));
 		$(this.hoursLeftElement).bind("dblclick", function(event){event.stopPropagation();} );
 		$(this.hoursLeftElement).bind("keyup", function(event) {scope.validateNumberAndNotify(scope.hoursLeftElement);});
-		$(this.ownerElement).bind("change",  $.proxy(this.ownerChanged, this ));
-		$(this.ownerElement).bind("dblclick",  function(event){event.stopPropagation();} );
+		$(this.ownerElement).bind("change", $.proxy(this.ownerChanged, this ));
+		$(this.ownerElement).bind("dblclick", function(event){event.stopPropagation();} );
 		//TODO: remove the expander
-		$(this.expander).bind("click",  $.proxy(this.expand, this));
-		$(this).bind("click",{},this.highlight, this);
+		$(this.expander).bind("click", $.proxy(this.expand, this));
+		$(this).bind("click", $.proxy(this.highlight, this));
 	},
-	highlight: function(){
+	highlight: function(event){
 		this.column.zIndex++;
-		this.jq.css("z-index",this.column.zIndex);
+		this.jq.css("z-index", this.column.zIndex);
+		this.column.layout.highlightItem(this);
+		this.highlighted = true;
+		this.jq.css("background-color", this.HIGHLIGHT_COLOR);
+		this.jq.bind("keyup", this.deleteItem);
+		
+	},
+	unHighlight: function(){
+		this.highlighted = false;
+		this.jq.css("background-color", this.color);
+		this.jq.unbind("keyup", this.deleteItem);
+	},
+	deleteItem: function(event){
+		if(this.highlighted && 
+				(event.target.id == this.id 
+					|| event.target.className == "itemText"
+					|| event.target.className == "itemContentWrapper")){
+			var key = event.which || event.keyCode;
+			if( key == $.ui.keyCode.DELETE){
+				event.preventDefault();
+				this.remove();
+			}
+		}
 	},
 	ownerChanged: function(){
 		this.setOwner($(this.ownerElement).val());
@@ -134,14 +161,8 @@ create("item", {
 		}
 		item.save();
 	},
-	paint:function(children, scope, color){
-		children.each( function() {
-				$(this).css("background-color", color);
-				scope.paint($(this).children(), scope, color);
-		});
-		 
-	},
 	expand:function(event){
+		this.highlight(event);
 		var scope = this;
 		
 		$(this.expander).unbind("click");

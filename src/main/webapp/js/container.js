@@ -45,15 +45,12 @@ scrumwall.create("container", {
 		var item = New("item", {owner: ownerName, 
                 sprintId:this.layout.getCurrentSprint(),
                 column: this,
-                coords: {left: event.pageX, top: event.pageY}
+                coords: {left: event.pageX, top: event.pageY},
+                newItem: true
             },
             this);
 		
-		item.expand();
-		
 		this.addItem(item);
-		
-		item.save();
 	},
 	onItemDrop:function(event, ui){
 		var item = ui.draggable[0];
@@ -70,24 +67,22 @@ scrumwall.create("container", {
 								owner: ownerName,
 								sprintId:this.layout.getCurrentSprint(),
 								column: this,
-								coords: $(ui.helper).offset()
+								coords: $(ui.helper).offset(),
+								newItem: true
                                 }, this);
 
 			$(ui.helper).remove();
 
             itemCreated = true;
+		}else{
+	        item.setOwner(ownerName);
 		}
 
 		this.addItem(item);
-        item.setOwner(ownerName);
 
         item.setRelativeCoords();
-
         item.redraw();
-
 		item.save();
-
-        if(itemCreated) item.expand();
 
         return true;
 	},
@@ -108,26 +103,6 @@ scrumwall.create("container", {
 
 		var item = ui.draggable[0];
 		$(item).css("z-index",this.zIndex+1);
-//        if(item.setRelativeCoords) {
-//
-//            var offset = item.jq.width();
-//
-//            offset -= item.column.jq.width();
-//
-//            console.log("col: " + this.jq.attr('id') + " left: " + offset);
-//
-//            console.log($(this.body))
-//            $(item).appendTo(this.body ? $(this.body): $(this));
-//            $(this.body ? $(this.body): $(this)).append(item);
-//
-//
-//            item.setColumn(this);
-//
-//            item.setRelativeCoords(offset);
-//            item.jq.css("left", 0 +"px")
-//            $(item).css("left",0);
-//            item.redraw();
-//        }
     },
 	_getOwnerName: function(){
 		var ownerInput = this.layout.menu.owner;
