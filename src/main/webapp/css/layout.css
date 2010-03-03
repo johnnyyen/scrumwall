@@ -12,7 +12,7 @@
 }
 
 #menu{
-	/*position: absolute;*/
+	clear: both;
 	float:left;	
 	width: 10%;
 	text-align: center;
@@ -48,7 +48,7 @@
 }
 #tabbar{
 	margin-left:11%;
-	height:47px;
+	height:8%;
 }
 
 .colHeader{
@@ -169,7 +169,8 @@ body .ui-dialog .ui-dialog-title{
 .drawer{
     width:0;
     background-color:pink;
-    height:100%;
+    height:auto;
+    margin-top: 54px;
     position:absolute;
     right:0;
     top:0;
@@ -179,6 +180,8 @@ body .ui-dialog .ui-dialog-title{
 html, body  {
  height: 100%;
  min-width: 980px;
+ margin-top: 0px;
+ margin-left: 4px;
 }
 
 #removeMode{

@@ -33,6 +33,7 @@ createExtending("drawer", "container", {
 
 		var button = this.button;
 		
+		this.jq.height($(window).height() - this._getHeightOffset() + "px");
 		
 		var offset = this._getWidthOffset();
 		var width = $(window).width() - offset;
@@ -77,10 +78,13 @@ createExtending("drawer", "container", {
 			return notStarted.jq.offset().left;
 		}
 	},
+	_getHeightOffset: function(){
+		return parseInt(this.jq.css("margin-top").replace("px",""));
+	},
 	redraw: function() {
 		if(this.expanded){
-			var offset = this._getWidthOffset();
-			this.jq.width($(window).width() - offset);
+			this.jq.width($(window).width() - this._getWidthOffset() + "px");
+			this.jq.height($(window).height() - this._getHeightOffset() + "px");
 			
 			for(var i in this.items){
 				this.items[i].redraw();

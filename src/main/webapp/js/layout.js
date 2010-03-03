@@ -10,7 +10,6 @@ create("layout", {
 		GOALS: "GOALS",
 		IMPEDIMENTS: "IMPEDIMENTS"
 	},
-	HIGHLIGHT_COLOR: "yellow",
 	
 	init: function(){
 		var t = $("#tabbar");
