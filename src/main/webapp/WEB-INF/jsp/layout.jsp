@@ -69,6 +69,7 @@
 		<input type="button" value="UCB" id="ucbButton"/><br/>
 		<input type="button" value="Goals" id="goalsButton"/><br/>
 		<input type="button" value="Impediments" id="impedimentsButton"/><br/>
+		<input type="button" value="Align to grid" id="alignButton"/><br/>
 		<div><div class="velocity">10.5</div><div class="totalHoursLeft">34</div></div>
 		<div class="burndown">burndown chart goes here</div><br/>
 		<div id="itemCreator">

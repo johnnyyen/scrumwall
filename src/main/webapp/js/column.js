@@ -8,6 +8,7 @@ createExtending("column", "container", {
 		REMOVE: 3,
 		NO_ITEMS: 4
 	},
+	SPACE_BETWEEN_ITEMS: 5,
 	initialize:function(config){
 		map(config,this);
 		
@@ -214,5 +215,24 @@ createExtending("column", "container", {
 		for(var i = 0; i < items.length; i++){
 			this.addItem( New("item", items[i], this));
 		}
+    },
+    alignItems: function(){
+    	var leftPos = $(this).offset().left;
+    	var topPos = $(this).offset().top;
+    	var maxWidth = 0;
+    	var itemWidth;
+    	for(var i in this.items){
+    		this.items[i].setRelativeCoords({left: leftPos, top: topPos});
+    		this.items[i].changePosition();
+    		itemWidth = $(this.items[i]).width();
+    		if(itemWidth > maxWidth){
+    			maxWidth = itemWidth;
+    		}
+    		topPos += $(this.items[i]).height() + this.SPACE_BETWEEN_ITEMS;
+    		if(topPos > $(this).height()){
+    			topPos = $(this).offset().top;
+    			leftPos += maxWidth + this.SPACE_BETWEEN_ITEMS;
+    		}		
+    	}
     }
 });

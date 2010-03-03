@@ -327,9 +327,10 @@ create("item", {
 		var columnOffsets = $(this.column).offset();
 		var columnLeft = columnOffsets.left;
 		var columnTop = columnOffsets.top;
-		var itemOffsets = (coords) ? coords : $(this).offset();
-		var itemLeft = itemOffsets.left;
-		var itemTop = itemOffsets.top;
+		var originalOffsets = $(this).offset();
+		var itemOffsets = (coords) ? coords : originalOffsets;
+		var itemLeft = itemOffsets.left? itemOffsets.left: originalOffsets.left;
+		var itemTop = itemOffsets.top? itemOffsets.top: originalOffsets.top;
 		
 		var offsetTop = itemTop - columnTop;
 		var offsetLeft = itemLeft - columnLeft;
@@ -368,5 +369,9 @@ create("item", {
 			return false;
 		}
 		return true;
+	},
+	changePosition: function(){
+		this.redraw();
+        this.save();
 	}
 });

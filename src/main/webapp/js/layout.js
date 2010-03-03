@@ -251,11 +251,8 @@ create("layout", {
 			if(this.columns[i].order == nextOrder){
 				for(var j in column.items){
                     var item = column.items[j];
-					item.setColumn(this.columns[i]);
                     this.columns[i].addItem(item);
-                    //FIXME redraw should not be called here
-                    item.redraw();
-                    item.save();
+                    item.changePosition();
 				}
                 break;
 			}
@@ -324,6 +321,11 @@ create("layout", {
 		
 		this.highlightedItem = item;		
 		item.highlighted = true;
+	},
+	alignItems: function(){
+		for(var i in this.columns){
+			this.columns[i].alignItems();
+		}
 	}
 });
 
