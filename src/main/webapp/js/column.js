@@ -203,9 +203,6 @@ createExtending("column", "container", {
 				$(dialog).remove();
 			});
 	},
-	drawerExpanded: function(){
-		return this.layout.isDrawerExpanded();
-	},
     loadItems: function(){
         if(this.id){
             ItemService.getItems(this.guid, {scope: this, callback:this.loadItemsCallback, exceptionHandler:exceptionHandler});

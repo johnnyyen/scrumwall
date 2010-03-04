@@ -99,8 +99,6 @@ scrumwall.create("container", {
 		}
 	},
 	itemOverContainer: function(event, ui){
-		if(this.layout.isDrawerExpanded() && this.columnType != this.DRAWER) return;
-
 		var item = ui.draggable[0];
 		$(item).css("z-index", this.zIndex + getNewZIndex());
     },

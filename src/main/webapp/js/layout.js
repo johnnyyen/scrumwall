@@ -298,30 +298,6 @@ create("layout", {
 			this.drawers[i].saveItems();
 		}
 	},
-	collapseDrawers:function(openDrawer){
-		for(var i in this.drawers){
-			if(this.drawers[i].expanded){
-				$(this.drawers[i].button).click();
-			}
-		}
-	},
-	isDrawerExpanded: function(){
-		for(var i in this.drawers){
-			if(this.drawers[i].drawerExpanded()){
-				return true;
-			}
-		}
-		return false;
-	},
-	//this is needed to keep track of hte current highlighted item
-	highlightItem: function(item){
-		if(this.highlightedItem){
-			this.highlightedItem.unHighlight();
-		}
-		
-		this.highlightedItem = item;		
-		item.highlighted = true;
-	},
 	alignItems: function(){
 		for(var i in this.columns){
 			this.columns[i].alignItems();

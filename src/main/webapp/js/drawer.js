@@ -13,23 +13,23 @@ createExtending("drawer", "container", {
 		this.initializeParent();
 		
 		if(this.button){
-			$(this.button).bind("click", $.proxy(this._onExpand, this));
+			$(this.button).bind("click", $.proxy(this._expand, this));
 		}
 
 		this.jq.css("background-color", this.color);
 		this.jq.droppable({drop:this.onItemDrop, tolerance:"intersect",
             out:this.onDragStop});
         this.jq.droppable({over: this.itemOverContainer, tolerance:"touch"});
-		this.jq.bind("closeDrawers",  $.proxy(this._onCollapse, this));
+		this.jq.bind("collapse",  $.proxy(this._collapse, this));
 
 		this.zIndex = 10000;
 		
 		this.jq.css("z-index",this.zIndex);
 	},
-	_onExpand:function(event){
+	_expand:function(event){
 		var scope = this;
 		$(this.button).unbind("click");
-		this.layout.collapseDrawers(this);
+		$(".drawer").trigger("collapse");
 
 		var button = this.button;
 		
@@ -42,12 +42,12 @@ createExtending("drawer", "container", {
 			function(){
 				ItemService.getItems(scope.guid, 
 						{"scope": scope, callback:scope.loadItems, exceptionHandler:exceptionHandler});
-				$(button).bind("click",  $.proxy(scope._onCollapse, scope));
+				$(button).bind("click",  $.proxy(scope._collapse, scope));
 			}
 		);
 		this.expanded = true;
 	},
-	_onCollapse:function(event){
+	_collapse:function(event){
 
 		$(this.button).unbind("click");
 		var scope = this;
@@ -55,7 +55,7 @@ createExtending("drawer", "container", {
 		this.removeItems();
 		
 		$(this).animate({ width:"0px", queue:false}, 250, function(){
-				$(button).bind("click", $.proxy(scope._onExpand, scope));
+				$(button).bind("click", $.proxy(scope._expand, scope));
 			}
 		);
 		this.expanded = false;
@@ -65,9 +65,6 @@ createExtending("drawer", "container", {
 		for(var i in itemConfigs){
 			this.addItem(New("item", itemConfigs[i], this));
 		}
-	},
-	drawerExpanded: function(){
-		return this.expanded;
 	},
 	_getWidthOffset: function(){
 		var notStarted = this.layout.getNotStartedColumn();

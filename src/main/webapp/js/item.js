@@ -113,10 +113,12 @@ create("item", {
 		//TODO: remove the expander
 		$(this.expander).bind("click", $.proxy(this.expand, this));
 		$(this).bind("click", $.proxy(this.highlight, this));
+
+        $(this).bind("unHighlight", $.proxy(this.unHighlight,  this));
 	},
 	highlight: function(event){
 		this.jq.css("z-index", getNewZIndex());
-		this.column.layout.highlightItem(this);
+		$(".item").trigger("unHighlight");
 		this.highlighted = true;
 		this.jq.css("background-color", this.HIGHLIGHT_COLOR);
 		this.jq.bind("keyup", this.deleteItem);
