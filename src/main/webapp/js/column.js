@@ -69,7 +69,7 @@ createExtending("column", "container", {
 			this.jq.addClass("sortableColumn");
 		}
 		
-		this.jq.css("z-index",this.zIndex);
+		this.jq.css("z-index", getNewZIndex());
 		
 		this.jq.append($(this.header)).append($(this.body));
 		$(this.headerText).text(this.name);

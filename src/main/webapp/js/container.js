@@ -6,8 +6,8 @@ scrumwall.create("container", {
 	DRAWER:"DRAWER",
 	
 	items: new Array(),
-	zIndex:0,
-	
+    zIndex: 0,
+
 	initializeParent: function(){
 		this.jq.bind("dblclick", $.proxy(this.createItem, this));
 
@@ -27,7 +27,7 @@ scrumwall.create("container", {
 		this.items[item.guid] = item;
 		item.setColumn(this);
 
-		$(item).css("z-index", ++this.zIndex);
+		$(item).css("z-index", getNewZIndex());
 	},
 	resize:function(newWidth){
 		$(this).width(newWidth);
@@ -102,7 +102,7 @@ scrumwall.create("container", {
 		if(this.layout.isDrawerExpanded() && this.columnType != this.DRAWER) return;
 
 		var item = ui.draggable[0];
-		$(item).css("z-index",this.zIndex+1);
+		$(item).css("z-index", this.zIndex + getNewZIndex());
     },
 	_getOwnerName: function(){
 		var ownerInput = this.layout.menu.owner;

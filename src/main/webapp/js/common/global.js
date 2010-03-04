@@ -57,3 +57,8 @@ function count(object){
     }
     return count;
 }
+
+var GLOBAL_ZINDEX = 0;
+function getNewZIndex() {
+    return ++GLOBAL_ZINDEX; 
+}

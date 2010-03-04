@@ -115,8 +115,7 @@ create("item", {
 		$(this).bind("click", $.proxy(this.highlight, this));
 	},
 	highlight: function(event){
-		this.column.zIndex++;
-		this.jq.css("z-index", this.column.zIndex);
+		this.jq.css("z-index", getNewZIndex());
 		this.column.layout.highlightItem(this);
 		this.highlighted = true;
 		this.jq.css("background-color", this.HIGHLIGHT_COLOR);
