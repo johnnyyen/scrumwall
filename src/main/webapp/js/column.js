@@ -88,7 +88,7 @@ createExtending("column", "container", {
 		var scope = this;
 		
 		if(this.columnType != this.DONE) {
-			this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); scope.layout.saveAllColumns();},
+			this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); $(".column").trigger("save");},
                 containment: 'parent', handles:"e",
                 resize: $.proxy(this.resize, this)
             });
@@ -212,32 +212,6 @@ createExtending("column", "container", {
 		for(var i = 0; i < items.length; i++){
 			this.addItem( New("item", items[i], this));
 		}
-    },
-    alignItems: function(){
-    	var leftPos = $(this).offset().left;
-    	var topPos = $(this).offset().top + $(this.header).height();
-    	var oldTop = topPos;
-    	var maxWidth = 0;
-    	var itemWidth;
-    	var keys = [];
-    	for(var key in this.items){
-    		keys.push(key);
-    	}
-    	keys.sort();
-    	
-    	for(var i=0; i < keys.length; i++){
-    		this.items[keys[i]].setRelativeCoords({left: leftPos, top: topPos});
-    		this.items[keys[i]].changePosition();
-    		itemWidth = $(this.items[keys[i]]).width();
-    		if(itemWidth > maxWidth){
-    			maxWidth = itemWidth;
-    		}
-    		if(topPos > $(this).height() - ($(this.items[keys[i]]).height() + this.SPACE_BETWEEN_ITEMS)){
-    			topPos = oldTop;
-    			leftPos += maxWidth + this.SPACE_BETWEEN_ITEMS;
-    		}else{		
-    			topPos += $(this.items[keys[i]]).height() + this.SPACE_BETWEEN_ITEMS;
-    		}
-    	}
     }
+
 });

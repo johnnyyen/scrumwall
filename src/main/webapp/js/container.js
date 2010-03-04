@@ -11,6 +11,8 @@ scrumwall.create("container", {
 	initializeParent: function(){
 		this.jq.bind("dblclick", $.proxy(this.createItem, this));
         $(this).bind("redraw", $.proxy(this.redraw, this));
+        $(this).bind("save", $.proxy(this.redraw, this));
+        $(this).bind("alignItems", $.proxy(this.redraw, this));
 
 	},
 	removeItems:function(){
@@ -28,7 +30,7 @@ scrumwall.create("container", {
 		this.items[item.guid] = item;
 		item.setColumn(this);
 
-		$(item).css("z-index", getNewZIndex());
+		$(item).css("z-index", this.zIndex + getNewZIndex());
 	},
 	resize:function(newWidth){
 		$(this).width(newWidth);
@@ -100,6 +102,8 @@ scrumwall.create("container", {
 		}
 	},
 	itemOverContainer: function(event, ui){
+        if(this.layout.anyDrawersExpanded() && this.columnType != this.DRAWER) return;
+
 		var item = ui.draggable[0];
 		$(item).css("z-index", this.zIndex + getNewZIndex());
     },
@@ -113,5 +117,32 @@ scrumwall.create("container", {
 		}
 		
 		return ownerName;
-	}
+	},
+    alignItems: function(){
+    	var leftPos = $(this).offset().left;
+    	var topPos = $(this).offset().top + $(this.header).height();
+    	var oldTop = topPos;
+    	var maxWidth = 0;
+    	var itemWidth;
+    	var keys = [];
+    	for(var key in this.items){
+    		keys.push(key);
+    	}
+    	keys.sort();
+
+    	for(var i=0; i < keys.length; i++){
+    		this.items[keys[i]].setRelativeCoords({left: leftPos, top: topPos});
+    		this.items[keys[i]].changePosition();
+    		itemWidth = $(this.items[keys[i]]).width();
+    		if(itemWidth > maxWidth){
+    			maxWidth = itemWidth;
+    		}
+    		if(topPos > $(this).height() - ($(this.items[keys[i]]).height() + this.SPACE_BETWEEN_ITEMS)){
+    			topPos = oldTop;
+    			leftPos += maxWidth + this.SPACE_BETWEEN_ITEMS;
+    		}else{
+    			topPos += $(this.items[keys[i]]).height() + this.SPACE_BETWEEN_ITEMS;
+    		}
+    	}
+    }
 } );

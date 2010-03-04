@@ -26,10 +26,10 @@ createExtending("drawer", "container", {
 		
 		this.jq.css("z-index",this.zIndex);
 	},
-	_expand:function(event){
+	_expand:function(){
 		var scope = this;
 		$(this.button).unbind("click");
-		$(".drawer").trigger("collapse");
+		$(".drawer[id!=" + this.id + "]").trigger("collapse");
 
 		var button = this.button;
 		
@@ -47,8 +47,7 @@ createExtending("drawer", "container", {
 		);
 		this.expanded = true;
 	},
-	_collapse:function(event){
-
+	_collapse:function(){
 		$(this.button).unbind("click");
 		var scope = this;
 		var button = this.button;

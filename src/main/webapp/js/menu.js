@@ -9,7 +9,7 @@ create("menu",{
 		this.owner.bind("focus", $.proxy(this.clearOwner, this));
 		this.owner.bind("blur", $.proxy(this.onOwnerBlur, this));
 		
-		$("#alignButton").bind("click", $.proxy(layout.alignItems,layout));
+		$("#alignButton").bind("click", function(){ $(".column, .drawer").trigger("alignItems");} );
 		$(".sector").draggable({helper: 'clone'});
 		var creator = $("#itemCreator");
 		

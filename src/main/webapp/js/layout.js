@@ -35,7 +35,7 @@ create("layout", {
 		    scroll: false,
 		    revert: true,
 		    tolerance: "intersect",
-		    update: function(event, ui){ scope._updateColumnOrders(); scope.saveAllColumns(); }
+		    update: function(event, ui){ scope._updateColumnOrders(); $(".column").trigger("save"); }
 		  });
 		
 		this.previousContainerWidth = this.columnContainer.width();
@@ -69,7 +69,7 @@ create("layout", {
         $(".column, .drawer").trigger("redraw");
 
 		this.calculatePercentages();
-		this.saveAllColumns();
+		$(".column").trigger("save");
 		delete this.columns["new"];
 		$(column.header).dblclick();
 
@@ -86,7 +86,7 @@ create("layout", {
 		
 		this.calculatePercentages();
 		          
-		this.saveAllColumns();
+		$(".column").trigger("save");
 	},
 	calculatePercentages: function(){
 		var remainder = 0;
@@ -130,11 +130,6 @@ create("layout", {
 			counter++;
 		}
 	},
-	saveAllColumns: function() {
-		for(var i in this.columns){
-			this.columns[i].save();
-		}
-	},
 	_updateColumnOrders:function(){
 		var columns = $(this.columnContainer).children();
 		var order = 0;
@@ -159,8 +154,7 @@ create("layout", {
 	},
 	onPageUnload: function(scope){
 		//FIXME: always saves all items when unloading page
-//		scope.saveAllColumns();
-//		scope.saveAllDrawers();
+//		$(".column, .drawer").trigger("save");
 		
 		//FIXME: put a normal message here
 //		return "Don't leave please";
@@ -286,16 +280,14 @@ create("layout", {
 		this.drawers[-3] = (New("drawer", {layout: this, drawerType: this.DRAWERTYPES.IMPEDIMENTS,
 				button: this.menu.impediments, id: -3, color: "yellow"}) );
 	},
-	saveAllDrawers: function() {
-		for(var i in this.drawers){
-			this.drawers[i].saveItems();
-		}
-	},
-	alignItems: function(){
-		for(var i in this.columns){
-			this.columns[i].alignItems();
-		}
-	}
+    anyDrawersExpanded: function() {
+        for(var i in this.drawers) {
+            if(this.drawers[i].expanded) {
+                return true
+            }
+        }
+        return false;
+    }
 });
 
 
