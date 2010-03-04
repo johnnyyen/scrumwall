@@ -10,6 +10,7 @@ scrumwall.create("container", {
 
 	initializeParent: function(){
 		this.jq.bind("dblclick", $.proxy(this.createItem, this));
+        $(this).bind("redraw", $.proxy(this.redraw, this));
 
 	},
 	removeItems:function(){

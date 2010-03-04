@@ -65,7 +65,9 @@ create("layout", {
 		this.columns["new"]=column;
 		this._updateColumnOrders();
 		this.onColumnResize(this.ALL_COLUMNS, this.DEFAULT_COLUMN_WIDTH);
-		this.redraw();
+
+        $(".column, .drawer").trigger("redraw");
+
 		this.calculatePercentages();
 		this.saveAllColumns();
 		delete this.columns["new"];
@@ -147,7 +149,7 @@ create("layout", {
 		var widthDelta = this.previousContainerWidth - width;
 		this.previousContainerWidth = width;
 		this.onColumnResize(this.ALL_COLUMNS,widthDelta);
-		this.redraw();
+		$(".column, .drawer").trigger("redraw");
 	},
 	//also see item.remove()
 	onItemDelete:function(event, ui){
@@ -257,15 +259,6 @@ create("layout", {
                 break;
 			}
 		}
-	},
-	redraw: function() {
-		for(var i in this.columns) {
-			this.columns[i].redraw();
-		}
-		for(var i in this.drawers) {
-			this.drawers[i].redraw();
-		}
-		
 	},
 	getCurrentSprint:function() {
 		return 0; //FIXME: should be real when sprints are implemented

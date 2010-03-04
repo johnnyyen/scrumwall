@@ -77,7 +77,7 @@ createExtending("column", "container", {
 		$(this.header).append($(this.headerText));
 		$(this.parent).append(this.jq);
 		$(this.headerInput).hide();
-		
+
 		$(this.header).bind("dblclick", $.proxy(this._editName, this));
 		$(this.headerInput).bind("blur", $.proxy(this._nameEdited, this));
 		$(this.headerInput).bind("dblclick", function(event) {event.stopPropagation();});
