@@ -248,7 +248,6 @@ create("layout", {
 				for(var j in column.items){
                     var item = column.items[j];
                     this.columns[i].addItem(item);
-                    item.changePosition();
 				}
                 break;
 			}

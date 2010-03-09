@@ -26,7 +26,7 @@ scrumwall.create("container", {
 			//item already present in the column
 			return;
 		}
-		
+
 		this.items[item.guid] = item;
 		item.setColumn(this);
 
@@ -63,8 +63,6 @@ scrumwall.create("container", {
 		}
 
 		var ownerName = this._getOwnerName();
-
-        var itemCreated = false;
 		if($(item).hasClass("sector")) {
 			item = New("item", {color: $(ui.helper).css("background-color"),
 								owner: ownerName,
@@ -75,17 +73,13 @@ scrumwall.create("container", {
                                 }, this);
 
 			$(ui.helper).remove();
-
-            itemCreated = true;
 		}else{
 	        item.setOwner(ownerName);
 		}
+        this.addItem(item);
+        item.moveTo($(item).offset());
 
-		this.addItem(item);
-
-        item.setRelativeCoords();
-        item.redraw();
-		item.save();
+        item.save();
 
         return true;
 	},
@@ -131,8 +125,9 @@ scrumwall.create("container", {
     	keys.sort();
 
     	for(var i=0; i < keys.length; i++){
-    		this.items[keys[i]].setRelativeCoords({left: leftPos, top: topPos});
-    		this.items[keys[i]].changePosition();
+    		this.items[keys[i]].moveTo({left: leftPos, top: topPos});
+    		this.items[keys[i]].save();
+
     		itemWidth = $(this.items[keys[i]]).width();
     		if(itemWidth > maxWidth){
     			maxWidth = itemWidth;

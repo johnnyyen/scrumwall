@@ -10,10 +10,6 @@ create("item", {
 	initialize:function(config, col){
 		map(config, this);
 		this.guid =  config.id !== "undefined" && config.id > -1 ? "item_" + config.id : "new_" + itemCount;
-
-		if(this.coords) {
-			this.setRelativeCoords(this.coords);
-		}
 		
 		if(!this.color) {
 			this.color = this.DEFAULT_COLOR;
@@ -24,19 +20,18 @@ create("item", {
 			this.height = this.DEFAULT_HEIGHT;
 		}
 
-        if(col){
-		    this.setColumn(col);
-        }
-
-        
 		this._initDOM();
 		this._initEvents();
 
-		this.redraw();
+        if(col){
+		    this.setColumn(col);
+        }
+        
+        this.setOwner(this.owner);
+		this.moveTo(this.coords);
 		
 		if(this.newItem){
 			this.expand();
-			this.save();
 		}
 	},
 	_initDOM:function(){
@@ -75,7 +70,6 @@ create("item", {
 		var estimationWrapper = $.create("div",{"class":"estimationWrapper"});
 		var estimationWrapperJq = $(estimationWrapper);
 		this.ownerElement = $.create("input",{"type":"text","class":"owner"});
-		this.setOwner(this.owner);
 
 		$("body").append(this.jq);
 
@@ -270,8 +264,6 @@ create("item", {
 		}
 	},
 	_saveable:function(){
-		this.setRelativeCoords();
-		
 		var item = {column: this.column.guid,
 			content: $(this.contentElement).val(),
 			estimation: this.estimationElement.value == "" ? null : this.estimationElement.value,
@@ -318,7 +310,7 @@ create("item", {
         this.column = column;
         $(this).addClass("ownerColumn_" + $(this.column).attr('id'));
 	},
-	setRelativeCoords:function(coords){
+	_updatePosition:function(coords){
 		coords = this.getRelativeCoords(coords);
 
 		this.offsetX = coords.left;
@@ -326,22 +318,8 @@ create("item", {
 	},
 	getRelativeCoords:function(coords){
 		var columnOffsets = $(this.column).offset();
-		var columnLeft = columnOffsets.left;
-		var columnTop = columnOffsets.top;
-		var originalOffsets = $(this).offset();
-		var itemOffsets = (coords) ? coords : originalOffsets;
-		var itemLeft = itemOffsets.left? itemOffsets.left: originalOffsets.left;
-		var itemTop = itemOffsets.top? itemOffsets.top: originalOffsets.top;
-		
-		var offsetTop = itemTop - columnTop;
-		var offsetLeft = itemLeft - columnLeft;
-		
-		var columnHeight = $(this.column).height();
-		var columnWidth = $(this.column).width();
-		
-		var relativeTop = offsetTop / columnHeight * 100;
-		var relativeLeft = offsetLeft / columnWidth * 100;
-		return {top: relativeTop, left: relativeLeft};
+		return {top: (coords.top - columnOffsets.top) / $(this.column).height() * 100,
+                left: (coords.left - columnOffsets.left) / $(this.column).width() * 100};
 	},
 	_convertPercentToPixels: function() {
 		var pos = $(this.column).offset();
@@ -358,7 +336,10 @@ create("item", {
 		pos.top += Math.round(y);
 		return pos;
 	},
-	redraw: function(){		
+	moveTo: function(coords){
+        if(coords){
+            this._updatePosition(coords);
+        }
 		var pos = this._convertPercentToPixels();
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
 	},
