@@ -13,7 +13,7 @@ createExtending("column", "container", {
 		map(config,this);
 		
 		this.jq = $(this);
-		this.guid = config.id;
+		//this.guid = config.id;
 		this.items = new Array();
 
 		this.initializeParent();
@@ -49,8 +49,8 @@ createExtending("column", "container", {
             this.jq.addClass("notStartedColumn");
         }
 		
-		if(this.guid != undefined){
-			this.jq.attr("id", "col_" + this.guid);
+		if(this.id !== undefined){
+			this.jq.attr("id", "col_" + this.id);
 		}
 
 		if(this.columnType == this.DONE) {
@@ -148,8 +148,8 @@ createExtending("column", "container", {
 				columnType: this.columnType,
 				sprintId: this.sprintId
 			};
-		if(this.guid !== undefined) {
-			column.id = this.guid;
+		if(this.id !== undefined) {
+			column.id = this.id.replace("col_", "");
 		}
 		return column;
 	},
@@ -158,8 +158,7 @@ createExtending("column", "container", {
 				{async: false, scope: this, callback: this._saveCallback, exceptionHandler:exceptionHandler});
 	},
 	_saveCallback:function(column){
-		this.guid = column.id;
-		this.id = "col_"+column.id;
+		this.id = column.id;
 	},
 	deleteColumn:function(){
 		if(count(this.items) > 0){
@@ -205,7 +204,7 @@ createExtending("column", "container", {
 	},
     loadItems: function(){
         if(this.id){
-            ItemService.getItems(this.guid, {scope: this, callback:this.loadItemsCallback, exceptionHandler:exceptionHandler});
+            ItemService.getItems(this.id.replace("col_", ""), {scope: this, callback:this.loadItemsCallback, exceptionHandler:exceptionHandler});
         }
     },
     loadItemsCallback: function(items){

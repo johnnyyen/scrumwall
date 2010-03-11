@@ -4,7 +4,6 @@ createExtending("drawer", "container", {
 	
 	initialize:function(config){
 		map(config, this);
-		this.guid = this.id;
 		this.columnType = this.DRAWER;
 		this.items = new Array();
 		this.jq = $(this);
@@ -40,7 +39,7 @@ createExtending("drawer", "container", {
 		$("body").append(this); 	
 		this.jq.animate( { "width":parseInt(width)+"px", queue: false }, 250,  
 			function(){
-				ItemService.getItems(scope.guid, 
+				ItemService.getItems(scope.id, 
 						{"scope": scope, callback:scope.loadItems, exceptionHandler:exceptionHandler});
 				$(button).bind("click",  $.proxy(scope._collapse, scope));
 			}

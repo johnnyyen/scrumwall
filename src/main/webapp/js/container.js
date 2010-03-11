@@ -38,7 +38,7 @@ scrumwall.create("container", {
 	},
 	redraw: function() {
 		for(var i in this.items){
-			this.items[i].redraw();
+			this.items[i].moveTo();
 		}
 	},
 	createItem: function(event){
@@ -54,6 +54,7 @@ scrumwall.create("container", {
             this);
 		
 		this.addItem(item);
+        item.save();
 	},
 	onItemDrop:function(event, ui){
 		var item = ui.draggable[0];

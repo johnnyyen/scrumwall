@@ -9,7 +9,8 @@ create("item", {
 	
 	initialize:function(config, col){
 		map(config, this);
-		this.guid =  config.id !== "undefined" && config.id > -1 ? "item_" + config.id : "new_" + itemCount;
+
+		this.guid =  "item_" + (config.id !== undefined ? config.id: "");
 		
 		if(!this.color) {
 			this.color = this.DEFAULT_COLOR;
@@ -98,20 +99,18 @@ create("item", {
 		$(this.estimationElement).bind("change", $.proxy(this.save, this ));
 		$(this.estimationElement).bind("dblclick", function(event){event.stopPropagation();} );
 		var scope = this;
-		$(this.estimationElement).bind("keyup", function(event) {scope.validateNumberAndNotify(scope.estimationElement);});
 		$(this.hoursLeftElement).bind("change", $.proxy(this.save, this));
 		$(this.hoursLeftElement).bind("dblclick", function(event){event.stopPropagation();} );
-		$(this.hoursLeftElement).bind("keyup", function(event) {scope.validateNumberAndNotify(scope.hoursLeftElement);});
 		$(this.ownerElement).bind("change", $.proxy(this.ownerChanged, this ));
 		$(this.ownerElement).bind("dblclick", function(event){event.stopPropagation();} );
 		//TODO: remove the expander
 		$(this.expander).bind("click", $.proxy(this.expand, this));
-		$(this).bind("click", $.proxy(this.highlight, this));
+		$(this).bind("mousedown", $.proxy(this.highlight, this));
 
         $(this).bind("unHighlight", $.proxy(this.unHighlight,  this));
 	},
 	highlight: function(event){
-		this.jq.css("z-index", getNewZIndex());
+		this.jq.css("z-index", this.column.zIndex + getNewZIndex());
 		$(".item").trigger("unHighlight");
 		this.highlighted = true;
 		this.jq.css("background-color", this.HIGHLIGHT_COLOR);
@@ -222,7 +221,7 @@ create("item", {
 		$(this.hoursLeftElement).val(this.previousHours);
 		$(this.estimationElement).val(this.previousEstimation);
 	},
-	collapse:function(event){
+	collapse:function(){
 		var scope = this;
 		$(this.expander).unbind("click");
 		
@@ -264,7 +263,7 @@ create("item", {
 		}
 	},
 	_saveable:function(){
-		var item = {column: this.column.guid,
+		var item = {column: this.column.id.replace("col_",""),
 			content: $(this.contentElement).val(),
 			estimation: this.estimationElement.value == "" ? null : this.estimationElement.value,
 			offsetX: this.offsetX,
@@ -277,18 +276,16 @@ create("item", {
 			height: this.height
 		};
 		
-		if(this.guid.indexOf("item_") >= 0){
-			item.id = this.guid.replace("item_", "");
+        //setting the ID that is used to save the item to DB
+        var id = this.guid.replace("item_", "");
+		if(id != ""){
+			item.id = id;
 		}
 		return item;
 	},
 	save:function(){
-		if(this.validateNumberAndNotify(this.estimationElement) 
-				&& this.validateNumberAndNotify(this.hoursLeftElement)){
-			
-			ItemService.save(this._saveable(),
-				{"scope": this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
-		}
+        ItemService.save(this._saveable(),
+            {"scope": this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
 	},
 	saveCallback:function(item){
 		delete this.column.items[this.guid];
@@ -311,12 +308,12 @@ create("item", {
         $(this).addClass("ownerColumn_" + $(this.column).attr('id'));
 	},
 	_updatePosition:function(coords){
-		coords = this.getRelativeCoords(coords);
+		coords = this._getRelativeCoords(coords);
 
 		this.offsetX = coords.left;
 		this.offsetY = coords.top;
 	},
-	getRelativeCoords:function(coords){
+	_getRelativeCoords:function(coords){
 		var columnOffsets = $(this.column).offset();
 		return {top: (coords.top - columnOffsets.top) / $(this.column).height() * 100,
                 left: (coords.left - columnOffsets.left) / $(this.column).width() * 100};
@@ -342,18 +339,5 @@ create("item", {
         }
 		var pos = this._convertPercentToPixels();
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
-	},
-	validateNumberAndNotify: function(element){
-		//allows full numbers, at most two digits
-		if(!/^\d{0,2}$/.test($(element).val())){
-			//FIXME: create tooltip
-			//console.log($(element).attr('class') + " is invalid");
-			return false;
-		}
-		return true;
-	},
-	changePosition: function(){
-		this.redraw();
-        this.save();
 	}
 });
