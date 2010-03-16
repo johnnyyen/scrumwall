@@ -88,7 +88,7 @@ createExtending("column", "container", {
 		var scope = this;
 		
 		if(this.columnType != this.DONE) {
-			this.jq.resizable({stop: function(){scope.layout.calculatePercentages(); $(".column").trigger("save");},
+			this.jq.resizable({stop: function(){scope.layout.updateColumnWidths(); $(".column").trigger("save");},
                 containment: 'parent', handles:"e",
                 resize: $.proxy(this.resize, this)
             });
@@ -122,6 +122,7 @@ createExtending("column", "container", {
 		$(this.headerInput).hide();
 		$(this.headerText).show();
 	},
+    //this one is called automagically when a column resize is happening for every moved pixel.
 	resize:function(){
 		var delta = this.jq.width() - this.columnWidth;
 		this.columnResize(this.jq.width());
@@ -164,11 +165,12 @@ createExtending("column", "container", {
 		if(count(this.items) > 0){
 			this._showRemoveModeDialog();
 		}else{
-			this._deleteColumn(this.REMOVE_MODES.NO_ITEMS);
+			this._deleteColumnAndHandleItems(this.REMOVE_MODES.NO_ITEMS);
 		}
 	},
-	_deleteColumn:function(removeMode) {
+	_deleteColumnAndHandleItems:function(removeMode) {
 		ColumnService.remove(this._saveable(), removeMode, {scope: this, exceptionHandler:exceptionHandler});
+
 		if(removeMode == this.REMOVE_MODES.REMOVE){
 			for(var i in this.items){
 				this.items[i].remove();
@@ -182,13 +184,13 @@ createExtending("column", "container", {
 		var title = "What to do with items in the column?";
 		var column = this;
 		var buttons = {"Move right": {
-                    click: function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_RIGHT);},
+                    click: function(){$(this).dialog("close");column._deleteColumnAndHandleItems(column.REMOVE_MODES.MOVE_RIGHT);},
                     "class": "moveRightButton"},
 				"Delete": {
-                    click: function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.REMOVE);},
+                    click: function(){$(this).dialog("close");column._deleteColumnAndHandleItems(column.REMOVE_MODES.REMOVE);},
                     "class": "deleteItemsButton"},
 				"Move left": {
-                    click: function(){$(this).dialog("close");column._deleteColumn(column.REMOVE_MODES.MOVE_LEFT);},
+                    click: function(){$(this).dialog("close");column._deleteColumnAndHandleItems(column.REMOVE_MODES.MOVE_LEFT);},
                     "class": "moveLeftButton"}
 				};
 		$(dialog).dialog({"title":title,"buttons": buttons, closeOnEscape:true,

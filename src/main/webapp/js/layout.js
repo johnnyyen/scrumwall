@@ -68,7 +68,7 @@ create("layout", {
 
         $(".column, .drawer").trigger("redraw");
 
-		this.calculatePercentages();
+		this.updateColumnWidths();
 		$(".column").trigger("save");
 		delete this.columns["new"];
 		$(column.header).dblclick();
@@ -84,11 +84,12 @@ create("layout", {
 		delete this.columns[column.guid];
 		this.onColumnResize(this.ALL_COLUMNS, width);
 		
-		this.calculatePercentages();
+		this.updateColumnWidths();
 		          
 		$(".column").trigger("save");
 	},
-	calculatePercentages: function(){
+    //Updates the width(that is held in percentages) for each column
+	updateColumnWidths: function(){
 		var remainder = 0;
 		var percentage = 0;
 		var totalPercentage = 100;
@@ -248,6 +249,7 @@ create("layout", {
 				for(var j in column.items){
                     var item = column.items[j];
                     this.columns[i].addItem(item);
+                    item.save();
 				}
                 break;
 			}

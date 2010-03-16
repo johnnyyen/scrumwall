@@ -131,7 +131,7 @@ create("item", {
 			if( key == $.ui.keyCode.DELETE){
 				event.preventDefault();
 				this.remove();
-			}
+            }
 		}
 	},
 	ownerChanged: function(){
