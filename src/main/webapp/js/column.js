@@ -48,8 +48,8 @@ createExtending("column", "container", {
         } else if(this.columnType == this.NOT_STARTED) {
             this.jq.addClass("notStartedColumn");
         }
-		
-		if(this.id !== undefined){
+
+		if(this.id != ""){
 			this.jq.attr("id", "col_" + this.id);
 		}
 
@@ -148,7 +148,7 @@ createExtending("column", "container", {
 				columnType: this.columnType,
 				sprintId: this.sprintId
 			};
-		if(this.id !== undefined) {
+		if(this.id != "") {
 			column.id = this.id.replace("col_", "");
 		}
 		return column;
@@ -158,7 +158,7 @@ createExtending("column", "container", {
 				{async: false, scope: this, callback: this._saveCallback, exceptionHandler:exceptionHandler});
 	},
 	_saveCallback:function(column){
-		this.id = column.id;
+		this.id = "col_" + column.id;
 	},
 	deleteColumn:function(){
 		if(count(this.items) > 0){
