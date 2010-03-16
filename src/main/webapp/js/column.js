@@ -88,7 +88,7 @@ createExtending("column", "container", {
 		var scope = this;
 		
 		if(this.columnType != this.DONE) {
-			this.jq.resizable({stop: function(){scope.layout.updateColumnWidths(); $(".column").trigger("save");},
+			this.jq.resizable({stop: function(){scope.layout.updateColumnRelativeWidths(); $(".column").trigger("save");},
                 containment: 'parent', handles:"e",
                 resize: $.proxy(this.resize, this)
             });
@@ -176,8 +176,8 @@ createExtending("column", "container", {
 				this.items[i].remove();
 			}
 		}
-		
-		this.layout.deleteColumn(this, removeMode);
+		$(this).remove();
+		this.layout.handleColumnDelete(this, removeMode);
 	},
 	_showRemoveModeDialog:function(){
 		var dialog = $.create("div", {"id": "removeMode"});

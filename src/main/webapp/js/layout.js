@@ -50,7 +50,7 @@ create("layout", {
 			var column = New("column", columnConfigs[i]);
 			this.columns[columnConfigs[i].id] = column;
 		}
-		this.setColumnWidths();
+		this.updateColumnAbsoluteWidths();
 	},  
 	createColumn: function(){
 		
@@ -68,28 +68,27 @@ create("layout", {
 
         $(".column, .drawer").trigger("redraw");
 
-		this.updateColumnWidths();
+		this.updateColumnRelativeWidths();
 		$(".column").trigger("save");
 		delete this.columns["new"];
 		$(column.header).dblclick();
 
 		this.columns[column.guid] = column;
 	},
-	deleteColumn: function(column, removeMode){		
+	handleColumnDelete: function(column, removeMode){		
 		var width = column.jq.width();
 		
 		this.moveItems(column, removeMode);
 		
-		column.jq.remove();
 		delete this.columns[column.guid];
 		this.onColumnResize(this.ALL_COLUMNS, width);
 		
-		this.updateColumnWidths();
+		this.updateColumnRelativeWidths();
 		          
 		$(".column").trigger("save");
 	},
     //Updates the width(that is held in percentages) for each column
-	updateColumnWidths: function(){
+	updateColumnRelativeWidths: function(){
 		var remainder = 0;
 		var percentage = 0;
 		var totalPercentage = 100;
@@ -111,7 +110,7 @@ create("layout", {
 	 * This method calculates the size of the columns in pixels, based on percentage values received from the database.
 	 * We take the size of the columnContainer, multiply it by the percentage and set these pixels as the width.
 	 */
-	setColumnWidths: function(){
+	updateColumnAbsoluteWidths: function(){
 		var remainder = 0;
 		var pixels = 0;
 		var totalPixels = this.columnContainer.width();
