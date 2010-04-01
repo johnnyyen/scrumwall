@@ -34,6 +34,7 @@ create("item", {
 		if(this.newItem){
 			this.expand();
 		}
+		
 	},
 	_initDOM:function(){
 		this.jq = $(this);
@@ -108,6 +109,8 @@ create("item", {
 		$(this).bind("mousedown", $.proxy(this.highlight, this));
 
         $(this).bind("unHighlight", $.proxy(this.unHighlight,  this));
+        
+        $(this.hoursLeftElement).qtip({position: {corner: { target: "rightMiddle", tooltip: "leftMiddle"}}, style: {tip: "leftMiddle"}, content:"This needs to be a number", show: false, hide: {delay: 1000, effect:{type:"fade"}, when: { event: "inactive"}}});
 	},
 	highlight: function(event){
 		this.jq.css("z-index", this.column.zIndex + getNewZIndex());
@@ -284,8 +287,10 @@ create("item", {
 		return item;
 	},
 	save:function(){
-        ItemService.save(this._saveable(),
-            {"scope": this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
+		if(validateNumber(this.hoursLeftElement)){
+        	ItemService.save(this._saveable(),
+        	    {"scope": this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
+		}
 	},
 	saveCallback:function(item){
 		delete this.column.items[this.guid];
