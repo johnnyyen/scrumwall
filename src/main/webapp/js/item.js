@@ -90,6 +90,7 @@ create("item", {
 	},
 	_initEvents:function(){
 		
+		var scope = this;
 		this.jq.bind("dblclick",  $.proxy(this.expand, this));
 		this.jq.draggable({revert: "invalid", start: $.proxy(this.highlight, this)});
 		this.jq.resizable({minHeight:100, minWidth:120, stop: this.onResizeStop});
@@ -99,9 +100,12 @@ create("item", {
 		$(this.contentElement).bind("keyup", $.proxy(this.collapseAndSaveOrCancel, this));
 		$(this.estimationElement).bind("change", $.proxy(this.save, this ));
 		$(this.estimationElement).bind("dblclick", function(event){event.stopPropagation();} );
-		var scope = this;
+		$(this.estimationElement).bind("keyup", function(){validateNumber(scope.estimationElement);});
+		
 		$(this.hoursLeftElement).bind("change", $.proxy(this.save, this));
 		$(this.hoursLeftElement).bind("dblclick", function(event){event.stopPropagation();} );
+		$(this.hoursLeftElement).bind("keyup", function(){validateNumber(scope.hoursLeftElement);});
+		
 		$(this.ownerElement).bind("change", $.proxy(this.ownerChanged, this ));
 		$(this.ownerElement).bind("dblclick", function(event){event.stopPropagation();} );
 		//TODO: remove the expander
@@ -110,7 +114,6 @@ create("item", {
 
         $(this).bind("unHighlight", $.proxy(this.unHighlight,  this));
         
-        $(this.hoursLeftElement).qtip({position: {corner: { target: "rightMiddle", tooltip: "leftMiddle"}}, style: {tip: "leftMiddle"}, content:"This needs to be a number", show: false, hide: {delay: 1000, effect:{type:"fade"}, when: { event: "inactive"}}});
 	},
 	highlight: function(event){
 		this.jq.css("z-index", this.column.zIndex + getNewZIndex());
@@ -287,7 +290,7 @@ create("item", {
 		return item;
 	},
 	save:function(){
-		if(validateNumber(this.hoursLeftElement)){
+		if(this.validateItem()){
         	ItemService.save(this._saveable(),
         	    {"scope": this, callback:this.saveCallback,exceptionHandler:exceptionHandler});
 		}
@@ -344,5 +347,8 @@ create("item", {
         }
 		var pos = this._convertPercentToPixels();
 		this.jq.css({left:pos.left + "px",top:pos.top+ "px"});
+	},
+	validateItem: function(){
+		return validateNumber(this.hoursLeftElement) && validateNumber(this.estimationElement);	
 	}
 });

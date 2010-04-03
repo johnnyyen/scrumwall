@@ -25,6 +25,7 @@
   <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.effects.slide.js"></script>
   <script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
   <script type="text/javascript" src="js/common/global.js"></script>
+  <script type="text/javascript" src="js/common/tooltip.js"></script>
   <script type="text/javascript" src="js/common/validation.js"></script>
   <script type="text/javascript" src="js/container.js"></script>
   <script type="text/javascript" src="js/column.js"></script>
