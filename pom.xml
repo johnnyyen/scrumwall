@@ -362,14 +362,6 @@
 						<configuration>
 							<server>tomcat</server>
 						</configuration>
-						<executions>
-							<execution>
-								<phase>install</phase>
-								<goals>
-									<goal>redeploy</goal>
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>

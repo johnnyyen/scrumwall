@@ -1,4 +1,7 @@
-
+/**
+ * Copyright 2009,2010 Silver Juurik, Heiti Allak
+ */
+ 
 function showTooltip(element, message){
 	$(element).qtip({
 			position: {

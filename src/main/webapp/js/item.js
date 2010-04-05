@@ -1,3 +1,6 @@
+/**
+ * Copyright 2009,2010 Silver Juurik, Heiti Allak
+ */
 
 create("item", {
 	DEFAULT_WIDTH: 120,

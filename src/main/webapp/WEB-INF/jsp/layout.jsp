@@ -7,6 +7,7 @@
 	<title>Basic layout</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/layout.css"></link>
 	<link rel="stylesheet" type="text/css" media="screen" href="css/jquery-ui/jquery-ui-1.8rc1.css"></link>
+	<link rel="stylesheet" type="text/css" media="screen" href="css/scrollable-buttons.css"></link>
 	
 	<script type="text/javascript" src="js/jquery/jquery-1.4.1.js"></script>
   <script type="text/javascript" src="js/jquery/jquery.create.js"></script>
@@ -23,6 +24,7 @@
   <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.effects.core.js"></script>
   <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.effects.scale.js"></script>
   <script type="text/javascript" src="js/jquery.ui-1.8rc1/jquery.effects.slide.js"></script>
+  <script type="text/javascript" src="js/jquery/tools.scrollable-1.1.2.js"></script>
   <script type="text/javascript" src="js/common/DUI-0.0.4.js"></script>
   <script type="text/javascript" src="js/common/global.js"></script>
   <script type="text/javascript" src="js/common/tooltip.js"></script>
@@ -45,25 +47,6 @@
 </head>
 <body>
 	<div id="statusIndicator">Status indicator</div>
-	<div id="tabbar">
-		<ul>
-			<li>
-				<a href="#columnContainer">Sprint 1</a>
-			</li>
-			<li>
-				<a href="#columnContainer">Sprint 2</a>
-			</li>
-			<li>
-				<a href="#columnContainer">Sprint 3</a>
-			</li>
-			<li>
-				<a href="#columnContainer">Sprint 4</a>
-			</li>
-			<li>
-				<a href="#columnContainer">New sprint</a>
-			</li>
-		</ul>
-	</div>
 	<div id="menu">
 		<input type="text" value="" class="ownerInput" id="ownerInput"/><br/>
 		<div class="sprintdate">
@@ -85,7 +68,48 @@
 	<div id="trashcanWrapper">
 		<div id="trashcan"></div>
 	</div>
-	<div id="columnContainer"></div>
+	<div id="tabbar">
+		<div class="tabWrapper">
+			<a class="prevPage browse left"></a>
+			<a class="nextPage browse right"></a>
+			<div class="scrollingTabs">
+				<ul class="tabs">
+					<li class="movable">
+						<a href="#sprint0" class="current">Sprint 1</a>
+					</li>
+					<li class="movable">
+						<a href="#sprint1">Sprint 2</a>
+					</li>
+					<li class="movable">
+						<a href="#sprint2">Sprint 3</a>
+					</li>
+					<li class="movable">
+						<a href="#sprint3">Sprint 4</a>
+					</li>
+					<li class="movable">
+						<a href="#sprint4">Sprint 5</a>
+					</li>
+					<li class="movable">
+						<a href="#sprint5">Sprint 6</a>
+					</li>
+					<li class="movable">
+						<a href="#sprint6">Sprint 7</a>
+					</li>
+					<li class="movable">
+						<a href="#current">Sprint 8</a>
+					</li>
+					<li class="movable">
+						<a href="#new">New sprint</a>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+		<div id="columnContainer" class="ui-tabs">
+			<div id="sprint0" class="sprint"></div>
+			<div id="sprint1" class="sprint"></div>
+		</div>
+	</div>
 	<div id="errorHandler" title="Oops! Something went wrong" class="errorHandler" style="display:none"></div>
 </body>
 </html>

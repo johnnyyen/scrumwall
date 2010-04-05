@@ -1,3 +1,8 @@
+/**
+ * Copyright 2009,2010 Silver Juurik, Heiti Allak
+ * See COPYING for license terms 
+ */
+
 create("layout", {
 	itemCount:0,
 	itemZIndex:10,
@@ -14,10 +19,16 @@ create("layout", {
 	init: function(){
 		var t = $("#tabbar");
 		t.tabs();
+		$("#tabbar .scrollingTabs").scrollable({
+			items: ".tabs",
+			api: true,
+			size: 1
+		});
+		
 		this.menu = new scrumwall.menu(this);
 		this._initDrawers();
 		
-		this.columnContainer = $("#columnContainer");
+		this.columnContainer = $("#columnContainer #sprint" + this.getCurrentSprint());
         
 		$("#trashcan").droppable({drop:this.onItemDelete, tolerance:"touch"});
 

@@ -1,8 +1,13 @@
 #columnContainer{
-	margin-left: 11%;
-	width: 89%;
-	height:90%;
+	width: 100%;
+	height:94%;
 	min-width:800px;
+	padding: 0px !important;
+}
+#columnContainer .sprint{
+	height: 100%;
+	width: 100%;
+	padding: 0px !important;
 }
 .column{	
 	float:left;
@@ -48,7 +53,7 @@
 }
 #tabbar{
 	margin-left:11%;
-	height:8%;
+	height:100%;
 }
 
 .colHeader{
@@ -200,4 +205,39 @@ html, body  {
   width:10%;
   background-color: green;
   float:left;
+  margin-bottom: 25px;
+}
+
+.scrollingTabs{
+	overflow: hidden;
+	position: relative;
+	width: 680px;
+	height: 100%;
+	margin-left: 35px;
+}
+.tabWrapper{
+	height: 6%;
+	width: 750px;
+}
+.scrollingTabs .tabs{
+	width: 20000em;
+	clear:both;
+	position:absolute;
+	left: 35px;
+}
+.scrollingTabs .movable{
+	margin-left: 0px;
+	margin-right: 20px;
+	float:left;
+}
+
+.nextPage{
+	position:relative;
+	float:right !important;
+	margin-top: -30px;
+}
+.prevPage{
+	position:relative;
+	margin-top: -30px;
+	
 }

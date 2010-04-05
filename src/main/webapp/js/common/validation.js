@@ -1,3 +1,7 @@
+/**
+ * Copyright 2009,2010 Silver Juurik, Heiti Allak
+ */
+ 
 function isValidNumber(value){
 	return /^\d{0,2}$/.test(value);	
 }
