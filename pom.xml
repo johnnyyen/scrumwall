@@ -8,123 +8,141 @@
 	<packaging>war</packaging>
 	<name>Scrumwall</name>
 
-	<properties>
-		<version.spring>3.0.0.RELEASE</version.spring>
-		<version.scala>2.7.7</version.scala>
-		<version.asm>3.1</version.asm>
-		<version.log4j>1.2.9</version.log4j>
-		<version.scalatest>0.9.5</version.scalatest>
-		<maven.test.compile.verbose>true</maven.test.compile.verbose>
-		<db.schema>scrumwall</db.schema>
-		<db.test.schema>scrumjunit</db.test.schema>
-	</properties>
-	<scm>
-		<connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
-		<developerConnection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</developerConnection>
-		<url>http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</url>
-	</scm>
+<properties>
+    <gwtVersion>2.0.3</gwtVersion>
+    <version.spring>3.0.0.RELEASE</version.spring>
+    <version.scala>2.7.7</version.scala>
+    <version.asm>3.1</version.asm>
+    <version.log4j>1.2.9</version.log4j>
+    <version.scalatest>0.9.5</version.scalatest>
+    <maven.test.compile.verbose>true</maven.test.compile.verbose>
+    <db.schema>scrumwall</db.schema>
+    <db.test.schema>scrumjunit</db.test.schema>
+</properties>
+<scm>
+    <connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
+    <developerConnection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</developerConnection>
+    <url>http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</url>
+</scm>
 
-	<licenses>
-        <license>
-            <name>Gnu General Public License Version 3.0</name>
-            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.scala-tools</groupId>
-				<artifactId>maven-scala-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-          			<javaRebelPath>${user.home}/install/javarebel/javarebel.jar</javaRebelPath>
-        		</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<systemProperties>
-						<property>
-							<name>log4j.configuration</name>
-							<value>test-log4j.xml</value>
-						</property>
-					</systemProperties>
-					<useFile>false</useFile>
-				</configuration>
-			</plugin>
-			<plugin>
-                <artifactId> maven-war-plugin </artifactId>
-                <version> 2.1-beta-1 </version>
-            </plugin>
-            <plugin>
-                <groupId>org.zeroturnaround</groupId>
-                <artifactId>javarebel-maven-plugin</artifactId>
+<licenses>
+    <license>
+    <name>Gnu General Public License Version 3.0</name>
+    <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+    <distribution>repo</distribution>
+</license>
+</licenses>
+<build>
+    <plugins>
+    <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <executions>
+        <execution>
+        <goals>
+        <goal>compile</goal>
+        <goal>testCompile</goal>
+    </goals>
+    </execution>
+    </executions>
+        <configuration>
+        <javaRebelPath>${user.home}/install/javarebel/javarebel.jar</javaRebelPath>
+    </configuration>
+    </plugin>
+    <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+        <systemProperties>
+        <property>
+        <name>log4j.configuration</name>
+        <value>test-log4j.xml</value>
+    </property>
+    </systemProperties>
+        <useFile>false</useFile>
+    </configuration>
+    </plugin>
+    <plugin>
+        <artifactId> maven-war-plugin </artifactId>
+        <version> 2.1-beta-1 </version>
+    </plugin>
+    <plugin>
+        <groupId>org.zeroturnaround</groupId>
+        <artifactId>javarebel-maven-plugin</artifactId>
+        <configuration>
+        <classpath>
+        <resources>
+        <resource>
+        <dirset>${project.build.outputDirectory}</dirset>
+    </resource>
+    </resources>
+    </classpath>
+    </configuration>
+        <executions>
+        <execution>
+        <id>generate-rebel-xml</id>
+        <phase>process-resources</phase>
+        <goals>
+        <goal>generate</goal>
+    </goals>
+    </execution>
+    </executions>
+
+    </plugin>
+    <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
                 <configuration>
-                    <classpath>
-                        <resources>
-                            <resource>
-                              <dirset>${project.build.outputDirectory}</dirset>
-                            </resource>
-                        </resources>
-                    </classpath>
+                  <disableCastChecking>true</disableCastChecking>
+                  <disableClassMetadata>true</disableClassMetadata>
                 </configuration>
                 <executions>
-                <execution>
-                  <id>generate-rebel-xml</id>
-                  <phase>process-resources</phase>
-                  <goals>
-                    <goal>generate</goal>
-                  </goals>
-                </execution>
+                  <execution>
+                        <goals>
+                          <goal>generateAsync</goal>
+                          <goal>compile</goal>
+                        </goals>
+                  </execution>
                 </executions>
-            </plugin>
-		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-			<version>${version.asm}</version>
-		</dependency>
-		<dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>${version.log4j}</version>
-      <scope>compile</scope>
-    </dependency>
-    	<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm-commons</artifactId>
-			<version>${version.asm}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-compiler</artifactId>
-			<version>${version.scala}</version>
-		</dependency>
+          </plugin>
+    </plugins>
+    <resources>
+    <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+    </resource>
+    <resource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+    </resource>
+</resources>
+</build>
+<dependencies>
+    <dependency>
+    <groupId>asm</groupId>
+    <artifactId>asm</artifactId>
+    <version>${version.asm}</version>
+</dependency>
+    <dependency>
+    <groupId>log4j</groupId>
+    <artifactId>log4j</artifactId>
+    <version>${version.log4j}</version>
+    <scope>compile</scope>
+</dependency>
+    <dependency>
+    <groupId>cglib</groupId>
+    <artifactId>cglib</artifactId>
+    <version>2.2</version>
+</dependency>
+    <dependency>
+    <groupId>asm</groupId>
+    <artifactId>asm-commons</artifactId>
+    <version>${version.asm}</version>
+</dependency>
+    <dependency>
+    <groupId>org.scala-lang</groupId>
+    <artifactId>scala-compiler</artifactId>
+    <version>${version.scala}</version>
+</dependency>
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
@@ -146,7 +164,7 @@
 			<version>1.8.0.10</version>
 		</dependency>
 		<dependency>
-			<groupId>servletapi</groupId>
+			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.4</version>
 			<scope>provided</scope>
@@ -230,6 +248,12 @@
         <version>0.9.7376</version>
         <scope>test</scope>
     </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 	<repositories>
         <repository>
@@ -285,6 +309,10 @@
 			<name>Scala-tools Maven2 Repository</name>
 			<url>http://scala-tools.org/repo-releases</url>
 	    </pluginRepository>
+        <pluginRepository>
+          <id>gwt-maven</id>
+          <url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo</url>
+        </pluginRepository>
 	</pluginRepositories>
 
 	<profiles>
