@@ -1,6 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.scrumwall</groupId>
 	<artifactId>scrumwall</artifactId>
@@ -8,150 +7,162 @@
 	<packaging>war</packaging>
 	<name>Scrumwall</name>
 
-<properties>
-    <gwtVersion>2.0.3</gwtVersion>
-    <version.spring>3.0.0.RELEASE</version.spring>
-    <version.scala>2.7.7</version.scala>
-    <version.asm>3.1</version.asm>
-    <version.log4j>1.2.9</version.log4j>
-    <version.scalatest>0.9.5</version.scalatest>
-    <maven.test.compile.verbose>true</maven.test.compile.verbose>
-    <db.schema>scrumwall</db.schema>
-    <db.test.schema>scrumjunit</db.test.schema>
-</properties>
-<scm>
-    <connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
-    <developerConnection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</developerConnection>
-    <url>http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</url>
-</scm>
+	<properties>
+		<gwtVersion>2.0.3</gwtVersion>
+		<gwt.version>2.0.3</gwt.version>
+		<gwtHome>C:/Users/heiti/software/eclipseGWT/plugins/com.google.gwt.eclipse.sdkbundle.2.0.3_2.0.3.v201002191036/gwt-2.0.3</gwtHome>
+		<version.spring>3.0.0.RELEASE</version.spring>
+		<version.scala>2.7.7</version.scala>
+		<version.asm>3.1</version.asm>
+		<version.log4j>1.2.9</version.log4j>
+		<version.scalatest>0.9.5</version.scalatest>
+		<maven.test.compile.verbose>true</maven.test.compile.verbose>
+		<db.schema>scrumwall</db.schema>
+		<db.test.schema>scrumjunit</db.test.schema>
+	</properties>
+	<scm>
+		<connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
+		<developerConnection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</developerConnection>
+		<url>http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</url>
+	</scm>
 
-<licenses>
-    <license>
-    <name>Gnu General Public License Version 3.0</name>
-    <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
-    <distribution>repo</distribution>
-</license>
-</licenses>
-<build>
-    <plugins>
-    <plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
-        <executions>
-        <execution>
-        <goals>
-        <goal>compile</goal>
-        <goal>testCompile</goal>
-    </goals>
-    </execution>
-    </executions>
-        <configuration>
-        <javaRebelPath>${user.home}/install/javarebel/javarebel.jar</javaRebelPath>
-    </configuration>
-    </plugin>
-    <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-        <systemProperties>
-        <property>
-        <name>log4j.configuration</name>
-        <value>test-log4j.xml</value>
-    </property>
-    </systemProperties>
-        <useFile>false</useFile>
-    </configuration>
-    </plugin>
-    <plugin>
-        <artifactId> maven-war-plugin </artifactId>
-        <version> 2.1-beta-1 </version>
-    </plugin>
-    <plugin>
-        <groupId>org.zeroturnaround</groupId>
-        <artifactId>javarebel-maven-plugin</artifactId>
-        <configuration>
-        <classpath>
-        <resources>
-        <resource>
-        <dirset>${project.build.outputDirectory}</dirset>
-    </resource>
-    </resources>
-    </classpath>
-    </configuration>
-        <executions>
-        <execution>
-        <id>generate-rebel-xml</id>
-        <phase>process-resources</phase>
-        <goals>
-        <goal>generate</goal>
-    </goals>
-    </execution>
-    </executions>
+	<licenses>
+		<license>
+			<name>Gnu General Public License Version 3.0</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<javaRebelPath>${user.home}/install/javarebel/javarebel.jar</javaRebelPath>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemProperties>
+						<property>
+							<name>log4j.configuration</name>
+							<value>test-log4j.xml</value>
+						</property>
+					</systemProperties>
+					<useFile>false</useFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId> maven-war-plugin </artifactId>
+				<version> 2.1-beta-1 </version>
+			</plugin>
+			<plugin>
+				<groupId>org.zeroturnaround</groupId>
+				<artifactId>javarebel-maven-plugin</artifactId>
+				<configuration>
+					<classpath>
+						<resources>
+							<resource>
+								<dirset>${project.build.outputDirectory}</dirset>
+							</resource>
+						</resources>
+					</classpath>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate-rebel-xml</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
 
-    </plugin>
-    <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <configuration>
-                  <disableCastChecking>true</disableCastChecking>
-                  <disableClassMetadata>true</disableClassMetadata>
-                </configuration>
-                <executions>
-                  <execution>
-                        <goals>
-                          <goal>generateAsync</goal>
-                          <goal>compile</goal>
-                        </goals>
-                  </execution>
-                </executions>
-          </plugin>
-    </plugins>
-    <resources>
-    <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-    </resource>
-    <resource>
-        <directory>src/test/resources</directory>
-        <filtering>true</filtering>
-    </resource>
-</resources>
-</build>
-<dependencies>
-    <dependency>
-    <groupId>asm</groupId>
-    <artifactId>asm</artifactId>
-    <version>${version.asm}</version>
-</dependency>
-    <dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>${version.log4j}</version>
-    <scope>compile</scope>
-</dependency>
-    <dependency>
-    <groupId>cglib</groupId>
-    <artifactId>cglib</artifactId>
-    <version>2.2</version>
-</dependency>
-    <dependency>
-    <groupId>asm</groupId>
-    <artifactId>asm-commons</artifactId>
-    <version>${version.asm}</version>
-</dependency>
-    <dependency>
-    <groupId>org.scala-lang</groupId>
-    <artifactId>scala-compiler</artifactId>
-    <version>${version.scala}</version>
-</dependency>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<configuration>
+					<disableCastChecking>true</disableCastChecking>
+					<disableClassMetadata>true</disableClassMetadata>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- <goal>generateAsync</goal>-->
+							<goal>compile</goal>
+							<goal>mergewebxml</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>${version.asm}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${version.log4j}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm-commons</artifactId>
+			<version>${version.asm}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-compiler</artifactId>
+			<version>${version.scala}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 			<version>${version.scala}</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.scala-tools.testing</groupId>
-		  <artifactId>scalatest</artifactId>
-		  <version>${version.scalatest}</version>
+			<groupId>org.scala-tools.testing</groupId>
+			<artifactId>scalatest</artifactId>
+			<version>${version.scalatest}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -166,7 +177,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
+			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -215,104 +226,104 @@
 			<version>4.6</version>
 			<scope>test</scope>
 		</dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>org.springframework.test</artifactId>
-      <version>${version.spring}</version>
-    </dependency>
-    <dependency>
-	    <groupId>org.codehaus.mojo</groupId>
-	    <artifactId>aspectj-maven-plugin</artifactId>
-	    <version>1.1</version>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>org.springframework.test</artifactId>
+			<version>${version.spring}</version>
 		</dependency>
-    <dependency>
-    	<groupId>org.directwebremoting</groupId>
-    	<artifactId>dwr</artifactId>
-    	<version>3.0.rc1</version>
-    </dependency>
-    <dependency>
-        <groupId>org.seleniumhq.webdriver</groupId>
-        <artifactId>webdriver-ie</artifactId>
-        <version>0.9.7376</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.seleniumhq.webdriver</groupId>
-        <artifactId>webdriver-chrome</artifactId>
-        <version>0.9.7376</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.seleniumhq.webdriver</groupId>
-        <artifactId>webdriver-firefox</artifactId>
-        <version>0.9.7376</version>
-        <scope>test</scope>
-    </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwtVersion}</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>aspectj-maven-plugin</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>3.0.rc1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-ie</artifactId>
+			<version>0.9.7376</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-chrome</artifactId>
+			<version>0.9.7376</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.webdriver</groupId>
+			<artifactId>webdriver-firefox</artifactId>
+			<version>0.9.7376</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.0.3</version>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 	<repositories>
-        <repository>
-            <id>maven2</id>
-            <url>http://repo2.maven.org/maven2/</url>
-        </repository>
-        <repository>
-					  <id>openqa</id>
-					  <name>OpenQA Repository</name>
-					  <url>http://nexus.openqa.org/content/repositories/releases/</url>
-					  <snapshots>
-					    <enabled>false</enabled>
-					  </snapshots>
-					  <releases>
-					    <enabled>true</enabled>
-					  </releases>
-				</repository>
-        <repository>
-            <id>springsource-milestone</id>
-            <url>http://repository.springsource.com/maven/bundles/milestone</url>
-        </repository>
-        <repository>
-            <id>log4j</id>
-            <url>http://repo1.maven.org/maven2/log4j/log4j/1.2.9/</url>
-        </repository>
-        <repository>
-            <id>springsource-release</id>
-            <url>http://repository.springsource.com/maven/bundles/release</url>
-        </repository>
-        <repository>
-            <id>springsource-external</id>
-            <url>http://repository.springsource.com/maven/bundles/external</url>
-        </repository>
-        <repository>
-            <id>scala-tools.org</id>
-            <name>Scala Tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-        <repository>
-            <id>jboss.com</id>
-            <name>Jboss repo</name>
-            <url>http://repository.jboss.com/maven2</url>
-        </repository>
-        <repository>
-          <id>scalatest</id>
-          <name>ScalaTest in scalatools</name>
-          <url>http://scala-tools.org/repo-releases/org/scala-tools/testing/scalatest/0.9.5/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-	    <pluginRepository>
+		<repository>
+			<id>maven2</id>
+			<url>http://repo2.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>openqa</id>
+			<name>OpenQA Repository</name>
+			<url>http://nexus.openqa.org/content/repositories/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>springsource-milestone</id>
+			<url>http://repository.springsource.com/maven/bundles/milestone</url>
+		</repository>
+		<repository>
+			<id>log4j</id>
+			<url>http://repo1.maven.org/maven2/log4j/log4j/1.2.9/</url>
+		</repository>
+		<repository>
+			<id>springsource-release</id>
+			<url>http://repository.springsource.com/maven/bundles/release</url>
+		</repository>
+		<repository>
+			<id>springsource-external</id>
+			<url>http://repository.springsource.com/maven/bundles/external</url>
+		</repository>
+		<repository>
+			<id>scala-tools.org</id>
+			<name>Scala Tools Maven2 Repository</name>
+			<url>http://scala-tools.org/repo-releases</url>
+		</repository>
+		<repository>
+			<id>jboss.com</id>
+			<name>Jboss repo</name>
+			<url>http://repository.jboss.com/maven2</url>
+		</repository>
+		<repository>
+			<id>scalatest</id>
+			<name>ScalaTest in scalatools</name>
+			<url>http://scala-tools.org/repo-releases/org/scala-tools/testing/scalatest/0.9.5/</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
 			<id>scala-tools.org</id>
 			<name>Scala-tools Maven2 Repository</name>
 			<url>http://scala-tools.org/repo-releases</url>
-	    </pluginRepository>
-        <pluginRepository>
-          <id>gwt-maven</id>
-          <url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo</url>
-        </pluginRepository>
+		</pluginRepository>
+		<pluginRepository>
+			<id>gwt-maven</id>
+			<url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo</url>
+		</pluginRepository>
 	</pluginRepositories>
 
 	<profiles>
@@ -322,9 +333,9 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
-        		<finalName>scrumwall</finalName>
-        		<plugins>
-	        		<plugin>
+				<finalName>scrumwall</finalName>
+				<plugins>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>tomcat-maven-plugin</artifactId>
 						<configuration>
@@ -348,9 +359,9 @@
 				<db.schema>scrumtest</db.schema>
 			</properties>
 			<build>
-        		<finalName>scrumtest</finalName>
-        		<plugins>
-                    <plugin>
+				<finalName>scrumtest</finalName>
+				<plugins>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>tomcat-maven-plugin</artifactId>
 						<configuration>
@@ -406,34 +417,37 @@
 								<version>1.8.0.10</version>
 							</dependency>
 						</dependencies>
-				        <groupId>org.codehaus.mojo</groupId>
-				        <artifactId>sql-maven-plugin</artifactId>
-				        <version>1.1</version>
-				        <!-- common configuration shared by all executions -->
-				        <configuration>
-				          	<driver>org.hsqldb.jdbcDriver</driver>
-				          	<url>jdbc:hsqldb:hsql://eowyn.ftpaccess.cc:9001/${db.schema}</url>
-				          	<username>sa</username>
-				          	<password></password>
-				        </configuration>
-				        <executions>
-				          	<execution>
-				            	<phase>compile</phase>
-				            	<goals>
-				              		<goal>execute</goal>
-				            	</goals>
-				            	<!-- specific configuration for this execution -->
-				            	<configuration>
-				              		<!-- specify your SQL commands, can be all of the following configurations -->
-				              		<fileset>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>sql-maven-plugin</artifactId>
+						<version>1.1</version>
+						<!-- common configuration shared by all executions -->
+						<configuration>
+							<driver>org.hsqldb.jdbcDriver</driver>
+							<url>jdbc:hsqldb:hsql://eowyn.ftpaccess.cc:9001/${db.schema}</url>
+							<username>sa</username>
+							<password></password>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<!-- specific configuration for this execution -->
+								<configuration>
+									<!--
+										specify your SQL commands, can be all of the following
+										configurations
+									-->
+									<fileset>
 										<basedir>${basedir}</basedir>
-						                <includes>
-					                 		<include>db/ddl/install.sql</include>
-						                </includes>
+										<includes>
+											<include>db/ddl/install.sql</include>
+										</includes>
 									</fileset>
-				            	</configuration>
-				          	</execution>
-			        	</executions>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>

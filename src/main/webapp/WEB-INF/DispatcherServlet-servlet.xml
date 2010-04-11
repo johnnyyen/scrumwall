@@ -15,8 +15,15 @@
             <prop key="/Layout.form">layoutController</prop>
             <prop key="/**/*.js">dwrController</prop>
             <prop key="exec/*">dwrController</prop>
+            <prop key="gwttest/greet/*">greetingController</prop>
        </props>
      </property>
+  </bean>
+  
+  <bean name="chartController" class="com.scrumwall.gwt.GWTController">
+    <property name="remoteService">
+      <bean class="com.scrumwall.gwt.server.GreetingServiceImpl"/>
+    </property>
   </bean>
   
   <bean id="dwrUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">

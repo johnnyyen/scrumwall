@@ -15,4 +15,5 @@ trait ColumnDao extends BaseDao {
   def save(column: Column): Column
   
   def remove(id: Int)
+  
 }
