@@ -20,7 +20,7 @@
      </property>
   </bean>
   
-  <bean name="chartController" class="com.scrumwall.gwt.GWTController">
+  <bean name="greetingController" class="com.scrumwall.gwt.GWTController">
     <property name="remoteService">
       <bean class="com.scrumwall.gwt.server.GreetingServiceImpl"/>
     </property>

@@ -13,7 +13,7 @@
 
 	<description>
 		Scrumwall application
- </description>
+ 	</description>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
@@ -35,16 +35,6 @@
 	<servlet-mapping>
 		<servlet-name>DispatcherServlet</servlet-name>
 		<url-pattern>*.form</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>greetServlet</servlet-name>
-		<servlet-class>com.scrumwall.gwt.server.GreetingServiceImpl</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>greetServlet</servlet-name>
-		<url-pattern>/gwttest/greet</url-pattern>
 	</servlet-mapping>
 
 </web-app>

@@ -9,8 +9,6 @@
 
 	<properties>
 		<gwtVersion>2.0.3</gwtVersion>
-		<gwt.version>2.0.3</gwt.version>
-		<gwtHome>C:/Users/heiti/software/eclipseGWT/plugins/com.google.gwt.eclipse.sdkbundle.2.0.3_2.0.3.v201002191036/gwt-2.0.3</gwtHome>
 		<version.spring>3.0.0.RELEASE</version.spring>
 		<version.scala>2.7.7</version.scala>
 		<version.asm>3.1</version.asm>
@@ -21,9 +19,9 @@
 		<db.test.schema>scrumjunit</db.test.schema>
 	</properties>
 	<scm>
-		<connection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</connection>
-		<developerConnection>scm:svn:http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</developerConnection>
-		<url>http://eowyn.ftpaccess.cc/svn/repos/scrumwall/trunk</url>
+		<connection>scm:git:git://github.com/johnnyyen/scrumwall.git</connection>
+		<developerConnection>scm:git:git@github.com:johnnyyen/scrumwall.git</developerConnection>
+		<url>http://github.com/johnnyyen/scrumwall</url>
 	</scm>
 
 	<licenses>
@@ -104,13 +102,34 @@
 				<configuration>
 					<disableCastChecking>true</disableCastChecking>
 					<disableClassMetadata>true</disableClassMetadata>
+					<resourcesOnPath>false</resourcesOnPath>
+					<warSourceExcludes>servlet-api-2.5.jar</warSourceExcludes>
 				</configuration>
 				<executions>
 					<execution>
 						<goals>
 							<!-- <goal>generateAsync</goal>-->
-							<goal>compile</goal>
 							<goal>mergewebxml</goal>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>applicationContextCopy</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<copy
+									file="${basedir}/src/main/webapp/WEB-INF/DispatcherServlet-servlet.xml"
+									toFile="${basedir}/war/WEB-INF/DispatcherServlet-servlet.xml" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -126,6 +145,9 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+		<outputDirectory>war/WEB-INF/classes</outputDirectory>
+		<testOutputDirectory>target/test-classes</testOutputDirectory>
+		
 	</build>
 	<dependencies>
 		<dependency>
@@ -261,9 +283,15 @@
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>2.0.3</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 			<version>2.0.3</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<repositories>
@@ -343,7 +371,6 @@
 						</configuration>
 						<executions>
 							<execution>
-								<phase>install</phase>
 								<goals>
 									<goal>redeploy</goal>
 								</goals>
