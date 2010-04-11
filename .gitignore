@@ -1,0 +1,7 @@
+.classpath
+.manager
+.project
+.settings
+.springBeans
+target/
+war/
