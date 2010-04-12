@@ -3,11 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-           http://www.directwebremoting.org/schema/spring-dwr
-           http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd
            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
@@ -26,29 +23,14 @@
     <aop:pointcut id="transactionsPointcut" expression="execution(* com.scrumwall.service..*.*(..))"/>
     <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionsPointcut"/>
   </aop:config>
-  
 
   <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
   </bean>
   
-  <dwr:configuration>
-    <dwr:convert type="bean" class="java.lang.Exception"></dwr:convert>
-    <dwr:convert type="bean" class="java.lang.StackTraceElement"></dwr:convert>
-    <dwr:convert type="bean" class="com.scrumwall.domain.Item" />
-    <dwr:convert type="bean" class="com.scrumwall.domain.Column" />
-  </dwr:configuration>
-  
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
   	<aop:scoped-proxy/>
   	<property name="itemDao" ref="itemDao"/>
-    <dwr:remote javascript="ItemService">
-      <dwr:include method="save"/>
-      <dwr:include method="getForSprint"/>
-      <dwr:include method="getItems"/>
-      <dwr:include method="remove"/>
-      <dwr:filter class="org.directwebremoting.filter.AuditLogAjaxFilter"/>
-    </dwr:remote>
   </bean>
 
 
@@ -56,12 +38,6 @@
     <aop:scoped-proxy/>
     <property name="columnDao" ref="columnDao"/>
     <property name="itemService" ref="itemService"/>
-    <dwr:remote javascript="ColumnService">
-      <dwr:include method="getColumns"/>
-      <dwr:include method="save"/>
-      <dwr:include method="remove"/>
-      <dwr:filter class="org.directwebremoting.filter.AuditLogAjaxFilter"/> 
-    </dwr:remote>
   </bean>
 
   <bean id="itemDao" class="com.scrumwall.dao.item.ItemDaoImpl">

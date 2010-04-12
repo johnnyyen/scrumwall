@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-           http://www.directwebremoting.org/schema/spring-dwr
-           http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
-
-  <dwr:controller id="dwrController" debug="true" />
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
   <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="mappings">
        <props>
             <prop key="/Layout.form">layoutController</prop>
-            <prop key="/**/*.js">dwrController</prop>
-            <prop key="exec/*">dwrController</prop>
             <prop key="gwttest/greet/*">greetingController</prop>
        </props>
      </property>
@@ -23,15 +16,6 @@
   <bean name="greetingController" class="com.scrumwall.gwt.GWTController">
     <property name="remoteService">
       <bean class="com.scrumwall.gwt.server.GreetingServiceImpl"/>
-    </property>
-  </bean>
-  
-  <bean id="dwrUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-    <property name="alwaysUseFullPath" value="true"/>
-    <property name="mappings">
-      <props>
-        <prop key="/dwr/**/*">dwrController</prop>
-      </props>
     </property>
   </bean>
   

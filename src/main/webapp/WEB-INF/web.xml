@@ -36,5 +36,20 @@
 		<servlet-name>DispatcherServlet</servlet-name>
 		<url-pattern>*.form</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>greetServlet</servlet-name>
+		<servlet-class>com.scrumwall.gwt.server.GreetingServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>greetServlet</servlet-name>
+		<url-pattern>/gwttest/greet</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Gwttest.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>

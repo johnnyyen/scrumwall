@@ -46,9 +46,30 @@
 				<artifactId>maven-scala-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>testCompile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>processResources</id>
 						<phase>process-resources</phase>
 						<goals>
 							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>processTestResources</id>
+						<phase>process-test-resources</phase>
+						<goals>
 							<goal>testCompile</goal>
 						</goals>
 					</execution>
@@ -109,30 +130,17 @@
 					<execution>
 						<goals>
 							<!-- <goal>generateAsync</goal>-->
-							<goal>mergewebxml</goal>
 							<goal>compile</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>applicationContextCopy</id>
-						<phase>package</phase>
-						<configuration>
-							<tasks>
-								<copy
-									file="${basedir}/src/main/webapp/WEB-INF/DispatcherServlet-servlet.xml"
-									toFile="${basedir}/war/WEB-INF/DispatcherServlet-servlet.xml" />
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<buildOutputDirectory>war/WEB-INF/classes</buildOutputDirectory>
+				</configuration>
 			</plugin>
 		</plugins>
 		<resources>
@@ -144,10 +152,11 @@
 				<directory>src/test/resources</directory>
 				<filtering>true</filtering>
 			</resource>
+			<resource>
+				<directory>src/main/scala</directory>
+				<filtering>true</filtering>
+			</resource>
 		</resources>
-		<outputDirectory>war/WEB-INF/classes</outputDirectory>
-		<testOutputDirectory>target/test-classes</testOutputDirectory>
-		
 	</build>
 	<dependencies>
 		<dependency>
@@ -259,11 +268,6 @@
 			<version>1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.directwebremoting</groupId>
-			<artifactId>dwr</artifactId>
-			<version>3.0.rc1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.seleniumhq.webdriver</groupId>
 			<artifactId>webdriver-ie</artifactId>
 			<version>0.9.7376</version>
@@ -290,7 +294,7 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>2.0.3</version>
+			<version>${gwtVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

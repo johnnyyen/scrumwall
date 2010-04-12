@@ -2,8 +2,7 @@ package com.scrumwall.gwt.server;
 
 import java.util.List;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.scrumwall.domain.Item;
@@ -18,15 +17,9 @@ import com.scrumwall.service.item.ItemService;
 public class GreetingServiceImpl extends RemoteServiceServlet implements
 		GreetingService {
 	
-	private ItemService blah;
+	@Autowired
+	private ItemService itemService;
 	
-	public GreetingServiceImpl() {
-		BeanFactory context = new ClassPathXmlApplicationContext(
-			    "applicationContext.xml", this.getClass());
-
-		blah = (ItemService) context.getBean("itemService");
-	}
-		
 	public String greetServer(String input) throws IllegalArgumentException {
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {
@@ -39,7 +32,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		String serverInfo = getServletContext().getServerInfo();
 		String userAgent = getThreadLocalRequest().getHeader("User-Agent");
 		
-		List<Item> items = blah.getItems(0);
+		List<Item> items = itemService.getItems(0);
 		
 		return  items.get(0).getContent() + "Hello, " + input + "!<br><br>I am running " + serverInfo
 				+ ".<br><br>It looks like you are using:<br>" + userAgent;
