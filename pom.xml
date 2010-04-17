@@ -9,7 +9,7 @@
 
 	<properties>
 		<gwtVersion>2.0.3</gwtVersion>
-		<version.spring>3.0.0.RELEASE</version.spring>
+		<version.spring>3.0.2.RELEASE</version.spring>
 		<version.scala>2.7.7</version.scala>
 		<version.asm>3.1</version.asm>
 		<version.log4j>1.2.9</version.log4j>
@@ -152,10 +152,10 @@
 				<directory>src/test/resources</directory>
 				<filtering>true</filtering>
 			</resource>
-			<resource>
+			<!--<resource>
 				<directory>src/main/scala</directory>
 				<filtering>true</filtering>
-			</resource>
+			</resource>-->
 		</resources>
 	</build>
 	<dependencies>
@@ -218,38 +218,40 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.beans</artifactId>
+			<artifactId>spring-beans</artifactId>
+			<version>${version.spring}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.context</artifactId>
+			<artifactId>spring-core</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.core</artifactId>
+			<artifactId>spring-web</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.web</artifactId>
+			<artifactId>spring-webmvc</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.web.servlet</artifactId>
+			<artifactId>spring-jdbc</artifactId>
 			<version>${version.spring}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.jdbc</artifactId>
+			<artifactId>spring-tx</artifactId>
 			<version>${version.spring}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>org.springframework.transaction</artifactId>
-			<version>${version.spring}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -2,10 +2,8 @@ package com.scrumwall.gwt.server;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.scrumwall.domain.Item;
+import com.scrumwall.gwt.BaseRemoteService;
 import com.scrumwall.gwt.client.GreetingService;
 import com.scrumwall.gwt.shared.FieldVerifier;
 import com.scrumwall.service.item.ItemService;
@@ -13,13 +11,16 @@ import com.scrumwall.service.item.ItemService;
 /**
  * The server side implementation of the RPC service.
  */
-@SuppressWarnings("serial")
-public class GreetingServiceImpl extends RemoteServiceServlet implements
-		GreetingService {
+public class GreetingServiceImpl extends BaseRemoteService implements GreetingService {
 	
-	@Autowired
+	private static final long serialVersionUID = 1L;
+	
 	private ItemService itemService;
 	
+	public void setItemService(ItemService itemService) {
+		this.itemService = itemService;
+	}
+
 	public String greetServer(String input) throws IllegalArgumentException {
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {

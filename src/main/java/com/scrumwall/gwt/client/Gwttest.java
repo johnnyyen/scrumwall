@@ -25,9 +25,7 @@ public class Gwttest implements EntryPoint {
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
 	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+	private static final String SERVER_ERROR = "async call failed for some reason";
 
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
@@ -103,6 +101,16 @@ public class Gwttest implements EntryPoint {
 				}
 			}
 
+			private String getStackTrace(Throwable t){
+				StringBuilder sb = new StringBuilder(t.getMessage());
+				sb.append("\n");
+				
+				for(StackTraceElement ste: t.getStackTrace()){
+					sb.append(ste.toString());
+				}
+				
+				return sb.toString();
+			}
 			/**
 			 * Send the name from the nameField to the server and wait for a response.
 			 */
@@ -127,7 +135,7 @@ public class Gwttest implements EntryPoint {
 										.setText("Remote Procedure Call - Failure");
 								serverResponseLabel
 										.addStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(SERVER_ERROR);
+								serverResponseLabel.setHTML(getStackTrace(caught));
 								dialogBox.center();
 								closeButton.setFocus(true);
 							}
