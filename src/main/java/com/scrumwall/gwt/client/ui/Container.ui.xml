@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
+
+	<ui:style src="css/layout.css"/>
+	
+	<g:TabLayoutPanel ui:styleName="{style.columnContainer}" barHeight="40" barUnit="PX" ui:field="tabContainer">
+	  <g:tab>
+	  	<g:header>Sprint 1</g:header>
+	  	<g:Label>test</g:Label>
+	  </g:tab>
+	  <g:tab>
+	  	<g:header>Sprint 2</g:header>
+	  	<g:Label>test 2</g:Label>
+	  </g:tab>
+	</g:TabLayoutPanel>
+</ui:UiBinder>

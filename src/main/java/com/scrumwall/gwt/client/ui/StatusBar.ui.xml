@@ -1,0 +1,10 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
+
+	<ui:style src="css/layout.css"/>
+	
+	<g:FlowPanel ui:styleName="{style.statusIndicator}">
+	  <g:HTML>Status indicator</g:HTML>
+	</g:FlowPanel>
+</ui:UiBinder>

@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
+
+	<ui:style src="css/layout.css"/>
+	
+	<g:FlowPanel ui:styleName="{style.menu}">
+	  <g:TextBox ui:field="ownerName" ui:styleName="{style.ownerInput}"/>
+	  <g:Button text='UCB' ui:field='ucbButton' />
+	  <g:Button text="Goals" ui:field="goalsButton"/>
+	  <g:Button text="Impediments" ui:field="impedimentsButton"/>
+	  
+	  <g:FlowPanel ui:styleName="{style.itemCreator}">
+			<g:FlowPanel ui:styleName="{style.sector} {style.red}"/>
+			<g:FlowPanel ui:styleName="{style.sector} {style.green}"/>
+			<g:FlowPanel ui:styleName="{style.sector} {style.blue}"/>
+			<g:FlowPanel ui:styleName="{style.sector} {style.yellow}"/>
+	  </g:FlowPanel>
+	</g:FlowPanel>
+</ui:UiBinder>

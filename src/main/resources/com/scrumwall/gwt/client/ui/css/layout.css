@@ -1,0 +1,247 @@
+.wrapper{
+	width:100%;
+	height: 100%;	
+}
+	
+.columnContainer{
+	width: 89%;
+	height:100%;
+	margin-left:11%;
+	min-width:800px;
+	padding: 0px !important;
+	border: 1px solid black;
+}
+.columnContainer .sprint{
+	height: 100%;
+	width: 100%;
+	padding: 0px !important;
+}
+.column{	
+	float:left;
+	height:100%;
+	z-index:10;
+    position:relative;
+}
+
+.menu{
+	clear: both;
+	float:left;	
+	width: 10%;
+	text-align: center;
+	border: 1px solid black;
+	background-color: #e0ffff;
+}
+
+.itemCreator{
+	height:85px;
+	width:85px;
+	margin-left:25%;
+}
+.item{
+	position:absolute !important;
+	height: 100px;
+	width: 120px;
+	background-color: white;
+	text-align: center;
+	border:1px solid black;
+	overflow:hidden;
+	z-index: 100;
+}
+
+.burndown{
+	height:100px;
+	width:75px;
+	background-color:grey;
+	margin-left:15px;
+}
+
+.ui-tabs .ui-tabs-hide {
+     display: none;
+}
+
+
+.colHeader{
+	background-color:grey;
+	border-right:1px dotted black;
+	float:right;
+	width:100%;
+}
+.colBody{
+	height:100%;
+	border-right:1px dotted grey;
+}
+.hidden{
+	display:none;
+}
+
+.itemContentWrapper {
+    height: 90%;
+}
+
+.itemContent{
+    clear: both;
+    width:100%;
+    height: 100%;
+    resize: none;
+    overflow: auto;
+    background-color:transparent;
+}
+
+.expandIcon{
+	background-image: url('../images/expandIcon.jpeg');
+	margin-left:auto;
+	margin-right:auto;
+	height: 24px;
+	width:24px;
+}
+	
+.estimation,
+.hoursLeft{
+	width:1.8em;
+	float:right;
+	clear:both;
+	background-color:transparent;
+}
+.estimationWrapper{
+	position:absolute;
+	bottom:0;
+	right:10px;
+}
+.collapseButton{
+	
+	
+}
+.owner{
+	color:grey;
+	width:50px;
+	position:absolute;
+	bottom:0;
+	left:0;
+	background-color:transparent;
+}
+
+.ownerInput{
+	width:100%;
+}
+.itemText{
+	height:75%;
+	overflow: hidden;
+	font-size:0.75em;
+}
+.errorHandler{
+	font-size:1em;
+}
+body .ui-dialog .ui-dialog-title{
+	font-size:0.9em;
+}
+
+.sector{
+	float:left;
+	height:40px;
+	width:40px;	
+	border: 1px solid black;
+	z-index: 1000001;
+}
+
+.red{
+	background-color:pink;
+}
+.green{
+	background-color:green;
+}
+.blue{
+	background-color:blue;
+}
+.yellow{
+	background-color:yellow;
+}
+
+.trashcan {
+	background-image: url('../images/trashcan.jpeg');
+	width: 100px;
+	height: 100px;
+	margin-left:auto;
+	margin-right:auto;
+	background-color: red;
+}
+
+.trashcanWrapper{
+	position: absolute;
+	bottom:0;
+	width:10%;
+}
+
+.ui-resizable-handle {
+	width: 15px !important;
+}
+
+.drawer{
+    width:0;
+    background-color:pink;
+    height:auto;
+    margin-top: 54px;
+    position:absolute;
+    right:0;
+    top:0;
+    z-index:10000;
+}
+
+html, body  {
+ height: 100%;
+ min-width: 980px;
+ margin-top: 0px;
+ margin-left: 4px;
+}
+
+#removeMode{
+  display:none !important;
+}
+
+.columnNameText{
+  width: 100%;
+}
+
+.newColumnButton, .deleteColumnButton{
+  float: right;
+  margin-right: 15px;
+}
+.statusIndicator{
+  width:10%;
+  background-color: green;
+  float:left;
+  margin-bottom: 25px;
+}
+
+.scrollingTabs{
+	overflow: hidden;
+	position: relative;
+	width: 680px;
+	height: 100%;
+	margin-left: 35px;
+}
+.tabWrapper{
+	height: 6%;
+	width: 750px;
+}
+.scrollingTabs .tabs{
+	width: 20000em;
+	clear:both;
+	position:absolute;
+	left: 35px;
+}
+.scrollingTabs .movable{
+	margin-left: 0px;
+	margin-right: 20px;
+	float:left;
+}
+
+.nextPage{
+	position:relative;
+	float:right !important;
+	margin-top: -30px;
+}
+.prevPage{
+	position:relative;
+	margin-top: -30px;
+	
+}
