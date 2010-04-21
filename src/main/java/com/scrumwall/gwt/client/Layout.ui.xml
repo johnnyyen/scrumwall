@@ -8,5 +8,6 @@
   	<scrumwall:StatusBar ui:field="statusBar"/>
   	<scrumwall:Menu ui:field="menu"/>
   	<scrumwall:Container ui:field="container"/>
+  	<scrumwall:Item ui:field="item"/>
   </g:FlowPanel>
 </ui:UiBinder>
