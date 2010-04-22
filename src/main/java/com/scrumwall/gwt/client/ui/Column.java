@@ -8,18 +8,20 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Item extends Composite{
+public class Column extends Composite {
 
+	private static ColumnUiBinder binder = GWT.create(ColumnUiBinder.class);
+	
 	@UiField
-	protected DeckPanel contentArea; 
-	
-	@UiTemplate("Item.ui.xml")
-	interface Binder extends UiBinder<Widget, Item>{};
-	private static final Binder binder = GWT.create(Binder.class);
+	protected DeckPanel columnNameArea;
 
-	
-	public Item(){
-		initWidget(binder.createAndBindUi(this));
-		contentArea.showWidget(0);
+	@UiTemplate("Column.ui.xml")
+	interface ColumnUiBinder extends UiBinder<Widget, Column> {
 	}
+	
+	public Column(){
+		initWidget(binder.createAndBindUi(this));
+		columnNameArea.showWidget(0);
+	}
+
 }

@@ -1,20 +1,63 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'
-  xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
 
-	<ui:style src="css/layout.css"/>
-	
-	<g:FlowPanel ui:styleName="{style.menu}">
-	  <g:TextBox ui:field="ownerName" ui:styleName="{style.ownerInput}"/>
-	  <g:Button text='UCB' ui:field='ucbButton' />
-	  <g:Button text="Goals" ui:field="goalsButton"/>
-	  <g:Button text="Impediments" ui:field="impedimentsButton"/>
-	  
-	  <g:FlowPanel ui:styleName="{style.itemCreator}">
-			<g:FlowPanel ui:styleName="{style.sector} {style.red}"/>
-			<g:FlowPanel ui:styleName="{style.sector} {style.green}"/>
-			<g:FlowPanel ui:styleName="{style.sector} {style.blue}"/>
-			<g:FlowPanel ui:styleName="{style.sector} {style.yellow}"/>
-	  </g:FlowPanel>
-	</g:FlowPanel>
+	<ui:style>
+		.menu {
+			clear: both;
+			float: left;
+			width: 10%;
+			border: 1px solid black;
+			background-color: #e0ffff;
+		}
+		
+		.menu td {
+			padding-top: 5px;
+			text-align: center;
+		}
+		
+		.itemCreator {
+			height: 85px;
+			width: 85px;
+			margin-left: 25%;
+		}
+		
+		.sector {
+			float: left;
+			height: 40px;
+			width: 40px;
+			border: 1px solid black;
+			z-index: 1000001;
+		}
+		
+		.red {
+			background-color: pink;
+		}
+		
+		.green {
+			background-color: green;
+		}
+		
+		.blue {
+			background-color: blue;
+		}
+		
+		.yellow {
+			background-color: yellow;
+		}
+	</ui:style>
+
+	<g:VerticalPanel ui:styleName="{style.menu}">
+		<g:TextBox ui:field="ownerName" />
+		<g:Button text='UCB' ui:field='ucbButton' />
+		<g:Button text="Goals" ui:field="goalsButton" />
+		<g:Button text="Impediments" ui:field="impedimentsButton" />
+
+		<g:FlowPanel ui:styleName="{style.itemCreator}">
+			<g:FlowPanel ui:styleName="{style.sector} {style.red}" />
+			<g:FlowPanel ui:styleName="{style.sector} {style.green}" />
+			<g:FlowPanel ui:styleName="{style.sector} {style.blue}" />
+			<g:FlowPanel ui:styleName="{style.sector} {style.yellow}" />
+		</g:FlowPanel>
+
+	</g:VerticalPanel>
 </ui:UiBinder>

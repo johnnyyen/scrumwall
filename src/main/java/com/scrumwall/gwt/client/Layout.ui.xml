@@ -7,7 +7,7 @@
   <g:FlowPanel ui:styleName="{style.wrapper}">
   	<scrumwall:StatusBar ui:field="statusBar"/>
   	<scrumwall:Menu ui:field="menu"/>
+  	<scrumwall:RecycleBin ui:field="recycleBin" />
   	<scrumwall:Container ui:field="container"/>
-  	<scrumwall:Item ui:field="item"/>
   </g:FlowPanel>
 </ui:UiBinder>

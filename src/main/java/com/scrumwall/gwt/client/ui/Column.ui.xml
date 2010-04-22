@@ -1,0 +1,49 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
+
+	<ui:style>
+		.colHeader {
+			background-color: grey;
+			border-right: 1px dotted black;
+			width: 100%;
+			float: right;
+		}
+		
+		.colBody {
+			height: 100%;
+			clear: both;
+			border-right: 1px dotted grey;
+		}
+		
+		.columnNameText {
+			width: 100%;
+		}
+		
+		.deleteColumnButton {
+			float: right;
+			margin-right: 15px;
+		}
+		
+		.column {
+			float: left;
+			height: 100%;
+			z-index: 10;
+			position: relative;
+			width: 33%;
+		}
+	</ui:style>
+
+	<g:FlowPanel ui:styleName="{style.column}">
+		<g:FlowPanel ui:field="columnHeader" ui:styleName="{style.colHeader}">
+			<g:Anchor ui:field="deleteColumn" ui:styleName="{style.deleteColumnButton}">X</g:Anchor>
+			<g:DeckPanel ui:field="columnNameArea">
+				<g:Label ui:field="columnName" ui:styleName="{style.columnNameText}">Column name</g:Label>
+				<g:TextBox ui:field="columnNameInput" />
+			</g:DeckPanel>
+		</g:FlowPanel>
+		<g:FlowPanel ui:field="columnBody" ui:styleName="{style.colBody}">
+			<scrumwall:Item />
+		</g:FlowPanel>
+	</g:FlowPanel>
+</ui:UiBinder> 

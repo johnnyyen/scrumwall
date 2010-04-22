@@ -1,16 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-  xmlns:g='urn:import:com.google.gwt.user.client.ui'
-  xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
 
-	<ui:style src="css/layout.css"/>
-	
+	<ui:style>
+		.ownerInput {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 50%;
+			background-color: transparent;
+		}
+		
+		.itemFooter {
+			float: left;
+			bottom: 0;
+			width: 100%;
+			position: absolute;
+		}
+		
+		.item {
+			position: absolute !important;
+			height: 100px;
+			width: 120px;
+			background-color: white;
+			text-align: center;
+			border: 1px solid black;
+			overflow: hidden;
+			z-index: 100;
+			background-color: yellow;
+		}
+		
+		.itemContent {
+			clear: both;
+			width: 100%;
+			height: 100%;
+			resize: none;
+			overflow: auto;
+			background-color: transparent;
+		}
+		
+		.itemContentWrapper {
+			height: 78%;
+		}
+		
+		.estimation,.hoursLeft {
+			width: 1.8em;
+			float: right;
+			clear: both;
+			background-color: transparent;
+		}
+		
+		.itemText {
+			height: 75%;
+			overflow: hidden;
+			font-size: 0.75em;
+		}
+	</ui:style>
+
 	<g:FlowPanel ui:styleName="{style.item}">
-		<g:TextArea ui:field="content" ui:styleName="{style.itemContent}"/>
-		<g:InlineLabel ui:field="contentText" ui:styleName="{style.itemText}"/>
-	   	<g:TextBox ui:field="ownerName" ui:styleName="{style.ownerInput}" />
-	   	<g:TextBox ui:field="hoursLeft" ui:styleName="{style.hoursLeft}" />
-	   	<g:TextBox ui:field="estimate" ui:styleName="{style.estimation}" />
+		<g:DeckPanel ui:field="contentArea" ui:styleName="{style.itemContentWrapper}">
+			<g:InlineLabel ui:field="contentText" ui:styleName="{style.itemText}">blah</g:InlineLabel>
+			<g:TextArea ui:field="content" ui:styleName="{style.itemContent}" />
+		</g:DeckPanel>
+		<g:FlowPanel ui:styleName="{style.itemFooter}">
+			<g:TextBox ui:field="ownerName" ui:styleName="{style.ownerInput}" />
+			<g:TextBox ui:field="hoursLeft" ui:styleName="{style.hoursLeft}" />
+			<g:TextBox ui:field="estimate" ui:styleName="{style.estimation}" />
+		</g:FlowPanel>
 	</g:FlowPanel>
 </ui:UiBinder>
 
