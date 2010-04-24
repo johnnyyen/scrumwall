@@ -23,5 +23,6 @@ public class Layout implements EntryPoint {
 		
 		Window.enableScrolling(false);
 		RootPanel.get().add(panel);
+		
 	}
 }

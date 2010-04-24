@@ -19,6 +19,7 @@
 		}
 		
 		.item {
+			cursor: auto !important;
 			position: absolute !important;
 			height: 100px;
 			width: 120px;

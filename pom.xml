@@ -152,10 +152,10 @@
 				<directory>src/test/resources</directory>
 				<filtering>true</filtering>
 			</resource>
-			<!--<resource>
-				<directory>src/main/scala</directory>
-				<filtering>true</filtering>
-			</resource>-->
+			<!--
+				<resource> <directory>src/main/scala</directory>
+				<filtering>true</filtering> </resource>
+			-->
 		</resources>
 	</build>
 	<dependencies>
@@ -299,6 +299,11 @@
 			<version>${gwtVersion}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gwt-dnd</groupId>
+			<artifactId>gwt-dnd</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
@@ -315,14 +320,6 @@
 			<releases>
 				<enabled>true</enabled>
 			</releases>
-		</repository>
-		<repository>
-			<id>springsource-milestone</id>
-			<url>http://repository.springsource.com/maven/bundles/milestone</url>
-		</repository>
-		<repository>
-			<id>log4j</id>
-			<url>http://repo1.maven.org/maven2/log4j/log4j/1.2.9/</url>
 		</repository>
 		<repository>
 			<id>springsource-release</id>
@@ -346,6 +343,11 @@
 			<id>scalatest</id>
 			<name>ScalaTest in scalatools</name>
 			<url>http://scala-tools.org/repo-releases/org/scala-tools/testing/scalatest/0.9.5/</url>
+		</repository>
+		<repository>
+			<id>z80-repository.fr</id>
+			<name>z80-repository</name>
+			<url>https://z80-repository.googlecode.com/svn/maven2</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
