@@ -2,7 +2,7 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
 
 	<ui:style>
-		.columnContainer {
+		.tabContainer {
 			width: 89%;
 			height: 100%;
 			margin-left: 11%;
@@ -10,16 +10,17 @@
 			padding: 0px !important;
 			border: 1px solid black;
 		}
+		
+		.columnContainer {
+			height: 100%;
+		}
 	</ui:style>
 
-	<g:TabLayoutPanel ui:styleName="{style.columnContainer}"
+	<g:TabLayoutPanel ui:styleName="{style.tabContainer}"
 		barHeight="40" barUnit="PX" ui:field="tabContainer">
 		<g:tab>
 			<g:header>Sprint 1</g:header>
-			<g:FlowPanel>
-				<scrumwall:Column ui:field="notStarted" />
-				<scrumwall:Column ui:field="inProgress" />
-				<scrumwall:Column ui:field="done" />
+			<g:FlowPanel ui:field="columnContainer" ui:styleName="${style.columnContainer}">
 			</g:FlowPanel>
 		</g:tab>
 		<g:tab>
