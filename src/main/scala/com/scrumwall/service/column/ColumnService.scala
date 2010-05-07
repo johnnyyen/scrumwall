@@ -3,13 +3,13 @@ package com.scrumwall.service.column
 import com.scrumwall.domain.Column
 import java.util.List
 
-trait ColumnService extends BaseService{
+trait ColumnService extends BaseService {
 
   /**
   * Returns all the columns for this sprint in order  
   */
   def getColumns(sprintId: Int) : List[Column]
-  
+   
   def save(column: Column) : Column
   
   /** 

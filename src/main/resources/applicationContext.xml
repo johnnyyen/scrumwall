@@ -20,31 +20,30 @@
   
 
   <aop:config>
-    <aop:pointcut id="transactionsPointcut" expression="execution(* com.scrumwall.service..*.*(..))"/>
+    <aop:pointcut id="transactionsPointcut" expression="execution(* com.scrumwall.gwt.server.service..*.*(..))"/>
     <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionsPointcut"/>
   </aop:config>
 
   <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
   </bean>
-  
+
+<!--   
   <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
   	<aop:scoped-proxy/>
   	<property name="itemDao" ref="itemDao"/>
   </bean>
 
-
-  <bean id="columnService" class="com.scrumwall.service.column.ColumnServiceImpl">
-    <aop:scoped-proxy/>
-    <property name="columnDao" ref="columnDao"/>
-    <property name="itemService" ref="itemService"/>
-  </bean>
-
   <bean id="itemDao" class="com.scrumwall.dao.item.ItemDaoImpl">
     <property name="dataSource" ref="dataSource" />
   </bean>
+ -->
+   
+  <bean id="columnService" class="com.scrumwall.gwt.server.service.ColumnServiceImpl">
+    <aop:scoped-proxy/>
+  </bean>
   
-  <bean id="columnDao" class="com.scrumwall.dao.column.ColumnDaoImpl">
+  <bean id="columnDao" class="com.scrumwall.gwt.server.dao.ColumnDao">
     <property name="dataSource" ref="dataSource" />
   </bean>
 
