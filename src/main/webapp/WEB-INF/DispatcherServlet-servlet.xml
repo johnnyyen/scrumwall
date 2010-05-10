@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-           http://www.springframework.org/schema/context 
-           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:context="http://www.springframework.org/schema/context"
+	 xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	 	http://www.springframework.org/schema/context
+	 	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
 
-	<context:component-scan base-package="com.scrumwall.gwt.server">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>
-	
-	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="mappings">
-			<props>
-				<prop key="*/columnService">columnService</prop>
-			</props>
-		</property>
-	</bean>
+<context:component-scan base-package="com.scrumwall.gwt">
+    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+</context:component-scan>
 
+<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="mappings">
+        <props>
+            <prop key="*Service">gwtRpcDispatcher</prop>
+        </props>
+    </property>
+</bean>
+
+<bean id="gwtRpcDispatcher" class="com.scrumwall.gwt.ServletWrapperController">
+    <property name="servletInstance">
+        <bean class="com.scrumwall.gwt.DispatcherServlet">
+            <constructor-arg index="0" ref="rpcServiceLocator"/>
+        </bean>
+    </property>
+</bean>
 </beans>
