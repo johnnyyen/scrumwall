@@ -7,8 +7,11 @@
 	 	http://www.springframework.org/schema/context
 	 	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
 
+<import resource="classpath:applicationContext.xml" />
+
 <context:component-scan base-package="com.scrumwall.gwt">
     <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
 </context:component-scan>
 
 <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">

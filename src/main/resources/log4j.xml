@@ -16,9 +16,6 @@
   <logger name="com.google">
     <level value="debug"/> 
   </logger>
-  <logger name="org.directwebremoting.filter.AuditLogAjaxFilter">
-    <level value="info"/> 
-  </logger>
   <root>
     <priority value="error" />
     <appender-ref ref="R" /> 

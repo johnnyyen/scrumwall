@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.scrumwall.gwt.client.ColumnService;
 import com.scrumwall.gwt.client.ColumnServiceAsync;
+import com.scrumwall.gwt.shared.ColumnDTO;
 
 public class Container extends Composite{
 	@UiTemplate("Container.ui.xml")
@@ -20,12 +21,12 @@ public class Container extends Composite{
 	
 	private final ColumnServiceAsync columnService = GWT.create(ColumnService.class); 
 	
-	private List<Column> columns;
+	private List<ColumnDTO> columns;
 	@UiField
 	protected FlowPanel columnContainer;
 	
 	public Container(){
-		columnService.getColumns(0, new AsyncCallback<List<Column>>() {
+		columnService.getColumns(0, new AsyncCallback<List<ColumnDTO>>() {
 
 			@Override
 			public void onFailure(Throwable arg0) {
@@ -34,11 +35,10 @@ public class Container extends Composite{
 			}
 
 			@Override
-			public void onSuccess(List<Column> cols) {
+			public void onSuccess(List<ColumnDTO> cols) {
 				columns = cols;
-				for (Column column : columns) {
-					column.init();
-					columnContainer.add(column);
+				for (ColumnDTO column : columns) {
+					columnContainer.add(new Column(column));
 				}
 			}
 		});

@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
 
 	<ui:style>
 		.colHeader {
@@ -38,12 +39,11 @@
 		<g:FlowPanel ui:field="columnHeader" ui:styleName="{style.colHeader}">
 			<g:Anchor ui:field="deleteColumn" ui:styleName="{style.deleteColumnButton}">X</g:Anchor>
 			<g:DeckPanel ui:field="columnNameArea">
-				<g:Label ui:field="columnName" ui:styleName="{style.columnNameText}">Column name</g:Label>
+				<g:Label ui:field="columnName" ui:styleName="{style.columnNameText}"></g:Label>
 				<g:TextBox ui:field="columnNameInput" />
 			</g:DeckPanel>
 		</g:FlowPanel>
 		<g:FlowPanel ui:field="columnBody" ui:styleName="{style.colBody}">
-			<scrumwall:Item />
 		</g:FlowPanel>
 	</g:FlowPanel>
 </ui:UiBinder> 

@@ -40,7 +40,7 @@
  -->
    
   <bean id="columnService" class="com.scrumwall.gwt.server.service.ColumnServiceImpl">
-    <aop:scoped-proxy/>
+    <!--aop:scoped-proxy/ -->
   </bean>
   
   <bean id="columnDao" class="com.scrumwall.gwt.server.dao.ColumnDao">

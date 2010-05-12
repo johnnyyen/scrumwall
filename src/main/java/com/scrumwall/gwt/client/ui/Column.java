@@ -7,47 +7,35 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.scrumwall.gwt.shared.ColumnDTO;
 
 public class Column extends Composite {
 
-	private static ColumnUiBinder binder = GWT.create(ColumnUiBinder.class);
+	private static ColumnUiBinder binder;
 	
-	@UiField
-	protected DeckPanel columnNameArea;
+	@UiField protected DeckPanel columnNameArea;
 
-	private int id;
-	private String name;
-	private int type;
-	private int sprintId;
-
+	@UiField protected Label columnName;
+	
+	private ColumnDTO dto;
+	
+	public String getName() {
+		return dto.getName();
+	}
+	
 	@UiTemplate("Column.ui.xml")
 	interface ColumnUiBinder extends UiBinder<Widget, Column> {
 	}
 	
 	@UiConstructor
-	public Column(int id){
-		this.id = id;
-	}
-
-	public void init() {
+	public Column(ColumnDTO column){
+		this.dto = column;
+		binder = GWT.create(ColumnUiBinder.class);
 		initWidget(binder.createAndBindUi(this));
+		columnName.setText(dto.getName());
 		columnNameArea.showWidget(0);
-	}
-
-	public Column setName(String name) {
-		this.name = name;
-		return this;
-	}
-
-	public Column setType(int type) {
-		this.type = type;
-		return this;
-	}
-
-	public Column setSprintId(int sprintId) {
-		this.sprintId = sprintId;
-		return this;
 	}
 	
 }

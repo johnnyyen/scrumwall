@@ -9,7 +9,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
-import com.scrumwall.gwt.client.ui.Column;
+import com.scrumwall.gwt.shared.ColumnDTO;
 
 public class ColumnDao extends NamedParameterJdbcDaoSupport {
 
@@ -22,18 +22,17 @@ public class ColumnDao extends NamedParameterJdbcDaoSupport {
 			"AND sprintId = :sprintId " +
 		"ORDER BY columnorder";
 	
-	public List<Column> getColumns(Integer sprintId){
+	public List<ColumnDTO> getColumns(Integer sprintId){
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("sprintId", sprintId);
 		
-		return getNamedParameterJdbcTemplate().query(SQL_GET_COLUMNS, params, new RowMapper<Column>() {
+		return getNamedParameterJdbcTemplate().query(SQL_GET_COLUMNS, params, new RowMapper<ColumnDTO>() {
 			@Override
-			public Column mapRow(ResultSet rs, int arg1) throws SQLException {
-				Column column = new Column(rs.getInt("id"));
-				column.setName(rs.getString("name"))
-						.setType(rs.getInt("columntype")).
-						setSprintId(rs.getInt("sprintid"));
-				return column;
+			public ColumnDTO mapRow(ResultSet rs, int index) throws SQLException {
+				return new ColumnDTO().setId(rs.getInt("id"))
+						.setName(rs.getString("name"))
+						.setType(rs.getString("columntype"))
+						.setSprintId(rs.getInt("sprintid"));
 			}
 		});
 	}
