@@ -21,7 +21,6 @@ public class Container extends Composite{
 	
 	private final ColumnServiceAsync columnService = GWT.create(ColumnService.class); 
 	
-	private List<ColumnDTO> columns;
 	@UiField
 	protected FlowPanel columnContainer;
 	
@@ -35,8 +34,7 @@ public class Container extends Composite{
 			}
 
 			@Override
-			public void onSuccess(List<ColumnDTO> cols) {
-				columns = cols;
+			public void onSuccess(List<ColumnDTO> columns) {
 				for (ColumnDTO column : columns) {
 					columnContainer.add(new Column(column));
 				}

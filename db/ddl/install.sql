@@ -3,13 +3,11 @@ CREATE CACHED TABLE item(
     id IDENTITY,
     content VARCHAR(4096),
     estimation INTEGER DEFAULT NULL,
-    sprintid INTEGER DEFAULT NULL,
     offsetx DECIMAL DEFAULT 0,
     offsety DECIMAL DEFAULT 0,
     col INTEGER DEFAULT 0,
     owner VARCHAR(25) DEFAULT NULL,
     color VARCHAR(10) NOT NULL,
-    hoursleft INTEGER DEFAULT NULL,
     height INTEGER NOT NULL,
     width INTEGER NOT NULL
 );
@@ -60,8 +58,4 @@ ALTER TABLE item
     
 ALTER TABLE col
     ADD CONSTRAINT COLUMN_TO_SPRINT FOREIGN KEY (sprintId)
-    REFERENCES sprint(id);
-        
-ALTER TABLE item
-    ADD CONSTRAINT ITEM_TO_SPRINT FOREIGN KEY (sprintid)
     REFERENCES sprint(id);

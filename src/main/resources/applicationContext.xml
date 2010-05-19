@@ -28,17 +28,7 @@
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
-<!--   
-  <bean id="itemService" class="com.scrumwall.service.item.ItemServiceImpl">
-  	<aop:scoped-proxy/>
-  	<property name="itemDao" ref="itemDao"/>
-  </bean>
 
-  <bean id="itemDao" class="com.scrumwall.dao.item.ItemDaoImpl">
-    <property name="dataSource" ref="dataSource" />
-  </bean>
- -->
-   
   <bean id="columnService" class="com.scrumwall.gwt.server.service.ColumnServiceImpl">
     <!--aop:scoped-proxy/ -->
   </bean>
@@ -47,4 +37,12 @@
     <property name="dataSource" ref="dataSource" />
   </bean>
 
+
+	<bean id="itemService" class="com.scrumwall.gwt.server.service.ItemServiceImpl">
+	</bean>
+	
+	<bean id="itemDao" class="com.scrumwall.gwt.server.dao.ItemDao">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 </beans>
