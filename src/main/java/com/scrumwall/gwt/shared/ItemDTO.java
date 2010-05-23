@@ -70,12 +70,12 @@ public class ItemDTO implements Serializable {
 	}
 
 	public ItemDTO setLeft(int offsetLeft, Column column) {
-		this.offsetX = Double.valueOf(offsetLeft / column.getElement().getClientWidth() * 100);
+		this.offsetX = Double.valueOf((double)offsetLeft / column.getOffsetWidth() * 100);
 		return this;
 	}
 	
 	public ItemDTO setTop(int offsetTop, Column column) {
-		this.offsetY = Double.valueOf(offsetTop / column.getElement().getClientHeight() * 100);
+		this.offsetY = Double.valueOf((double)offsetTop / column.getOffsetHeight() * 100);
 		return this;
 	}
 	

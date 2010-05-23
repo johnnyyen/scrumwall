@@ -12,57 +12,68 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 import com.scrumwall.gwt.client.ItemService;
 import com.scrumwall.gwt.client.ItemServiceAsync;
 import com.scrumwall.gwt.shared.ColumnDTO;
 import com.scrumwall.gwt.shared.ItemDTO;
 
-public class Column extends Composite {
+public class Column extends Composite implements ProvidesResize, RequiresResize{
 
-	private final ItemServiceAsync itemService = GWT.create(ItemService.class); 
-	
+	private final ItemServiceAsync itemService = GWT.create(ItemService.class);
+
 	private static ColumnUiBinder binder;
-	
-	@UiField protected DeckPanel columnNameArea;
 
-	@UiField protected Label columnName;
-	
-	@UiField protected FlowPanel columnBody;
-	
+	@UiField
+	protected DeckPanel columnNameArea;
+
+	@UiField
+	protected Label columnName;
+
+	@UiField
+	protected FlowPanel columnBody;
+
 	private ColumnDTO dto;
-	
+
 	public String getName() {
 		return dto.getName();
 	}
-	
+
 	@UiTemplate("Column.ui.xml")
 	interface ColumnUiBinder extends UiBinder<Widget, Column> {
 	}
-	
+
 	@UiConstructor
-	public Column(ColumnDTO column){
+	public Column(ColumnDTO column) {
 		this.dto = column;
-		final Column instance = this; 
-		itemService.getForColumn(dto.getId(), new AsyncCallback<List<ItemDTO>>() {
-			@Override
-			public void onFailure(Throwable e) {
-			}
-			@Override
-			public void onSuccess(List<ItemDTO> items) {
-				for (ItemDTO item : items) {
-					columnBody.add(new Item(item, instance));
-				}
-			}
-		});
+		final Column instance = this;
+		itemService.getForColumn(dto.getId(),
+				new AsyncCallback<List<ItemDTO>>() {
+					@Override
+					public void onFailure(Throwable e) {
+					}
+
+					@Override
+					public void onSuccess(List<ItemDTO> items) {
+						for (ItemDTO item : items) {
+							columnBody.add(new Item(item, instance));
+						}
+					}
+				});
 		binder = GWT.create(ColumnUiBinder.class);
 		initWidget(binder.createAndBindUi(this));
 		columnName.setText(dto.getName());
 		columnNameArea.showWidget(0);
+		this.setWidth(dto.getWidth() + "%");
 	}
 
 	public int getId() {
 		return dto.getId();
 	}
-	
+
+	public void onResize() {
+		throw new UnsupportedOperationException("can't resize");
+	}
 }

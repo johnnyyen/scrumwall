@@ -14,7 +14,6 @@
 		.colBody {
 			height: 100%;
 			clear: both;
-			border-right: 1px dotted grey;
 		}
 		
 		.columnNameText {
@@ -31,7 +30,14 @@
 			height: 100%;
 			z-index: 10;
 			position: relative;
-			width: 33%;
+		}
+
+		.resizeHandle{
+			height: 100%;
+			width: 3px;
+			cursor: e-resize;
+			float: right;
+			background-color: black;
 		}
 	</ui:style>
 
@@ -43,6 +49,7 @@
 				<g:TextBox ui:field="columnNameInput" />
 			</g:DeckPanel>
 		</g:FlowPanel>
+		<g:FlowPanel ui:field="resizeHandle" ui:styleName="{style.resizeHandle}"/>
 		<g:FlowPanel ui:field="columnBody" ui:styleName="{style.colBody}">
 		</g:FlowPanel>
 	</g:FlowPanel>

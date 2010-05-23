@@ -10,6 +10,7 @@ public class ColumnDTO implements Serializable {
 	private String name;
 	private String type;
 	private int sprintId;
+	private Double width;
 	
 	public int getId() {
 		return id;
@@ -38,6 +39,13 @@ public class ColumnDTO implements Serializable {
 	public ColumnDTO setSprintId(int sprintId) {
 		this.sprintId = sprintId;
 		return this;
+	}
+	public ColumnDTO setWidth(Double width) {
+		this.width = width;
+		return this;
+	}
+	public Double getWidth() {
+		return width;
 	}
 	
 	

@@ -32,7 +32,8 @@ public class ColumnDao extends NamedParameterJdbcDaoSupport {
 				return new ColumnDTO().setId(rs.getInt("id"))
 						.setName(rs.getString("name"))
 						.setType(rs.getString("columntype"))
-						.setSprintId(rs.getInt("sprintid"));
+						.setSprintId(rs.getInt("sprintid"))
+						.setWidth(rs.getDouble("width"));
 			}
 		});
 	}
