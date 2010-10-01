@@ -6,22 +6,12 @@
 	<!-- gwt drag and drop dependency -->
 	<inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
 	
-	
-	<!-- Inherit the default GWT style sheet.  You can change       -->
-	<!-- the theme of your GWT application by uncommenting          -->
-	<!-- any one of the following lines.                            -->
+	<!-- Inherit the default GWT style sheet.                       -->
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
-	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
-
-	<!-- Other module inherits                                      -->
 
 	<!-- Specify the app entry point class.                         -->
 	<entry-point class='com.scrumwall.gwt.client.Layout' />
 
-	<!-- Specify the paths for translatable code                    -->
-	<inherits name="com.google.gwt.inject.Inject"/>
-	
 	<source path="shared" />
 	<source path="client" />
 

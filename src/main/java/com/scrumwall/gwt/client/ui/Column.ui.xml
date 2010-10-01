@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 	xmlns:scrumwall='urn:import:com.scrumwall.gwt.client.ui'>
 
-	<ui:style>
+	<ui:style type="com.scrumwall.gwt.client.ui.Column.ColumnStyle">
 		.colHeader {
 			background-color: grey;
 			border-right: 1px dotted black;
@@ -14,6 +14,8 @@
 		.colBody {
 			height: 100%;
 			clear: both;
+			border-right: 1px solid black;
+			overflow: visible !important;
 		}
 		
 		.columnNameText {
@@ -30,6 +32,8 @@
 			height: 100%;
 			z-index: 10;
 			position: relative;
+			overflow: visible !important;
+			background-color: #e6e6e6;
 		}
 
 		.resizeHandle{
@@ -39,9 +43,13 @@
 			float: right;
 			background-color: black;
 		}
+		
+		.highlight{
+			background-color: #f3f3f3 !important;
+		}
 	</ui:style>
 
-	<g:FlowPanel ui:styleName="{style.column}">
+	<g:AbsolutePanel ui:styleName="{style.column}">
 		<g:FlowPanel ui:field="columnHeader" ui:styleName="{style.colHeader}">
 			<g:Anchor ui:field="deleteColumn" ui:styleName="{style.deleteColumnButton}">X</g:Anchor>
 			<g:DeckPanel ui:field="columnNameArea">
@@ -49,8 +57,7 @@
 				<g:TextBox ui:field="columnNameInput" />
 			</g:DeckPanel>
 		</g:FlowPanel>
-		<g:FlowPanel ui:field="resizeHandle" ui:styleName="{style.resizeHandle}"/>
-		<g:FlowPanel ui:field="columnBody" ui:styleName="{style.colBody}">
-		</g:FlowPanel>
-	</g:FlowPanel>
+		<g:AbsolutePanel ui:field="columnBody" ui:styleName="{style.colBody}">
+		</g:AbsolutePanel>
+	</g:AbsolutePanel>
 </ui:UiBinder> 

@@ -8,12 +8,10 @@
 	<name>Scrumwall</name>
 
 	<properties>
-		<gwtVersion>2.0.3</gwtVersion>
-		<version.spring>3.0.2.RELEASE</version.spring>
-		<version.scala>2.7.7</version.scala>
+		<gwtVersion>2.0.4</gwtVersion>
+		<version.spring>3.0.4.RELEASE</version.spring>
 		<version.asm>3.1</version.asm>
 		<version.log4j>1.2.9</version.log4j>
-		<version.scalatest>0.9.5</version.scalatest>
 		<maven.test.compile.verbose>true</maven.test.compile.verbose>
 		<db.schema>scrumwall</db.schema>
 		<db.test.schema>scrumjunit</db.test.schema>
@@ -39,43 +37,6 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.scala-tools</groupId>
-				<artifactId>maven-scala-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>compile</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>testCompile</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>processResources</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>processTestResources</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<javaRebelPath>${user.home}/install/javarebel/javarebel.jar</javaRebelPath>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -152,10 +113,6 @@
 				<directory>src/test/resources</directory>
 				<filtering>true</filtering>
 			</resource>
-			<!--
-				<resource> <directory>src/main/scala</directory>
-				<filtering>true</filtering> </resource>
-			-->
 		</resources>
 	</build>
 	<dependencies>
@@ -181,21 +138,6 @@
 			<version>${version.asm}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-compiler</artifactId>
-			<version>${version.scala}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>${version.scala}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.scala-tools.testing</groupId>
-			<artifactId>scalatest</artifactId>
-			<version>${version.scalatest}</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
@@ -203,7 +145,7 @@
 		<dependency>
 			<groupId>hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>1.8.0.10</version>
+			<version>1.8.0.7</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -270,24 +212,6 @@
 			<version>1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.seleniumhq.webdriver</groupId>
-			<artifactId>webdriver-ie</artifactId>
-			<version>0.9.7376</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.webdriver</groupId>
-			<artifactId>webdriver-chrome</artifactId>
-			<version>0.9.7376</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.webdriver</groupId>
-			<artifactId>webdriver-firefox</artifactId>
-			<version>0.9.7376</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
 			<version>2.0.3</version>
@@ -302,12 +226,7 @@
 		<dependency>
 			<groupId>com.google.code.gwt-dnd</groupId>
 			<artifactId>gwt-dnd</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.gwt.inject</groupId>
-			<artifactId>gin</artifactId>
-			<version>1.0</version>
+			<version>3.0.1</version>
 		</dependency>
 	</dependencies>
 	<repositories>
@@ -335,38 +254,11 @@
 			<url>http://repository.springsource.com/maven/bundles/external</url>
 		</repository>
 		<repository>
-			<id>scala-tools.org</id>
-			<name>Scala Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</repository>
-		<repository>
 			<id>jboss.com</id>
 			<name>Jboss repo</name>
 			<url>http://repository.jboss.com/maven2</url>
 		</repository>
-		<repository>
-			<id>scalatest</id>
-			<name>ScalaTest in scalatools</name>
-			<url>http://scala-tools.org/repo-releases/org/scala-tools/testing/scalatest/0.9.5/</url>
-		</repository>
-		<repository>
-			<id>z80-repository.fr</id>
-			<name>z80-repository</name>
-			<url>https://z80-repository.googlecode.com/svn/maven2</url>
-		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>scala-tools.org</id>
-			<name>Scala-tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>gwt-maven</id>
-			<url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<profiles>
 		<profile>
 			<id>dev</id>
@@ -460,7 +352,6 @@
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>sql-maven-plugin</artifactId>
 						<version>1.1</version>
-						<!-- common configuration shared by all executions -->
 						<configuration>
 							<driver>org.hsqldb.jdbcDriver</driver>
 							<url>jdbc:hsqldb:hsql://eowyn.ftpaccess.cc:9001/${db.schema}</url>
@@ -473,12 +364,7 @@
 								<goals>
 									<goal>execute</goal>
 								</goals>
-								<!-- specific configuration for this execution -->
 								<configuration>
-									<!--
-										specify your SQL commands, can be all of the following
-										configurations
-									-->
 									<fileset>
 										<basedir>${basedir}</basedir>
 										<includes>

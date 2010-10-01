@@ -2,6 +2,7 @@ package com.scrumwall.gwt.client.ui;
 
 import java.util.List;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -20,11 +21,14 @@ public class Container extends Composite{
 	private static final Binder binder = GWT.create(Binder.class);
 	
 	private final ColumnServiceAsync columnService = GWT.create(ColumnService.class); 
+	private PickupDragController dragController;
 	
 	@UiField
 	protected FlowPanel columnContainer;
 	
-	public Container(){
+	public void initialize(){
+		
+		//TODO: no sprints yet
 		columnService.getColumns(0, new AsyncCallback<List<ColumnDTO>>() {
 
 			@Override
@@ -36,14 +40,17 @@ public class Container extends Composite{
 			@Override
 			public void onSuccess(List<ColumnDTO> columns) {
 				for (ColumnDTO column : columns) {
-					columnContainer.add(new Column(column));
+					columnContainer.add(new Column(column, dragController));
 				}
 			}
 		});
-		
-		
-		
-		initWidget(binder.createAndBindUi(this));
 	}
 
+	public Container(){
+		initWidget(binder.createAndBindUi(this));
+	}
+	
+	public void setDragController(PickupDragController dragController) {
+		this.dragController = dragController;
+	}
 }
